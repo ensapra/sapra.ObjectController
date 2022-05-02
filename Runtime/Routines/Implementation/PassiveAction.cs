@@ -4,7 +4,7 @@ namespace sapra.ObjectController
 {
     public enum PassivePriority{FirstOfAll,BeforeActive, AfterActive, LastOne, never}
     [System.Serializable]
-    public abstract class AbstractPassive : ObjectComponent
+    public abstract class AbstractPassive : AbstractRoutine<AbstractCObject>
     {    
         [SerializeField]
         public abstract PassivePriority whenDo{get;}

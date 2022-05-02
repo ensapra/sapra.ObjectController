@@ -6,7 +6,7 @@ using UnityEngine.Events;
 namespace sapra.ObjectController
 {
     [System.Serializable]
-    public class ActiveModule : AbstractModule<AbstractActive>
+    public class ActiveModule : AbstractModule<AbstractActive<AbstractCObject>>
     {
         [SerializeReference]
         public AbstractActive currentAction;

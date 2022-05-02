@@ -7,20 +7,20 @@ using System;
 namespace sapra.ObjectController
 {
     [System.Serializable]
-    public abstract class AbstractModule<T> : AbstractModule where T : ObjectComponent 
+    public abstract class AbstractModule<T> : AbstractModule where T : AbstractRoutine 
     {
         public CObject cObject;
         [SerializeReference]
         public List<T> allComponents = new List<T>();
         public List<T> onlyEnabledComponents = new List<T>();
         private List<string> allCompoenntsName = new List<string>();
-        public override ObjectComponent FindComponent(Type component)
+        public override AbstractRoutine FindComponent(Type component)
         {
-            foreach(ObjectComponent ObjectComponent in onlyEnabledComponents)
+            foreach(AbstractRoutine abstractRoutine in onlyEnabledComponents)
             {
-                if(ObjectComponent.GetType().IsEquivalentTo(component))
+                if(abstractRoutine.GetType().IsEquivalentTo(component))
                 {
-                    return ObjectComponent;
+                    return abstractRoutine;
                 }
             }
             return null;
@@ -117,6 +117,6 @@ namespace sapra.ObjectController
         public abstract void SleepComponents(CObject cObject);
         public abstract void GetAllComponents(string nmspace);
         public bool onlyEnabled = true;
-        public abstract ObjectComponent FindComponent(Type component);
+        public abstract AbstractRoutine FindComponent(Type component);
     }
 }

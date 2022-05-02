@@ -6,7 +6,7 @@ using UnityEngine;
 namespace sapra.ObjectController
 {
 [RequireComponent(typeof(Rigidbody))]
-public class CObject : MonoBehaviour
+public class CObject : AbstractCObject 
 {
     [SerializeField] private string ComponentsNamespace = "sapra.ObjectController";
 

@@ -76,7 +76,7 @@ namespace sapra.ObjectController.Editor
                 for(int i = 0; i < prop.arraySize; i++)
                 {
                     SerializedProperty item = prop.GetArrayElementAtIndex(i);
-                    bool result = LoadObjectComponent(item, i, onlyEnabled);
+                    bool result = LoadAbstractRoutine(item, i, onlyEnabled);
                     anElement = anElement || result;
                 }
                 if(!anElement)     
@@ -143,13 +143,13 @@ namespace sapra.ObjectController.Editor
             }
             newMenu.ShowAsContext();
         }
-        private bool LoadObjectComponent(SerializedProperty item, int index, bool onlyEnabled)
+        private bool LoadAbstractRoutine(SerializedProperty item, int index, bool onlyEnabled)
         {
             SerializedProperty enabledBool = item.FindPropertyRelative("wantsAwake");
             if(!onlyEnabled || enabledBool.boolValue)
             {     
                 Rect position = EditorGUILayout.GetControlRect();           
-                ObjectComponentHeader(position, item);
+                AbstractRoutineHeader(position, item);
                 if(item.isExpanded)                
                     EditorGUILayout.PropertyField(item);
                 GUILayout.Space(4);
@@ -157,11 +157,11 @@ namespace sapra.ObjectController.Editor
             }
             return false;
         }
-        protected void ObjectComponentHeader(Rect position, SerializedProperty ObjectComponent)
+        protected void AbstractRoutineHeader(Rect position, SerializedProperty AbstractRoutine)
         {
-            string[] propertyName = ObjectComponent.managedReferenceFullTypename.Split('.');
+            string[] propertyName = AbstractRoutine.managedReferenceFullTypename.Split('.');
             string correctPropertyName = ObjectName(propertyName[propertyName.Length-1]);
-            SerializedProperty enabledBool = ObjectComponent.FindPropertyRelative("wantsAwake");
+            SerializedProperty enabledBool = AbstractRoutine.FindPropertyRelative("wantsAwake");
 
             Rect boxPosition = position;
             boxPosition.height = 22;
@@ -174,7 +174,7 @@ namespace sapra.ObjectController.Editor
             GUI.Box(boxPosition, "", boxButtonStyle);
             enabledBool.boolValue = GUI.Toggle(togglePosition,enabledBool.boolValue, "");
             if(GUI.Button(buttonPosition, correctPropertyName, buttonStyle)) {
-                ObjectComponent.isExpanded = !ObjectComponent.isExpanded;
+                AbstractRoutine.isExpanded = !AbstractRoutine.isExpanded;
             }
         }
         string UpperSplit(string name)

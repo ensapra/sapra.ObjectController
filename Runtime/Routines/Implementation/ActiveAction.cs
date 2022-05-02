@@ -4,7 +4,7 @@ using UnityEngine.Events;
 namespace sapra.ObjectController
 {
     [System.Serializable]
-    public abstract class AbstractActive : ObjectComponent
+    public abstract class AbstractActive : AbstractRoutine<AbstractCObject>
     {
         public abstract int priorityID{get;}
         public bool isActive{get{return cObject.activeModule.currentAction == this;}}

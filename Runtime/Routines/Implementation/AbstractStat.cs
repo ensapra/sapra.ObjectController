@@ -5,7 +5,7 @@ using UnityEngine;
 namespace sapra.ObjectController
 {
     [System.Serializable]
-    public abstract class AbstractStat : ObjectComponent
+    public abstract class AbstractStat : AbstractRoutine<AbstractCObject>
     {
         public virtual void DoExtra(){}
     }
