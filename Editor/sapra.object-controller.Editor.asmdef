@@ -1,0 +1,18 @@
+{
+    "name": "sapra.object-controller.Editor",
+    "rootNamespace": "sapra",
+    "references": [
+        "GUID:92ce4a4593469dc4291939cc2ce99948"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
