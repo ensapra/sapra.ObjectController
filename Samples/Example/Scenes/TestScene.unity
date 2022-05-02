@@ -1420,7 +1420,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 200c2ba452db09946950e0b777abd264, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nmspace: sapra.ObjectController.Samples
+  ComponentsNamespace: sapra.ObjectController
   continuosCheck: 1
   rb: {fileID: 0}
   activeModule:
