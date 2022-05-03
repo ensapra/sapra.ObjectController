@@ -28,18 +28,18 @@ namespace sapra.ObjectController
         public override void GetAllComponents(string nmspace)
         {
             List<Assembly> assemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
-            allComponents.Clear();
+            List<T> temp = new List<T>();
             foreach(Assembly assembly in assemblies)
             {
-                GetComponentsInAssembly(assembly, nmspace);
+                GetComponentsInAssembly(assembly, nmspace, ref temp);
             }
+            allComponents = temp;
         }
-        private void GetComponentsInAssembly(Assembly assem, string nmspace)
+        private void GetComponentsInAssembly(Assembly assem, string nmspace, ref List<T> temp)
         {
             IEnumerable<Type> q = from t in assem.GetTypes()
                     where t.IsSubclassOf(typeof(T)) && t.Namespace == nmspace
                     select t;
-            List<T> temp = new List<T>();
             foreach (Type item in q)
             {
                 T ObjectFound = allComponents.Find(x => x != null && x.GetType() == item);
@@ -57,7 +57,6 @@ namespace sapra.ObjectController
                 else
                     temp.Add(ObjectFound);
             }
-            allComponents.AddRange(temp);
         }
         public override void SleepComponents(CObject cObject)
         {
