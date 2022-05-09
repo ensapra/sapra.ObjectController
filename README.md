@@ -8,7 +8,6 @@ The benefits of using this is allowing for a better component organisation insid
 
 Not only that, but the structure allows for the creation of any type of object controller. 
 
-![image](https://user-images.githubusercontent.com/61149758/167369730-b5227962-4b59-4f3c-8279-ef7acd4b79f0.png)
 
 https://user-images.githubusercontent.com/61149758/167369478-c5c42e5d-f77b-48b7-909d-5de58fc28922.mp4
 
