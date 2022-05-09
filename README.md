@@ -9,11 +9,13 @@ The benefits of using this is allowing for a better component organisation insid
 Not only that, but the structure allows for the creation of any type of object controller. 
 
 ## Before
-As soon as the character controller gets complex and you want to keep modularity on it, components start to overflow the inspector, making it hard to easily find what you are looking for
+As soon as the character controller gets complex and you want to keep modularity on it, components start to overflow the inspector, making it hard to easily find what you are looking for.
+
 ![image](https://user-images.githubusercontent.com/61149758/167370149-96e4708e-fda2-43a8-9011-d34de4dfb997.png)
 
 ## After
-By using this workflow, components are nicely grouped, without losing the control over them
+By using this workflow, components are nicely grouped, without losing the control over them.
+
 ![image](https://user-images.githubusercontent.com/61149758/167370830-dfe5df6a-1fa1-4d32-b1be-3f4800c9e589.png)
 
 ## Scripts
