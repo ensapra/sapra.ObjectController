@@ -128,8 +128,7 @@ namespace sapra.ObjectController.Editor
             for(int i = 0; i < list.arraySize; i++)
             {
                 SerializedProperty item = list.GetArrayElementAtIndex(i);
-                string[] propertyName = item.managedReferenceFullTypename.Split('.');
-                GUIContent content = new GUIContent(ObjectName(propertyName[propertyName.Length-1]));
+                GUIContent content = new GUIContent(ObjectName(item.managedReferenceFullTypename));
                 bool enabled = item.FindPropertyRelative("wantsAwake").boolValue;
                 if(enabled)            
                     newMenu.AddDisabledItem(content);
@@ -159,8 +158,7 @@ namespace sapra.ObjectController.Editor
         }
         protected void AbstractRoutineHeader(Rect position, SerializedProperty AbstractRoutine)
         {
-            string[] propertyName = AbstractRoutine.managedReferenceFullTypename.Split('.');
-            string correctPropertyName = ObjectName(propertyName[propertyName.Length-1]);
+            string correctPropertyName = ObjectName(AbstractRoutine.managedReferenceFullTypename);
             SerializedProperty enabledBool = AbstractRoutine.FindPropertyRelative("wantsAwake");
 
             Rect boxPosition = position;
@@ -198,7 +196,11 @@ namespace sapra.ObjectController.Editor
         }
         protected string ObjectName(string name)
         {
-            string noFirst = name.Substring(1);
+            string[] propertyName = name.Split('.');
+            string lastBit = propertyName[propertyName.Length-1];
+            propertyName = lastBit.Split(" ");
+            lastBit = propertyName[propertyName.Length-1];
+            string noFirst = lastBit.Substring(1);
             return UpperSplit(noFirst);
         }
     }

@@ -27,6 +27,7 @@ namespace sapra.ObjectController
         protected abstract void AwakeComponent(T cObject);
         protected virtual void SleepComponent(T cObject){}
     }
+    [System.Serializable]
     public abstract class AbstractRoutine
     {
         [SerializeField] [HideInInspector] protected bool wantsAwake = false;

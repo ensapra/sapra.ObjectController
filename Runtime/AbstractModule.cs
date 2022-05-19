@@ -13,7 +13,6 @@ namespace sapra.ObjectController
         [SerializeReference]
         public List<T> allComponents = new List<T>();
         public List<T> onlyEnabledComponents = new List<T>();
-        private List<string> allCompoenntsName = new List<string>();
         public AbstractRoutine<Z> FindComponent(Type component)
         {
             foreach(AbstractRoutine<Z> abstractRoutine in onlyEnabledComponents)
@@ -25,19 +24,19 @@ namespace sapra.ObjectController
             }
             return null;
         }
-        public override void GetAllComponents(string nmspace)
+        public override void GetAllComponents()
         {
             List<Assembly> assemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
             allComponents.Clear();
             foreach(Assembly assembly in assemblies)
             {
-                GetComponentsInAssembly(assembly, nmspace);
+                GetComponentsInAssembly(assembly);
             }
         }
-        private void GetComponentsInAssembly(Assembly assem, string nmspace)
+        private void GetComponentsInAssembly(Assembly assem)
         {
             IEnumerable<Type> q = from t in assem.GetTypes()
-                    where t.IsSubclassOf(typeof(T)) && t.Namespace == nmspace
+                    where t.IsSubclassOf(typeof(T))
                     select t;
             List<T> temp = new List<T>();
             foreach (Type item in q)
@@ -111,11 +110,12 @@ namespace sapra.ObjectController
             return null;
         }
     }
+    [System.Serializable]
     public abstract class AbstractModule<T> where T : AbstractCObject
     {
         public abstract void InitializeComponents(T cObject);
         public abstract void SleepComponents(T cObject);
-        public abstract void GetAllComponents(string nmspace);
+        public abstract void GetAllComponents();
         public bool onlyEnabled = true;
     }
 }
