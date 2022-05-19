@@ -7,38 +7,37 @@ using System;
 namespace sapra.ObjectController
 {
     [System.Serializable]
-    public abstract class AbstractModule<T> : AbstractModule where T : ObjectComponent 
+    public abstract class AbstractModule<T, Z> : AbstractModule<Z> where T : AbstractRoutine<Z> where Z : AbstractCObject
     {
-        public CObject cObject;
+        public Z cObject;
         [SerializeReference]
         public List<T> allComponents = new List<T>();
         public List<T> onlyEnabledComponents = new List<T>();
-        private List<string> allCompoenntsName = new List<string>();
-        public override ObjectComponent FindComponent(Type component)
+        public AbstractRoutine<Z> FindComponent(Type component)
         {
-            foreach(ObjectComponent ObjectComponent in onlyEnabledComponents)
+            foreach(AbstractRoutine<Z> abstractRoutine in onlyEnabledComponents)
             {
-                if(ObjectComponent.GetType().IsEquivalentTo(component))
+                if(abstractRoutine.GetType().IsEquivalentTo(component))
                 {
-                    return ObjectComponent;
+                    return abstractRoutine;
                 }
             }
             return null;
         }
-        public override void GetAllComponents(string nmspace)
+        public override void GetAllComponents()
         {
             List<Assembly> assemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
-            List<T> temp = new List<T>();
+            List<T> newList = new List<T>();
             foreach(Assembly assembly in assemblies)
             {
-                GetComponentsInAssembly(assembly, nmspace, ref temp);
+                newList.AddRange(GetComponentsInAssembly(assembly));
             }
-            allComponents = temp;
+            allComponents = newList;
         }
-        private void GetComponentsInAssembly(Assembly assem, string nmspace, ref List<T> temp)
+        private List<T> GetComponentsInAssembly(Assembly assem)
         {
             IEnumerable<Type> q = from t in assem.GetTypes()
-                    where t.IsSubclassOf(typeof(T)) && t.Namespace == nmspace
+                    where t.IsSubclassOf(typeof(T))
                     select t;
             foreach (Type item in q)
             {
@@ -57,8 +56,9 @@ namespace sapra.ObjectController
                 else
                     temp.Add(ObjectFound);
             }
+            return temp;
         }
-        public override void SleepComponents(CObject cObject)
+        public override void SleepComponents(Z cObject)
         {
             for(int i = allComponents.Count-1; i>= 0; i--)
             {
@@ -66,7 +66,7 @@ namespace sapra.ObjectController
                 component.Sleep(cObject);                
             }
         }
-        public override void InitializeComponents(CObject cObject)
+        public override void InitializeComponents(Z cObject)
         {
             this.cObject = cObject;
             if(this.cObject == null)
@@ -110,12 +110,12 @@ namespace sapra.ObjectController
             return null;
         }
     }
-    public abstract class AbstractModule
+    [System.Serializable]
+    public abstract class AbstractModule<T> where T : AbstractCObject
     {
-        public abstract void InitializeComponents(CObject cObject);
-        public abstract void SleepComponents(CObject cObject);
-        public abstract void GetAllComponents(string nmspace);
+        public abstract void InitializeComponents(T cObject);
+        public abstract void SleepComponents(T cObject);
+        public abstract void GetAllComponents();
         public bool onlyEnabled = true;
-        public abstract ObjectComponent FindComponent(Type component);
     }
 }

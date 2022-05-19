@@ -4,8 +4,8 @@ using sapra.ObjectController;
 
 namespace sapra.ObjectController.Editor
 {
-    [CustomPropertyDrawer(typeof(ObjectComponent), true)]
-    public class ObjectComponentDrawer : PropertyDrawer
+    [CustomPropertyDrawer(typeof(AbstractRoutine), true)]
+    public class AbstractRoutineDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {

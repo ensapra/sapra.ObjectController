@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 
-namespace sapra.ObjectController
+namespace sapra.ObjectController.Samples
 {
     public enum PassivePriority{FirstOfAll,BeforeActive, AfterActive, LastOne, never}
     [System.Serializable]
-    public abstract class AbstractPassive : ObjectComponent
+    public abstract class AbstractPassive : AbstractRoutine<CObject>
     {    
         [SerializeField]
         public abstract PassivePriority whenDo{get;}

@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 
-namespace sapra.ObjectController
+namespace sapra.ObjectController.Samples
 {
     [System.Serializable]
-    public abstract class AbstractActive : ObjectComponent
+    public abstract class AbstractActive : AbstractRoutine<CObject>
     {
         public abstract int priorityID{get;}
         public bool isActive{get{return cObject.activeModule.currentAction == this;}}

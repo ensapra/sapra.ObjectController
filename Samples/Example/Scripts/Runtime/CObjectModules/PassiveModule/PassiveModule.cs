@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-namespace sapra.ObjectController
+namespace sapra.ObjectController.Samples
 {
     [System.Serializable]
-    public class PassiveModule : AbstractModule<AbstractPassive>
+    public class PassiveModule : AbstractModule<AbstractPassive, CObject>
     {
         public void Run(PassivePriority wichOnes, InputValues _input, bool continuosCheck)
         {   
