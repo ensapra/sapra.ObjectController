@@ -39,6 +39,7 @@ namespace sapra.ObjectController
             IEnumerable<Type> q = from t in assem.GetTypes()
                     where t.IsSubclassOf(typeof(T))
                     select t;
+            List<T> temp = new List<T>();
             foreach (Type item in q)
             {
                 T ObjectFound = allComponents.Find(x => x != null && x.GetType() == item);
