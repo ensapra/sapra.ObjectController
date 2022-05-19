@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace sapra.ObjectController
+namespace sapra.ObjectController.Samples
 {
     [System.Serializable]
-    public class StatModule : AbstractModule<AbstractStat>
+    public class StatModule : AbstractModule<AbstractStat, CObject>
     {        
         public void Run(bool continuosCheck)
         {

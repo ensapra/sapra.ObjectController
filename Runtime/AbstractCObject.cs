@@ -6,16 +6,11 @@ namespace sapra
 {
     public class AbstractCObject : MonoBehaviour
     {
-        // Start is called before the first frame update
-        void Start()
-        {
+        [Tooltip("Enables Continuous check of new components")]
+        public bool continuosCheck = true;
+        public static float TimeScale = 1f;
         
-        }
+        [HideInInspector] public Rigidbody rb;
 
-        // Update is called once per frame
-        void Update()
-        {
-        
-        }
     }
 }

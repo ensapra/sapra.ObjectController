@@ -273,6 +273,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   continuosCheck: 1
   rb: {fileID: 0}
+  ComponentsNamespace: sapra.ObjectController.Samples
   activeModule:
     onlyEnabled: 1
     cObject: {fileID: 1846917093848713169}

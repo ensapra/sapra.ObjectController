@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace sapra.ObjectController
+namespace sapra.ObjectController.Samples
 {
     [System.Serializable]
-    public class ActiveModule : AbstractModule<AbstractActive<AbstractCObject>>
+    public class ActiveModule : AbstractModule<AbstractActive, CObject>
     {
         [SerializeReference]
         public AbstractActive currentAction;

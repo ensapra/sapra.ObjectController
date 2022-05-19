@@ -5,18 +5,12 @@ using UnityEngine;
 namespace sapra.ObjectController
 {
     [System.Serializable]
-    public abstract class AbstractRoutine<T> where T : AbstractCObject
+    public abstract class AbstractRoutine<T> : AbstractRoutine where T : AbstractCObject
     {
         protected T cObject;
-        [SerializeField] [HideInInspector] private bool wantsAwake = false;
-        [SerializeField] [HideInInspector] private bool isAwake;
-
-        protected Transform transform;
-        protected Rigidbody rb;
-
         public void Awake(T abstractCObject)
         {
-            this.cObject = cObject;
+            this.cObject = abstractCObject;
             wantsAwake = true;
             isAwake = true;
             transform = cObject.transform;
@@ -32,6 +26,13 @@ namespace sapra.ObjectController
         protected virtual void AwakeObject(T cObject){}
         protected abstract void AwakeComponent(T cObject);
         protected virtual void SleepComponent(T cObject){}
+    }
+    public abstract class AbstractRoutine
+    {
+        [SerializeField] [HideInInspector] protected bool wantsAwake = false;
+        [SerializeField] [HideInInspector] protected bool isAwake;
+        protected Transform transform;
+        protected Rigidbody rb;
         public bool wantsAwakened{get{return wantsAwake;}}
         public bool awakened{get{return isAwake;}}
     }

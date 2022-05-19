@@ -3,19 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
-namespace sapra.ObjectController
+namespace sapra.ObjectController.Samples
 {
 [RequireComponent(typeof(Rigidbody))]
 public class CObject : AbstractCObject 
 {
     [SerializeField] private string ComponentsNamespace = "sapra.ObjectController";
 
-    [Tooltip("Enables Continuous check of new components")]
-    public bool continuosCheck = true;
-    public static float TimeScale = 1f;
-
-    [HideInInspector] public Rigidbody rb;
-    private List<AbstractModule> modules = new List<AbstractModule>();
+    private List<AbstractModule<CObject>> modules = new List<AbstractModule<CObject>>();
     public ActiveModule activeModule = new ActiveModule();
     public PassiveModule passiveModule = new PassiveModule();
     public StatModule statModule = new StatModule();
@@ -47,12 +42,12 @@ public class CObject : AbstractCObject
         addModules();
         if(forcedRestart)
         {
-            foreach(AbstractModule module in modules)
+            foreach(AbstractModule<CObject> module in modules)
             {
                 module.SleepComponents(this);
             }
         }
-        foreach(AbstractModule module in modules)
+        foreach(AbstractModule<CObject> module in modules)
         {
             module.InitializeComponents(this);
         }
@@ -60,7 +55,7 @@ public class CObject : AbstractCObject
     public void SwitchTo(bool showEnabled)
     {
         onlyEnabled = showEnabled;
-        foreach(AbstractModule module in modules)
+        foreach(AbstractModule<CObject> module in modules)
             module.onlyEnabled = showEnabled;
     }
     public T RequestComponent<T>(bool required) where T : Component
@@ -70,9 +65,9 @@ public class CObject : AbstractCObject
             requested = this.gameObject.AddComponent<T>();
         return requested;
     }
-    public AbstractModule FindModule(Type module)
+    public AbstractModule<CObject> FindModule(Type module)
     {
-        foreach(AbstractModule moduleFound in modules)
+        foreach(AbstractModule<CObject>  moduleFound in modules)
         {
             if(moduleFound.GetType().IsEquivalentTo(module))
             {
@@ -99,7 +94,7 @@ public class CObject : AbstractCObject
     public void GetAllComponents()
     {
         addModules();
-        foreach(AbstractModule module in modules)
+        foreach(AbstractModule<CObject> module in modules)
         {
             module.GetAllComponents(ComponentsNamespace);
         }

@@ -1,8 +1,9 @@
 using UnityEngine;
 using UnityEditor;
 using sapra.ObjectController;
+using sapra.ObjectController.Editor;
 
-namespace sapra.ObjectController.Editor
+namespace sapra.ObjectController.Samples.Editor
 {
     [CustomEditor(typeof(CObject))]
     public class CObjectEditor : UnityEditor.Editor

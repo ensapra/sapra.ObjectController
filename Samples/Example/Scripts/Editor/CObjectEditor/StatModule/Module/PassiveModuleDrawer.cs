@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using sapra.ObjectController;
+using sapra.ObjectController.Editor;
 
-namespace sapra.ObjectController.Editor
+namespace sapra.ObjectController.Samples.Editor
 {
     [CustomPropertyDrawer(typeof(PassiveModule))]
     public class PassiveModuleDrawer : ModuleDrawer
