@@ -27,13 +27,14 @@ namespace sapra.ObjectController
         public override void GetAllComponents()
         {
             List<Assembly> assemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
-            allComponents.Clear();
+            List<T> newList = new List<T>();
             foreach(Assembly assembly in assemblies)
             {
-                GetComponentsInAssembly(assembly);
+                newList.AddRange(GetComponentsInAssembly(assembly));
             }
+            allComponents = newList;
         }
-        private void GetComponentsInAssembly(Assembly assem)
+        private List<T> GetComponentsInAssembly(Assembly assem)
         {
             IEnumerable<Type> q = from t in assem.GetTypes()
                     where t.IsSubclassOf(typeof(T))
@@ -56,7 +57,7 @@ namespace sapra.ObjectController
                 else
                     temp.Add(ObjectFound);
             }
-            allComponents.AddRange(temp);
+            return temp;
         }
         public override void SleepComponents(Z cObject)
         {
