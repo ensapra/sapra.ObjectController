@@ -18,9 +18,9 @@
   },
   "samples": [
       {
-          "displayName": "Basic Character Controller",
-          "description": "Contains implementations of a character controller, capable to Swim, Walk, Jump, Move in the Air, and other actions",
-          "path": "Samples~/Example"
+        "displayName": "Basic Character Controller",
+        "description": "Contains implementations of a character controller, capable to Swim, Walk, Jump, Move in the Air, and other actions",
+        "path": "Samples~/Example"
       }
   ]
 }
