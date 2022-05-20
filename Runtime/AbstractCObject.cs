@@ -8,7 +8,7 @@ namespace sapra.ObjectController
     [RequireComponent(typeof(Rigidbody))]
     public abstract class AbstractCObject : MonoBehaviour
     {        
-        protected List<AbstractModule<AbstractRoutine>> modules = new List<AbstractModule<AbstractRoutine>>();
+        protected List<AbstractModule> modules = new List<AbstractModule>();
         [Tooltip("Enables Continuous check of new components")]
         public bool continuosCheck = true;
         public static float TimeScale = 1f;   
@@ -28,13 +28,13 @@ namespace sapra.ObjectController
                 requested = this.gameObject.AddComponent<T>();
             return requested;
         }
-        public T FindModule<T>(Type module) where T : AbstractModule<AbstractRoutine>
+        public T FindModule<T>() where T : AbstractModule
         {
-            foreach(T moduleFound in modules)
+            foreach(AbstractModule moduleFound in modules)
             {
-                if(moduleFound.GetType().IsEquivalentTo(module))
+                if(moduleFound.GetType().IsEquivalentTo(typeof(T)))
                 {
-                    return moduleFound;
+                    return moduleFound as T;
                 }
             }
             return null;
@@ -42,7 +42,7 @@ namespace sapra.ObjectController
         public void SwitchTo(bool showEnabled)
         {
             onlyEnabled = showEnabled;
-            foreach(AbstractModule<AbstractRoutine> module in modules)
+            foreach(AbstractModule module in modules)
                 module.onlyEnabled = showEnabled;
         }
         protected abstract void addModules();
@@ -59,12 +59,12 @@ namespace sapra.ObjectController
             addModules();
             if(forcedRestart)
             {
-                foreach(AbstractModule<AbstractRoutine> module in modules)
+                foreach(AbstractModule module in modules)
                 {
                     module.SleepComponents(this);
                 }
             }
-            foreach(AbstractModule<AbstractRoutine> module in modules)
+            foreach(AbstractModule module in modules)
             {
                 module.InitializeComponents(this);
             }
