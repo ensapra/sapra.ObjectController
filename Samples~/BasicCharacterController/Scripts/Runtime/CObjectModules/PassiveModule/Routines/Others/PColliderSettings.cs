@@ -53,10 +53,9 @@ namespace sapra.ObjectController
         private float temporalRadious = -1;
         private float temporalFactor = -1;
         // Start is called before the first frame update
-        protected override void AwakeComponent(CObject cObject)
-        {
-            _pWalkableDetection = cObject.passiveModule.RequestComponent<PWalkableDetection>(true);
-            _sDim = cObject.statModule.RequestComponent<SDimensions>(true);
+        protected override void AwakeComponent(AbstractCObject cObject)        {
+            _pWalkableDetection = cObject.FindModule<PassiveModule>().RequestComponent<PWalkableDetection>(true);
+            _sDim = cObject.FindModule<StatModule>().RequestComponent<SDimensions>(true);
             colliderCom = cObject.RequestComponent<CapsuleCollider>(true);
 
             if(materials.Count < 2)

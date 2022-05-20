@@ -25,9 +25,8 @@ namespace sapra.ObjectController
         [HideInInspector] public Rigidbody rbFound;
         private RaycastHit hit;
         
-        protected override void AwakeComponent(CObject cObject)
-        {
-            _sDimension = cObject.statModule.RequestComponent<SDimensions>(true);
+        protected override void AwakeComponent(AbstractCObject cObject)        {
+            _sDimension = cObject.FindModule<StatModule>().RequestComponent<SDimensions>(true);
         }
         public override void DoPassive(Vector3 position, InputValues input)
         {

@@ -18,12 +18,12 @@ namespace sapra.ObjectController
         public float smoothness = 10;
         public override PassivePriority whenDo => PassivePriority.BeforeActive;
         
-        protected override void AwakeComponent(CObject cObject)
-        {
-            _pWalkableDetection = cObject.passiveModule.RequestComponent<PWalkableDetection>(true);
-            _sDimensions = cObject.statModule.RequestComponent<SDimensions>(true);
-            _pFloatDetection = cObject.passiveModule.RequestComponent<PFloatDetection>(false);
-            _pColliderSettings = cObject.passiveModule.RequestComponent<PColliderSettings>(true);
+        protected override void AwakeComponent(AbstractCObject cObject)        {
+            PassiveModule passiveModule = cObject.FindModule<PassiveModule>();
+            _pWalkableDetection = passiveModule.RequestComponent<PWalkableDetection>(true);
+            _pFloatDetection = passiveModule.RequestComponent<PFloatDetection>(false);
+            _pColliderSettings = passiveModule.RequestComponent<PColliderSettings>(true);
+            _sDimensions = cObject.FindModule<StatModule>().RequestComponent<SDimensions>(true);
         }
 
         public override void DoPassive(Vector3 position, InputValues input)

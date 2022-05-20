@@ -35,10 +35,10 @@ namespace sapra.ObjectController
                 return false;        
         }
 
-        protected override void AwakeComponent(CObject cObject)
-        {
-            _pWalkableDetection = cObject.passiveModule.RequestComponent<PWalkableDetection>(true);
-            _pDirectionManager = cObject.passiveModule.RequestComponent<PDirectionManager>(true);
+        protected override void AwakeComponent(AbstractCObject cObject)        {
+            PassiveModule passiveModule = cObject.FindModule<PassiveModule>();
+            _pWalkableDetection = passiveModule.RequestComponent<PWalkableDetection>(true);
+            _pDirectionManager = passiveModule.RequestComponent<PDirectionManager>(true);
         }
     }
 }

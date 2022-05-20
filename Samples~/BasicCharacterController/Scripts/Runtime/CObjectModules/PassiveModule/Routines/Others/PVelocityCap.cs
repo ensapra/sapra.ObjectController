@@ -12,10 +12,10 @@ namespace sapra.ObjectController
         [Tooltip("Maximum allowed velocity on the Object")]
         public float maxVelocity = -50;
         InputValues _input;
-
-        protected override void AwakeComponent(CObject cObject)
-        {
-            _pWalkableDetection = cObject.passiveModule.RequestComponent<PWalkableDetection>(false);
+        ActiveModule activeModule;
+        protected override void AwakeComponent(AbstractCObject cObject)        {
+            activeModule = cObject.FindModule<ActiveModule>();
+            _pWalkableDetection = cObject.FindModule<PassiveModule>().RequestComponent<PWalkableDetection>(false);
             _input = cObject.RequestComponent<InputValueHolder>(true).input;
         }
         public override void DoPassive(Vector3 position, InputValues input)
@@ -27,7 +27,7 @@ namespace sapra.ObjectController
             if(_pWalkableDetection == null || _input == null)
                 return;        
                 
-            if(_pWalkableDetection != null &&_pWalkableDetection.Walkable && cObject.activeModule.currentAction == null)
+            if(_pWalkableDetection != null &&_pWalkableDetection.Walkable && activeModule.currentAction == null)
                 if(!_pWalkableDetection.rbFound)                
                     rb.velocity = Vector3.zero;                
         }

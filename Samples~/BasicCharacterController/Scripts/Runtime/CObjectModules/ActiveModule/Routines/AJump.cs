@@ -29,14 +29,15 @@ namespace sapra.ObjectController
         private Stat minJumpVelocity;
 
         private Vector3 latestVelocity;
-        protected override void AwakeComponent(CObject cObject)
-        {
-            _sDimensions = cObject.statModule.RequestComponent<SDimensions>(true);
-            _pWalkableDetection = cObject.passiveModule.RequestComponent<PWalkableDetection>(true);
-            _pRoofDetection = cObject.passiveModule.RequestComponent<PRoofDetection>(true);
-            _pFloatDetection =  cObject.passiveModule.RequestComponent<PFloatDetection>(false);
-            _pDirectionManager = cObject.passiveModule.RequestComponent<PDirectionManager>(true);
-            SForces _sForces = cObject.statModule.RequestComponent<SForces>(true);
+        protected override void AwakeComponent(AbstractCObject cObject)        {
+            StatModule statModule = cObject.FindModule<StatModule>();
+            PassiveModule passiveModule = cObject.FindModule<PassiveModule>();
+            _sDimensions = statModule.RequestComponent<SDimensions>(true);
+            _pWalkableDetection = passiveModule.RequestComponent<PWalkableDetection>(true);
+            _pRoofDetection = passiveModule.RequestComponent<PRoofDetection>(true);
+            _pFloatDetection =  passiveModule.RequestComponent<PFloatDetection>(false);
+            _pDirectionManager = passiveModule.RequestComponent<PDirectionManager>(true);
+            SForces _sForces = statModule.RequestComponent<SForces>(true);
             maxFJump = _sForces.maxFJump.Select();
             maxJumpVelocity = _sForces.maximumSpeed.Select();
             minJumpVelocity = _sForces.minimumSpeed.Select();

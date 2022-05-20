@@ -92,10 +92,9 @@ namespace sapra.ObjectController
             Plane middlePoint = new Plane(cross, ladderPositionOnWall);
             return middlePoint.ClosestPointOnPlane(wall.ClosestPointOnPlane(position))+_sDimensions.characterRadious*normalVector;
         }
-        protected override void AwakeComponent(CObject cObject)
-        {
-            _sDimensions = cObject.statModule.RequestComponent<SDimensions>(true);
-            _pWalkableDetection = cObject.passiveModule.RequestComponent<PWalkableDetection>(true);
+        protected override void AwakeComponent(AbstractCObject cObject)        {
+            _sDimensions = cObject.FindModule<StatModule>().RequestComponent<SDimensions>(true);
+            _pWalkableDetection = cObject.FindModule<PassiveModule>().RequestComponent<PWalkableDetection>(true);
         }
     }
 }

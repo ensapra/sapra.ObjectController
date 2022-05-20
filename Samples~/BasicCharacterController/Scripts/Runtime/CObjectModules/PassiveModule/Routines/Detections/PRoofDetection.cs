@@ -15,9 +15,8 @@ namespace sapra.ObjectController
         [Header("Result")]
         public bool topWall;
         public float distance;
-        protected override void AwakeComponent(CObject cObject)
-        {
-            _sDimensions = cObject.statModule.RequestComponent<SDimensions>(true);
+        protected override void AwakeComponent(AbstractCObject cObject)        {
+            _sDimensions = cObject.FindModule<StatModule>().RequestComponent<SDimensions>(true);
         }
 
         public override void DoPassive(Vector3 position, InputValues input)

@@ -28,11 +28,10 @@ namespace sapra.ObjectController
         }
 
 
-        protected override void AwakeComponent(CObject cObject)
-        {
+        protected override void AwakeComponent(AbstractCObject cObject)        {
             direction = cObject.gravityDirection;
             gravityMultiplierBase = cObject.gravityMultiplier;
-            _pDirectionManager = cObject.passiveModule.RequestComponent<PDirectionManager>(true);
+            _pDirectionManager = cObject.FindModule<PassiveModule>().RequestComponent<PDirectionManager>(true);
         }
     }
 }

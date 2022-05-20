@@ -21,15 +21,16 @@ namespace sapra.ObjectController
 
         private Vector3 finalDirection;
         private bool insideWater;
-        protected override void AwakeComponent(CObject cObject)
-        {
-            _pFloatDetection = cObject.passiveModule.RequestComponent<PFloatDetection>(true);
-            _pWalkableDetection = cObject.passiveModule.RequestComponent<PWalkableDetection>(true);
-            _sDim = cObject.statModule.RequestComponent<SDimensions>(true);
-            _pColliderSettings = cObject.passiveModule.RequestComponent<PColliderSettings>(true);
-            _pDirectionManager = cObject.passiveModule.RequestComponent<PDirectionManager>(true);
-            cObject.passiveModule.RequestComponent<PExtraGravity>(true);
-            _sForces = cObject.statModule.RequestComponent<SForces>(true);
+        protected override void AwakeComponent(AbstractCObject cObject)        {
+            PassiveModule passiveModule = cObject.FindModule<PassiveModule>();
+            StatModule statModule = cObject.FindModule<StatModule>();
+            _pFloatDetection = passiveModule.RequestComponent<PFloatDetection>(true);
+            _pWalkableDetection = passiveModule.RequestComponent<PWalkableDetection>(true);
+            _pColliderSettings = passiveModule.RequestComponent<PColliderSettings>(true);
+            _pDirectionManager = passiveModule.RequestComponent<PDirectionManager>(true);
+            passiveModule.RequestComponent<PExtraGravity>(true);
+            _sDim = statModule.RequestComponent<SDimensions>(true);
+            _sForces = statModule.RequestComponent<SForces>(true);
             swimVelocity = _sForces.minimumWaterSpeed.Select();
             sprintSwimVelocity = _sForces.maximumWaterSpeed.Select();
             desiredVelocity = _sForces.selectedSpeed.Select();

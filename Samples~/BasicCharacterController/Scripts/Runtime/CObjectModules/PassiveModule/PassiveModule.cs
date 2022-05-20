@@ -4,7 +4,7 @@ using UnityEngine;
 namespace sapra.ObjectController
 {
     [System.Serializable]
-    public class PassiveModule : AbstractModule<AbstractPassive, CObject>
+    public class PassiveModule : AbstractModule<AbstractPassive>
     {
         public void Run(PassivePriority wichOnes, InputValues _input, bool continuosCheck)
         {   

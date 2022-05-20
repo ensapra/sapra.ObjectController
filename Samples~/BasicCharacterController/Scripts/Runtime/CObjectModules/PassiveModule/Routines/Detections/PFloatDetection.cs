@@ -24,10 +24,9 @@ namespace sapra.ObjectController
 
         [HideInInspector] public Vector3 normal;
         public SurfaceStates surfaceState;
-        protected override void AwakeComponent(CObject cObject)
-        {
-            _sDimensions = cObject.statModule.RequestComponent<SDimensions>(true);
-            _pWalkableDetection = cObject.passiveModule.RequestComponent<PWalkableDetection>(false);
+        protected override void AwakeComponent(AbstractCObject cObject)        {
+            _sDimensions = cObject.FindModule<StatModule>().RequestComponent<SDimensions>(true);
+            _pWalkableDetection = cObject.FindModule<PassiveModule>().RequestComponent<PWalkableDetection>(false);
         }
 
         public override void DoPassive(Vector3 positionIni, InputValues input)

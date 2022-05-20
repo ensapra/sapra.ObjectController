@@ -19,8 +19,7 @@ namespace sapra.ObjectController
 
         private List<Stat> allStats = new List<Stat>();
         [HideInInspector] public Vector3 currentRBSpeed;
-        protected override void AwakeComponent(CObject cObject)
-        {
+        protected override void AwakeComponent(AbstractCObject cObject)        {
             allStats.Clear();
             allStats.Add(maximumSpeed);
             allStats.Add(maximumSlideSpeed);

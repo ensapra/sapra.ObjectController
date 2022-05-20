@@ -15,12 +15,12 @@ namespace sapra.ObjectController
         private Stat desiredVelocity;
         private SForces _sForces;
         private bool overriden;
-        protected override void AwakeComponent(CObject cObject)
-        {
-            _pWalkableDetection = cObject.passiveModule.RequestComponent<PWalkableDetection>(true);
-            _pDirectionManager = cObject.passiveModule.RequestComponent<PDirectionManager>(true);
-            cObject.passiveModule.RequestComponent<PVelocityCap>(true);
-            SForces _sForces = cObject.statModule.RequestComponent<SForces>(true);
+        protected override void AwakeComponent(AbstractCObject cObject)        {
+            PassiveModule passiveModule = cObject.FindModule<PassiveModule>();
+            _pWalkableDetection = passiveModule.RequestComponent<PWalkableDetection>(true);
+            _pDirectionManager = passiveModule.RequestComponent<PDirectionManager>(true);
+            passiveModule.RequestComponent<PVelocityCap>(true);
+            SForces _sForces = cObject.FindModule<StatModule>().RequestComponent<SForces>(true);
             sprintVelocity = _sForces.maximumSpeed;
             walkVelocity = _sForces.minimumSpeed.Select();
             normalVelocity = _sForces.passiveSpeed.Select();

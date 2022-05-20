@@ -11,9 +11,8 @@ namespace sapra.ObjectController
     {
         public LevelHolderList levelList = new LevelHolderList();
         private SForces sForces;
-        protected override void AwakeComponent(CObject cObject)
-        {
-            sForces = cObject.statModule.RequestComponent<SForces>(true);
+        protected override void AwakeComponent(AbstractCObject cObject)        {
+            sForces = cObject.FindModule<StatModule>().RequestComponent<SForces>(true);
             if(levelList == null)
                 levelList = new LevelHolderList();
             levelList.Initialize(sForces);

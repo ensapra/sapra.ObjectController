@@ -45,9 +45,8 @@ namespace sapra.ObjectController
         {
             directionalReference = transform;
         }
-        protected override void AwakeComponent(CObject cObject)
-        {
-            _pWalkableDetection = cObject.passiveModule.RequestComponent<PWalkableDetection>(false);
+        protected override void AwakeComponent(AbstractCObject cObject)        {
+            _pWalkableDetection = cObject.FindModule<PassiveModule>().RequestComponent<PWalkableDetection>(false);
             rigidbody = cObject.RequestComponent<Rigidbody>(true);
         }
         public Vector3 GetDirection(InputValues _input)

@@ -20,16 +20,19 @@ namespace sapra.ObjectController
         private SDimensions _sDimensions;
         private float heightLerped; 
         public override int priorityID => 10;
-        protected override void AwakeComponent(CObject cObject)
-        {
-            _aMove = cObject.activeModule.RequestComponent<AMove>(true);
-            _pWalkableDetection = cObject.passiveModule.RequestComponent<PWalkableDetection>(true);
-            _pRoofDetection = cObject.passiveModule.RequestComponent<PRoofDetection>(true);
-            _pColliderSettings = cObject.passiveModule.RequestComponent<PColliderSettings>(true);
-            _pFloatDetection = cObject.passiveModule.RequestComponent<PFloatDetection>(false);
-            _sDimensions = cObject.statModule.RequestComponent<SDimensions>(true);
-            crouchVelocity = cObject.statModule.RequestComponent<SForces>(true).minimumSpeed.Select();
-            desiredVelocity = cObject.statModule.RequestComponent<SForces>(true).selectedSpeed.Select();
+        protected override void AwakeComponent(AbstractCObject cObject)        {
+            PassiveModule passiveModule = cObject.FindModule<PassiveModule>();
+            StatModule statModule = cObject.FindModule<StatModule>();
+            ActiveModule activeModule = cObject.FindModule<ActiveModule>();
+
+            _aMove = activeModule.RequestComponent<AMove>(true);
+            _pWalkableDetection = passiveModule.RequestComponent<PWalkableDetection>(true);
+            _pRoofDetection = passiveModule.RequestComponent<PRoofDetection>(true);
+            _pColliderSettings = passiveModule.RequestComponent<PColliderSettings>(true);
+            _pFloatDetection = passiveModule.RequestComponent<PFloatDetection>(false);
+            _sDimensions = statModule.RequestComponent<SDimensions>(true);
+            crouchVelocity = statModule.RequestComponent<SForces>(true).minimumSpeed.Select();
+            desiredVelocity = statModule.RequestComponent<SForces>(true).selectedSpeed.Select();
         }
 
         public override void DoActive(InputValues input)

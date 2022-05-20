@@ -5,7 +5,7 @@ using UnityEngine;
 namespace sapra.ObjectController
 {
     [System.Serializable]
-    public class StatModule : AbstractModule<AbstractStat, CObject>
+    public class StatModule : AbstractModule<AbstractStat>
     {        
         public void Run(bool continuosCheck)
         {
