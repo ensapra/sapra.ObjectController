@@ -15,6 +15,8 @@ namespace sapra.ObjectController
         [HideInInspector] public Rigidbody rb;
         [HideInInspector]
         [SerializeField] protected bool onlyEnabled = true;
+        [HideInInspector] public Vector3 gravityDirection;
+        [HideInInspector] public float gravityMultiplier;
         void Start() {
             onlyEnabled = true;
             InitializeObject(true);
