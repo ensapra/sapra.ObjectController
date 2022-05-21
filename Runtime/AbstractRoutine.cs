@@ -13,24 +13,25 @@ namespace sapra.ObjectController
         protected Rigidbody rb;
         public bool wantsAwakened{get{return wantsAwake;}}
         public bool awakened{get{return isAwake;}}
-        protected AbstractCObject cObject;
-        public void Awake(AbstractCObject abstractCObject)
+        protected AbstractCObject controller;
+        
+        public void Awake(AbstractCObject controller)
         {
-            this.cObject = abstractCObject;
+            this.controller = controller;
             wantsAwake = true;
             isAwake = true;
-            transform = cObject.transform;
-            rb = cObject.rb;
-            AwakeObject(abstractCObject);
-            AwakeComponent(abstractCObject);
+            transform = controller.transform;
+            rb = controller.rb;
+            AwakeObject(controller);
+            AwakeComponent(controller);
         }
-        public void Sleep(AbstractCObject abstractCObject)
+        public void Sleep(AbstractCObject controller)
         {
-            SleepComponent(abstractCObject);
+            SleepComponent(controller);
             isAwake = false;
         }
-        protected virtual void AwakeObject(AbstractCObject cObject){}
-        protected abstract void AwakeComponent(AbstractCObject cObject);
-        protected virtual void SleepComponent(AbstractCObject cObject){}
+        protected virtual void AwakeObject(AbstractCObject controller){}
+        protected abstract void AwakeComponent(AbstractCObject controller);
+        protected virtual void SleepComponent(AbstractCObject controller){}
     }
 }

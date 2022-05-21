@@ -7,20 +7,27 @@ namespace sapra.ObjectController
 {
     [RequireComponent(typeof(Rigidbody))]
     public abstract class AbstractCObject : MonoBehaviour
-    {        
-        protected List<AbstractModule> modules = new List<AbstractModule>();
+    {                
         [Tooltip("Enables Continuous check of new components")]
         public bool continuosCheck = true;
-        public static float TimeScale = 1f;   
+        
         [HideInInspector] public Rigidbody rb;
-        [HideInInspector]
-        [SerializeField] protected bool onlyEnabled = true;
+        [HideInInspector] [SerializeField] protected bool onlyEnabled = true;
+
         [HideInInspector] public Vector3 gravityDirection;
         [HideInInspector] public float gravityMultiplier;
-        void Start() {
+        
+        protected List<AbstractModule> modules = new List<AbstractModule>();
+        
+        void Awake() {
+            rb = GetComponent<Rigidbody>();
+            gravityDirection = Physics.gravity.normalized;
+            gravityMultiplier = Physics.gravity.magnitude;
             onlyEnabled = true;
             InitializeObject(true);
         }
+
+        #region Object Requests
         public T RequestComponent<T>(bool required) where T : Component
         {
             T requested = GetComponent<T>();
@@ -28,7 +35,7 @@ namespace sapra.ObjectController
                 requested = this.gameObject.AddComponent<T>();
             return requested;
         }
-        public T FindModule<T>() where T : AbstractModule
+        public T RequestModule<T>() where T : AbstractModule
         {
             foreach(AbstractModule moduleFound in modules)
             {
@@ -39,21 +46,8 @@ namespace sapra.ObjectController
             }
             return null;
         }
-        public void SwitchTo(bool showEnabled)
-        {
-            onlyEnabled = showEnabled;
-            foreach(AbstractModule module in modules)
-                module.onlyEnabled = showEnabled;
-        }
-        protected abstract void addModules();
-        public void GetAllComponents()
-        {
-            addModules();
-            foreach(AbstractModule module in modules)
-            {
-                module.GetAllComponents();
-            }
-        }    
+        #endregion
+
         public void InitializeObject(bool forcedRestart)
         {
             addModules();
@@ -69,6 +63,25 @@ namespace sapra.ObjectController
                 module.InitializeComponents(this);
             }
         }
+        public void SwitchTo(bool showEnabled)
+        {
+            onlyEnabled = showEnabled;
+            foreach(AbstractModule module in modules)
+                module.onlyEnabled = showEnabled;
+        } 
+        public void GetAllComponents()
+        {
+            addModules();
+            foreach(AbstractModule module in modules)
+            {
+                module.GetAllComponents();
+            }
+        }   
+
+        #region Abstract
+        protected abstract void addModules();
+
+        #endregion
 
     }
 }
