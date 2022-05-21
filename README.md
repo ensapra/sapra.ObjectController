@@ -18,9 +18,22 @@ By using this workflow, components are nicely grouped, without losing the contro
 
 ![image](https://user-images.githubusercontent.com/61149758/167370830-dfe5df6a-1fa1-4d32-b1be-3f4800c9e589.png)
 
-## Scripts
+## Implementation
+An example of implementation can be found on the Samples Folder:
 
+1 - Create a "controller" deriving from AbstractCControl:
+From this script we will manage the diferent modules, time of execution and other generic variables. That's the monobehaviour that will be added to the gameObject. It's the root of everything
+2 - Create "parent routines" deriving from AbstractRoutine:
+From this script we will create the functions to be used on all of those routines. It must be System.Serializable, and abstract. That's a leaf
+3 - Create a "module" deriving from AbstractModule of type of the parent routine:
+From this script you will manage all the routines, the order of execution by using the list onlyEnabled, and setting a method to be called from the controller. That's a branch.
+4 - Create a "child routine" deriving from the previous parent routine: 
+From this script you will make the implementation of each action that you might need. Those will be the ants, and it will contain the actual work.
 
+5 - Finally, create a custom property drawer script deriving from ModuleDrawer, for your "module"
+This script doesn't require any code in it, and it will allow the module to be rendered
+
+All of the mentioned scripts must contain [System.Serializable].
 
 ## References
 Mini-Components by Sascha Graeff
