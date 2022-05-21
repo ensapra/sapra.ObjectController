@@ -41,4 +41,4 @@ All of the mentioned scripts must contain [System.Serializable].
 ## References
 Mini-Components by Sascha Graeff
   https://gitlab.com/13pixels/tools/Mini-Components/-/tree/master
-  Allows to create a containr for components and Scriptabl Objects
+  Allows to create a containr for components and Scriptable Objects
