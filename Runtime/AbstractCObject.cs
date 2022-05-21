@@ -17,7 +17,7 @@ namespace sapra.ObjectController
         [HideInInspector] public Vector3 gravityDirection;
         [HideInInspector] public float gravityMultiplier;
         
-        protected List<AbstractModule> modules = new List<AbstractModule>();
+        private List<AbstractModule> modules = new List<AbstractModule>();
         
         void Awake() {
             rb = GetComponent<Rigidbody>();
@@ -77,6 +77,11 @@ namespace sapra.ObjectController
                 module.GetAllComponents();
             }
         }   
+        protected void AddModule(AbstractModule module)
+        {
+            if(!modules.Contains(module))
+                modules.Add(module);
+        }
 
         #region Abstract
         protected abstract void addModules();

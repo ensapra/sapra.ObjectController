@@ -7,8 +7,7 @@ using sapra.ObjectController;
 
 namespace sapra.ObjectController.Editor
 {
-    [CustomPropertyDrawer(typeof(AbstractModule), true)]
-    public class ModuleDrawer : PropertyDrawer
+    public abstract class ModuleDrawer : PropertyDrawer
     {
         protected GUIStyle boxButtonStyle;
         protected GUIStyle buttonStyle;

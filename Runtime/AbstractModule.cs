@@ -13,7 +13,6 @@ namespace sapra.ObjectController
         
         [SerializeReference] public List<T> allComponents = new List<T>();
         public List<T> onlyEnabledComponents = new List<T>();
-
         private List<T> GetComponentsInAssembly(Assembly assem)
         {
             IEnumerable<Type> q = from t in assem.GetTypes()
@@ -105,6 +104,7 @@ namespace sapra.ObjectController
         }
         #endregion
     }
+    
     [System.Serializable]
     public abstract class AbstractModule
     {
