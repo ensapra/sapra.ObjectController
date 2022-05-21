@@ -38,12 +38,9 @@ namespace sapra.ObjectController
         }
         protected override void addModules()
         {
-            if(!modules.Contains(statModule))
-                modules.Add(statModule);
-            if(!modules.Contains(passiveModule))
-                modules.Add(passiveModule);
-            if(!modules.Contains(activeModule))
-                modules.Add(activeModule);
+            AddModule(statModule);
+            AddModule(passiveModule);
+            AddModule(activeModule);
         }
     }
 }
