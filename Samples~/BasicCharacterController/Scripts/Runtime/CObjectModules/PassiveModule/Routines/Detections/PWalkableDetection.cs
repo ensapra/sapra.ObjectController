@@ -25,13 +25,12 @@ namespace sapra.ObjectController
         [HideInInspector] public Rigidbody rbFound;
         private RaycastHit hit;
         
-        protected override void AwakeComponent(CObject cObject)
-        {
-            _sDimension = cObject.statModule.RequestComponent<SDimensions>(true);
+        protected override void AwakeComponent(AbstractCObject controller)        {
+            _sDimension = controller.RequestModule<StatModule>().RequestRoutine<SDimensions>(true);
         }
         public override void DoPassive(Vector3 position, InputValues input)
         {
-            Vector3 topPosition = position+_sDimension.footOffset+_sDimension.currentHeight*2*-cObject.gravityDirection;
+            Vector3 topPosition = position+_sDimension.footOffset+_sDimension.currentHeight*2*-controller.gravityDirection;
             float maxDistance = _sDimension.currentHeight*3;
             float radious = (_sDimension.currentRadious-0.05f);
             Vector3 hitPoint = position;
@@ -39,8 +38,8 @@ namespace sapra.ObjectController
             Vector3 normalVector = Vector3.zero;
             RaycastHit hit;
             if(debug)
-                Debug.DrawRay(topPosition, cObject.gravityDirection*maxDistance, Color.black);
-            if(Physics.Raycast(topPosition, cObject.gravityDirection, out hit, maxDistance, groundMask))
+                Debug.DrawRay(topPosition, controller.gravityDirection*maxDistance, Color.black);
+            if(Physics.Raycast(topPosition, controller.gravityDirection, out hit, maxDistance, groundMask))
             {
                 normalVector = hit.normal;
                 hitPoint = (hit.point);
@@ -54,14 +53,14 @@ namespace sapra.ObjectController
             }
             rbFound = hit.rigidbody;
             if(debug)
-                Debug.DrawRay(topPosition, cObject.gravityDirection, Color.blue);
-            if(Physics.SphereCast(topPosition, radious, cObject.gravityDirection, out hit, maxDistance, groundMask))
+                Debug.DrawRay(topPosition, controller.gravityDirection, Color.blue);
+            if(Physics.SphereCast(topPosition, radious, controller.gravityDirection, out hit, maxDistance, groundMask))
             {
-                if(Vector3.Angle(hit.normal, cObject.gravityDirection) < _sDimension.maxWalkableAngle)
+                if(Vector3.Angle(hit.normal, controller.gravityDirection) < _sDimension.maxWalkableAngle)
                 {
                     normalVector = (normalVector +hit.normal)/2;
                     Vector3 direction = topPosition-hit.point;
-                    float dot = Vector3.Dot(direction, -cObject.gravityDirection);
+                    float dot = Vector3.Dot(direction, -controller.gravityDirection);
                     distanceToSurface = (distanceToSurface+dot)/2; 
                     hitPoint = (hitPoint+(hit.point))/2;
                     if(debug)
@@ -75,7 +74,7 @@ namespace sapra.ObjectController
             point = hitPoint;
             distance = distanceToSurface; 
             angleFront = Vector3.Angle(normal, transform.forward) - 90;
-            angle = Vector3.Angle(normal, -cObject.gravityDirection);  
+            angle = Vector3.Angle(normal, -controller.gravityDirection);  
             if(debug)
                 Debug.DrawRay(topPosition, normal, Color.red);
             

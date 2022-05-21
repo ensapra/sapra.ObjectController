@@ -20,16 +20,19 @@ namespace sapra.ObjectController
         private SDimensions _sDimensions;
         private float heightLerped; 
         public override int priorityID => 10;
-        protected override void AwakeComponent(CObject cObject)
-        {
-            _aMove = cObject.activeModule.RequestComponent<AMove>(true);
-            _pWalkableDetection = cObject.passiveModule.RequestComponent<PWalkableDetection>(true);
-            _pRoofDetection = cObject.passiveModule.RequestComponent<PRoofDetection>(true);
-            _pColliderSettings = cObject.passiveModule.RequestComponent<PColliderSettings>(true);
-            _pFloatDetection = cObject.passiveModule.RequestComponent<PFloatDetection>(false);
-            _sDimensions = cObject.statModule.RequestComponent<SDimensions>(true);
-            crouchVelocity = cObject.statModule.RequestComponent<SForces>(true).minimumSpeed.Select();
-            desiredVelocity = cObject.statModule.RequestComponent<SForces>(true).selectedSpeed.Select();
+        protected override void AwakeComponent(AbstractCObject controller)        {
+            PassiveModule passiveModule = controller.RequestModule<PassiveModule>();
+            StatModule statModule = controller.RequestModule<StatModule>();
+            ActiveModule activeModule = controller.RequestModule<ActiveModule>();
+
+            _aMove = activeModule.RequestRoutine<AMove>(true);
+            _pWalkableDetection = passiveModule.RequestRoutine<PWalkableDetection>(true);
+            _pRoofDetection = passiveModule.RequestRoutine<PRoofDetection>(true);
+            _pColliderSettings = passiveModule.RequestRoutine<PColliderSettings>(true);
+            _pFloatDetection = passiveModule.RequestRoutine<PFloatDetection>(false);
+            _sDimensions = statModule.RequestRoutine<SDimensions>(true);
+            crouchVelocity = statModule.RequestRoutine<SForces>(true).minimumSpeed.Select();
+            desiredVelocity = statModule.RequestRoutine<SForces>(true).selectedSpeed.Select();
         }
 
         public override void DoActive(InputValues input)

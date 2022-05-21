@@ -1,6 +1,6 @@
 {
   "name": "com.sapra.object-controller",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "displayName": "Object Controller",
   "description": "Object Controller that allows for multitud of process, \nstack inside an easy to edit and see monobehaviour",
   "unity": "2021.3",
@@ -17,10 +17,15 @@
     "url": "https://github.com/darksapra"
   },
   "samples": [
-      {
-        "displayName": "Basic Character Controller",
-        "description": "Contains implementations of a character controller, capable to Swim, Walk, Jump, Move in the Air, and other actions",
-        "path": "Samples~/BasicCharacterController"
-      }
+    {
+      "displayName": "Minimal Controller",
+      "description": "Contains implementations of the most basic scripts to be created to have something visual",
+      "path": "Samples~/MinimalController"
+    },
+    {
+      "displayName": "Basic Character Controller",
+      "description": "Contains implementations of a character controller, capable to Swim, Walk, Jump, Move in the Air, and other actions",
+      "path": "Samples~/BasicCharacterController"
+    }
   ]
 }

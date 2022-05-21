@@ -7,33 +7,12 @@ using System;
 namespace sapra.ObjectController
 {
     [System.Serializable]
-    public abstract class AbstractModule<T, Z> : AbstractModule<Z> where T : AbstractRoutine<Z> where Z : AbstractCObject
+    public abstract class AbstractModule<T> : AbstractModule where T : AbstractRoutine
     {
-        public Z cObject;
-        [SerializeReference]
-        public List<T> allComponents = new List<T>();
+        protected AbstractCObject controller;
+        
+        [SerializeReference] [HideInInspector] public List<T> allComponents = new List<T>();
         public List<T> onlyEnabledComponents = new List<T>();
-        public AbstractRoutine<Z> FindComponent(Type component)
-        {
-            foreach(AbstractRoutine<Z> abstractRoutine in onlyEnabledComponents)
-            {
-                if(abstractRoutine.GetType().IsEquivalentTo(component))
-                {
-                    return abstractRoutine;
-                }
-            }
-            return null;
-        }
-        public override void GetAllComponents()
-        {
-            List<Assembly> assemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
-            List<T> newList = new List<T>();
-            foreach(Assembly assembly in assemblies)
-            {
-                newList.AddRange(GetComponentsInAssembly(assembly));
-            }
-            allComponents = newList;
-        }
         private List<T> GetComponentsInAssembly(Assembly assem)
         {
             IEnumerable<Type> q = from t in assem.GetTypes()
@@ -59,18 +38,19 @@ namespace sapra.ObjectController
             }
             return temp;
         }
-        public override void SleepComponents(Z cObject)
+        #region  Initialization
+        public override void SleepComponents(AbstractCObject controller)
         {
             for(int i = allComponents.Count-1; i>= 0; i--)
             {
                 T component = allComponents[i];
-                component.Sleep(cObject);                
+                component.Sleep(controller);                
             }
         }
-        public override void InitializeComponents(Z cObject)
+        public override void InitializeComponents(AbstractCObject controller)
         {
-            this.cObject = cObject;
-            if(this.cObject == null)
+            this.controller = controller;
+            if(this.controller == null)
             {
                 Debug.Log("Error initializing components, no CObject was set");
                 return;
@@ -80,42 +60,56 @@ namespace sapra.ObjectController
             {
                 T component = allComponents[i];
                 if(component.wantsAwakened && !component.awakened)      
-                    component.Awake(cObject);
+                    component.Awake(controller);
                 if(!component.wantsAwakened && component.awakened)  
-                    component.Sleep(cObject);    
+                    component.Sleep(controller);    
 
                 if(component.wantsAwakened && component.awakened)
                     onlyEnabledComponents.Add(component);          
             }            
         }
-        public TComponent RequestComponent<TComponent>(bool required) where TComponent : T
+        public override void GetAllComponents()
+        {
+            List<Assembly> assemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
+            List<T> newList = new List<T>();
+            foreach(Assembly assembly in assemblies)
+            {
+                newList.AddRange(GetComponentsInAssembly(assembly));
+            }
+            allComponents = newList;
+        }
+        #endregion
+        #region Components requests
+        public Z RequestRoutine<Z>(bool required) where Z : T
         {
             foreach (T component in allComponents)
             {
-                if(component is TComponent)
+                if(component is Z)
                 {
                     if(required)
                     {
                         if(!component.awakened)
-                            component.Awake(cObject);
-                        return component as TComponent;
+                            component.Awake(controller);
+                        return component as Z;
                     }
                     else if(component.wantsAwakened)
                     {
                         if(!component.awakened)
-                            component.Awake(cObject);
-                        return component as TComponent;
+                            component.Awake(controller);
+                        return component as Z;
                     }
                 }
             }
             return null;
         }
+        #endregion
     }
+    
     [System.Serializable]
-    public abstract class AbstractModule<T> where T : AbstractCObject
+    public abstract class AbstractModule
     {
-        public abstract void InitializeComponents(T cObject);
-        public abstract void SleepComponents(T cObject);
+        public abstract void InitializeComponents(AbstractCObject controller);
+        public abstract void SleepComponents(AbstractCObject controller);
         public abstract void GetAllComponents();
         public bool onlyEnabled = true;
     }

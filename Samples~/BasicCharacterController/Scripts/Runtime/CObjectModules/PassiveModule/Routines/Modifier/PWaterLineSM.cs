@@ -23,12 +23,13 @@ namespace sapra.ObjectController
             return false;
         }
 
-        protected override void AwakeComponent(CObject Object)
-        {
-            _pFloatDetection = Object.passiveModule.RequestComponent<PFloatDetection>(false);
-            _sDimensions = Object.statModule.RequestComponent<SDimensions>(false);
-            SForces forces = Object.statModule.RequestComponent<SForces>(true);
-            speedBeforeSwim =forces.minimumSpeed.Select();
+        protected override void AwakeComponent(AbstractCObject controller)        {
+            PassiveModule passiveModule = controller.RequestModule<PassiveModule>();
+            StatModule statModule = controller.RequestModule<StatModule>();
+            _pFloatDetection = passiveModule.RequestRoutine<PFloatDetection>(false);
+            _sDimensions = statModule.RequestRoutine<SDimensions>(false);
+            SForces forces = statModule.RequestRoutine<SForces>(true);
+            speedBeforeSwim = forces.minimumSpeed.Select();
             maximumVelocity = forces.maximumSpeed.Select();
             desiredVelocity = forces.selectedSpeed.Select();
         }

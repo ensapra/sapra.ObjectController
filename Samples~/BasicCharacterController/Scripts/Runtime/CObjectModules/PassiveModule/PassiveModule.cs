@@ -4,18 +4,18 @@ using UnityEngine;
 namespace sapra.ObjectController
 {
     [System.Serializable]
-    public class PassiveModule : AbstractModule<AbstractPassive, CObject>
+    public class PassiveModule : AbstractModule<AbstractPassive>
     {
         public void Run(PassivePriority wichOnes, InputValues _input, bool continuosCheck)
         {   
             if(continuosCheck)
-                InitializeComponents(this.cObject);
+                InitializeComponents(this.controller);
             for(int i = 0; i < onlyEnabledComponents.Count; i++)
             {
                 AbstractPassive passive = onlyEnabledComponents[i];
                 if(passive.whenDo == wichOnes)
                 {
-                    passive.DoPassive(cObject.transform.position, _input);
+                    passive.DoPassive(controller.transform.position, _input);
                     passive.DoAnimationParameters();
                 }
             }
@@ -25,7 +25,7 @@ namespace sapra.ObjectController
             for(int i = 0; i < onlyEnabledComponents.Count; i++)
             {
                 AbstractPassive passive = onlyEnabledComponents[i];
-                passive.DoPassiveLate(cObject.transform.position, _input);
+                passive.DoPassiveLate(controller.transform.position, _input);
             }
         }
         

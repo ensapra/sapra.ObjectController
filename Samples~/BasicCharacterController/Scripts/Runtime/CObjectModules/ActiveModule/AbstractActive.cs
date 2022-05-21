@@ -1,13 +1,17 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace sapra.ObjectController
 {
     [System.Serializable]
-    public abstract class AbstractActive : AbstractRoutine<CObject>
+    public abstract class AbstractActive : AbstractRoutine
     {
+        protected ActiveModule activeModule;
         public abstract int priorityID{get;}
-        public bool isActive{get{return cObject.activeModule.currentAction == this;}}
+        public bool isActive{get{
+            if(activeModule == null)
+                activeModule = this.controller.RequestModule<ActiveModule>();
+            return activeModule.currentAction == this;}}
         public CurrentEvents events = new CurrentEvents();
         public abstract bool WantActive(InputValues input);
         public abstract void DoActive(InputValues input);

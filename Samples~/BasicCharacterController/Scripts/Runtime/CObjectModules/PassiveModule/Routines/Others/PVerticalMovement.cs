@@ -26,7 +26,7 @@ namespace sapra.ObjectController
 
         public override void DoPassive(Vector3 position, InputValues input)
         {
-            position = position+_sDimensions.footOffset+_sDimensions.halfHeight*-cObject.gravityDirection;
+            position = position+_sDimensions.footOffset+_sDimensions.halfHeight*-controller.gravityDirection;
             RaycastHit hit;
             if(Physics.Raycast(position, transform.forward,out hit, maxDetectionDistance+_sDimensions.characterRadious, ladderMask))
             {
@@ -92,10 +92,9 @@ namespace sapra.ObjectController
             Plane middlePoint = new Plane(cross, ladderPositionOnWall);
             return middlePoint.ClosestPointOnPlane(wall.ClosestPointOnPlane(position))+_sDimensions.characterRadious*normalVector;
         }
-        protected override void AwakeComponent(CObject cObject)
-        {
-            _sDimensions = cObject.statModule.RequestComponent<SDimensions>(true);
-            _pWalkableDetection = cObject.passiveModule.RequestComponent<PWalkableDetection>(true);
+        protected override void AwakeComponent(AbstractCObject controller)        {
+            _sDimensions = controller.RequestModule<StatModule>().RequestRoutine<SDimensions>(true);
+            _pWalkableDetection = controller.RequestModule<PassiveModule>().RequestRoutine<PWalkableDetection>(true);
         }
     }
 }

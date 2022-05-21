@@ -6,16 +6,15 @@ using UnityEngine.Events;
 namespace sapra.ObjectController
 {
     [System.Serializable]
-    public class ActiveModule : AbstractModule<AbstractActive, CObject>
+    public class ActiveModule : AbstractModule<AbstractActive>
     {
         [SerializeReference]
         public AbstractActive currentAction;
         public UnityEvent whenNullAction;
         [SerializeReference]
         public List<AbstractActive> sortedShorterList = new List<AbstractActive>();
-        public override void InitializeComponents(CObject cObject)
-        {
-            base.InitializeComponents(cObject);
+        public override void InitializeComponents(AbstractCObject controller)        {
+            base.InitializeComponents(controller);
             GenerateSortedList();
         }
         public void GenerateSortedList()
@@ -40,7 +39,7 @@ namespace sapra.ObjectController
         public void Run(InputValues _input, bool continuosCheck)
         {
             if(continuosCheck)
-                InitializeComponents(this.cObject);
+                InitializeComponents(this.controller);
             if(_input == null)
                 return;
             bool foundCurrentAction = false;

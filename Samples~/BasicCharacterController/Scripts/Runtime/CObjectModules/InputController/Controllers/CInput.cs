@@ -12,13 +12,13 @@ namespace sapra.ObjectController
         private InputController input;
         private Transform cam;
         private InputValues values;
-        private CObject cObject;
+        private CObject controller;
 
         void Awake()
         {
             input = new InputController();
             values = GetComponent<InputValueHolder>().input;
-            cObject = GetComponent<CObject>();
+            controller = GetComponent<CObject>();
             Camera cm = Camera.main;
             if(cm != null)
                 cam = cm.transform;
@@ -27,8 +27,8 @@ namespace sapra.ObjectController
         {
             //Sets the camera to be the reference for the player in case there's an Object
             PDirectionManager directionManager = null;
-            if(cObject != null)
-                directionManager = cObject.passiveModule.RequestComponent<PDirectionManager>(false);
+            if(controller != null)
+                directionManager = controller.passiveModule.RequestRoutine<PDirectionManager>(false);
             if(directionManager != null)
                 directionManager.setReference(cam);
         }

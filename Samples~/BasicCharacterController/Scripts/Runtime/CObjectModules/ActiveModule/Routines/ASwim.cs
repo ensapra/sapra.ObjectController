@@ -21,15 +21,16 @@ namespace sapra.ObjectController
 
         private Vector3 finalDirection;
         private bool insideWater;
-        protected override void AwakeComponent(CObject cObject)
-        {
-            _pFloatDetection = cObject.passiveModule.RequestComponent<PFloatDetection>(true);
-            _pWalkableDetection = cObject.passiveModule.RequestComponent<PWalkableDetection>(true);
-            _sDim = cObject.statModule.RequestComponent<SDimensions>(true);
-            _pColliderSettings = cObject.passiveModule.RequestComponent<PColliderSettings>(true);
-            _pDirectionManager = cObject.passiveModule.RequestComponent<PDirectionManager>(true);
-            cObject.passiveModule.RequestComponent<PExtraGravity>(true);
-            _sForces = cObject.statModule.RequestComponent<SForces>(true);
+        protected override void AwakeComponent(AbstractCObject controller)        {
+            PassiveModule passiveModule = controller.RequestModule<PassiveModule>();
+            StatModule statModule = controller.RequestModule<StatModule>();
+            _pFloatDetection = passiveModule.RequestRoutine<PFloatDetection>(true);
+            _pWalkableDetection = passiveModule.RequestRoutine<PWalkableDetection>(true);
+            _pColliderSettings = passiveModule.RequestRoutine<PColliderSettings>(true);
+            _pDirectionManager = passiveModule.RequestRoutine<PDirectionManager>(true);
+            passiveModule.RequestRoutine<PExtraGravity>(true);
+            _sDim = statModule.RequestRoutine<SDimensions>(true);
+            _sForces = statModule.RequestRoutine<SForces>(true);
             swimVelocity = _sForces.minimumWaterSpeed.Select();
             sprintSwimVelocity = _sForces.maximumWaterSpeed.Select();
             desiredVelocity = _sForces.selectedSpeed.Select();
@@ -41,7 +42,7 @@ namespace sapra.ObjectController
         public override void DoActive(InputValues _input)
         {            
             rb.velocity = finalDirection;
-            _pDirectionManager.RotateBody(-cObject.gravityDirection, _input);
+            _pDirectionManager.RotateBody(-controller.gravityDirection, _input);
         }
         public Vector3 removeOnBoundary(Vector3 direction, Vector3 boundaryNormal, float amount)
         {
@@ -70,7 +71,7 @@ namespace sapra.ObjectController
             float cameraInducedVertical = input._extraCameraInducedVertical;
             Vector3 direction;
             direction = _pDirectionManager.getLocalDirection();
-            direction += (upDown+cameraInducedVertical)*-cObject.gravityDirection;
+            direction += (upDown+cameraInducedVertical)*-controller.gravityDirection;
             direction = removeExtras(direction);
             return direction.normalized;
         }
@@ -79,7 +80,7 @@ namespace sapra.ObjectController
             Vector3 finalVector = initialDirection;
             if(_pFloatDetection.distance != 1)
             {
-                finalVector = removeOnBoundary(finalVector, cObject.gravityDirection, 1);
+                finalVector = removeOnBoundary(finalVector, controller.gravityDirection, 1);
                 finalVector = removeOnBoundary(finalVector, -_pFloatDetection.normal, 1);
             }
             return finalVector;
@@ -94,7 +95,7 @@ namespace sapra.ObjectController
             float inputAmount = Mathf.Clamp(input._inputVectorRaw.magnitude + Mathf.Abs(input._upDownRaw), 0,1);
             inputDirection = Vector3.ClampMagnitude(inputDirection.normalized*inputAmount*desiredVelocity.value, desiredVelocity.value);
             finalDirection = Vector3.Lerp(finalDirection, inputDirection, Time.deltaTime*10);
-            Vector3 position = transform.position-_sDim.currentRadious*cObject.gravityDirection;
+            Vector3 position = transform.position-_sDim.currentRadious*controller.gravityDirection;
             position += inputDirection.normalized*_sDim.currentRadious*0.8f;
             RaycastHit hit;
             if(Physics.Raycast(position, inputDirection, out hit, 1, _pWalkableDetection.groundMask)) 

@@ -9,9 +9,8 @@ namespace sapra.ObjectController
     {
         public RelationshipHolderList relationshipList = new RelationshipHolderList();
         private SForces forces;
-        protected override void AwakeComponent(CObject cObject)
-        {
-            forces = cObject.statModule.RequestComponent<SForces>(true);
+        protected override void AwakeComponent(AbstractCObject controller)        {
+            forces = controller.RequestModule<StatModule>().RequestRoutine<SForces>(true);
             relationshipList.Initialize(forces);
         }
     }

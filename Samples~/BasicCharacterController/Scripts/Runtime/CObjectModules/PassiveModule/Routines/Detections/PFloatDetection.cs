@@ -24,25 +24,24 @@ namespace sapra.ObjectController
 
         [HideInInspector] public Vector3 normal;
         public SurfaceStates surfaceState;
-        protected override void AwakeComponent(CObject cObject)
-        {
-            _sDimensions = cObject.statModule.RequestComponent<SDimensions>(true);
-            _pWalkableDetection = cObject.passiveModule.RequestComponent<PWalkableDetection>(false);
+        protected override void AwakeComponent(AbstractCObject controller)        {
+            _sDimensions = controller.RequestModule<StatModule>().RequestRoutine<SDimensions>(true);
+            _pWalkableDetection = controller.RequestModule<PassiveModule>().RequestRoutine<PWalkableDetection>(false);
         }
 
         public override void DoPassive(Vector3 positionIni, InputValues input)
         {
             float maxDistance = (_sDimensions.characterHeight)*1.2f;
-            Vector3 position = positionIni+_sDimensions.forcesCenterOffset+(_sDimensions.halfHeight)*-cObject.gravityDirection;
+            Vector3 position = positionIni+_sDimensions.forcesCenterOffset+(_sDimensions.halfHeight)*-controller.gravityDirection;
             float radius = _sDimensions.characterRadious;
             Vector3 normalVector = Vector3.zero;
             float distanceToSurface = maxDistance;
             RaycastHit hit;
 
             if(debug)
-                Debug.DrawRay(position,cObject.gravityDirection*maxDistance, Color.black);
+                Debug.DrawRay(position,controller.gravityDirection*maxDistance, Color.black);
 
-            if(Physics.Raycast(position, cObject.gravityDirection, out hit, maxDistance, floatingMask))
+            if(Physics.Raycast(position, controller.gravityDirection, out hit, maxDistance, floatingMask))
             {
                 if(hit.distance < distanceToSurface)
                 {

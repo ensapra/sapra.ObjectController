@@ -4,12 +4,12 @@ using sapra.ObjectController;
 
 namespace sapra.ObjectController.Editor
 {
-    [CustomEditor(typeof(CObject))]
+    [CustomEditor(typeof(AbstractCObject), true)]
     public class CObjectEditor : UnityEditor.Editor
     {
         void OnEnable()
         {
-            CObject component = this.target as CObject;
+            AbstractCObject component = this.target as AbstractCObject;
             component.GetAllComponents();
         }
         public override void OnInspectorGUI()
@@ -41,7 +41,7 @@ namespace sapra.ObjectController.Editor
         }
         void loadRequirements(bool showEnabled)
         {
-            CObject component = this.target as CObject;
+            AbstractCObject component = this.target as AbstractCObject;
             Undo.RecordObject(component, "Reloaded requirements in " + target.name);
             component.InitializeObject(true);
             component.SwitchTo(showEnabled);
