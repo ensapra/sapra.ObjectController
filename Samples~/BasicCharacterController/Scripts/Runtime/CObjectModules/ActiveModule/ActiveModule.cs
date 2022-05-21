@@ -13,8 +13,8 @@ namespace sapra.ObjectController
         public UnityEvent whenNullAction;
         [SerializeReference]
         public List<AbstractActive> sortedShorterList = new List<AbstractActive>();
-        public override void InitializeComponents(AbstractCObject controller)        {
-            base.InitializeComponents(controller);
+        public override void InitializeRoutines(AbstractCObject controller)        {
+            base.InitializeRoutines(controller);
             GenerateSortedList();
         }
         public void GenerateSortedList()
@@ -22,14 +22,14 @@ namespace sapra.ObjectController
             for(int i = sortedShorterList.Count-1; i>= 0; i--)
             {
                 AbstractActive component = sortedShorterList[i];
-                if(!onlyEnabledComponents.Contains(component))
+                if(!onlyEnabledRoutines.Contains(component))
                 {
                     sortedShorterList.RemoveAt(i);
                 }
             }
-            for(int i = 0; i<onlyEnabledComponents.Count; i++)
+            for(int i = 0; i<onlyEnabledRoutines.Count; i++)
             {
-                AbstractActive component = onlyEnabledComponents[i];
+                AbstractActive component = onlyEnabledRoutines[i];
                 if(!sortedShorterList.Contains(component))
                 {
                     sortedShorterList.Add(component);
@@ -39,7 +39,7 @@ namespace sapra.ObjectController
         public void Run(InputValues _input, bool continuosCheck)
         {
             if(continuosCheck)
-                InitializeComponents(this.controller);
+                InitializeRoutines(this.controller);
             if(_input == null)
                 return;
             bool foundCurrentAction = false;

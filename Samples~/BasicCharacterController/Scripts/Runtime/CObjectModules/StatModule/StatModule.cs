@@ -10,8 +10,8 @@ namespace sapra.ObjectController
         public void Run(bool continuosCheck)
         {
             if(continuosCheck)
-                InitializeComponents(this.controller);
-            foreach(AbstractStat stat in onlyEnabledComponents)
+                InitializeRoutines(this.controller);
+            foreach(AbstractStat stat in onlyEnabledRoutines)
             {
                 stat.DoExtra();
             }

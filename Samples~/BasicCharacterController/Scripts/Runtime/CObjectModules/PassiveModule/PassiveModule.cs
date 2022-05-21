@@ -9,10 +9,10 @@ namespace sapra.ObjectController
         public void Run(PassivePriority wichOnes, InputValues _input, bool continuosCheck)
         {   
             if(continuosCheck)
-                InitializeComponents(this.controller);
-            for(int i = 0; i < onlyEnabledComponents.Count; i++)
+                InitializeRoutines(this.controller);
+            for(int i = 0; i < onlyEnabledRoutines.Count; i++)
             {
-                AbstractPassive passive = onlyEnabledComponents[i];
+                AbstractPassive passive = onlyEnabledRoutines[i];
                 if(passive.whenDo == wichOnes)
                 {
                     passive.DoPassive(controller.transform.position, _input);
@@ -22,9 +22,9 @@ namespace sapra.ObjectController
         }
         public void RunLate(InputValues _input)
         {   
-            for(int i = 0; i < onlyEnabledComponents.Count; i++)
+            for(int i = 0; i < onlyEnabledRoutines.Count; i++)
             {
-                AbstractPassive passive = onlyEnabledComponents[i];
+                AbstractPassive passive = onlyEnabledRoutines[i];
                 passive.DoPassiveLate(controller.transform.position, _input);
             }
         }

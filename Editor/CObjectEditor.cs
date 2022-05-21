@@ -10,7 +10,7 @@ namespace sapra.ObjectController.Editor
         void OnEnable()
         {
             AbstractCObject component = this.target as AbstractCObject;
-            component.GetAllComponents();
+            component.GetAllRoutines();
         }
         public override void OnInspectorGUI()
         {

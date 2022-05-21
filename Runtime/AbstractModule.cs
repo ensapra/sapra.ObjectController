@@ -11,8 +11,8 @@ namespace sapra.ObjectController
     {
         protected AbstractCObject controller;
         
-        [SerializeReference] [HideInInspector] public List<T> allComponents = new List<T>();
-        public List<T> onlyEnabledComponents = new List<T>();
+        [SerializeReference] [HideInInspector] public List<T> allRoutines = new List<T>();
+        public List<T> onlyEnabledRoutines = new List<T>();
         private List<T> GetComponentsInAssembly(Assembly assem)
         {
             IEnumerable<Type> q = from t in assem.GetTypes()
@@ -21,7 +21,7 @@ namespace sapra.ObjectController
             List<T> temp = new List<T>();
             foreach (Type item in q)
             {
-                T ObjectFound = allComponents.Find(x => x != null && x.GetType() == item);
+                T ObjectFound = allRoutines.Find(x => x != null && x.GetType() == item);
                 if(ObjectFound == null)
                 {
                     try{
@@ -39,15 +39,15 @@ namespace sapra.ObjectController
             return temp;
         }
         #region  Initialization
-        public override void SleepComponents(AbstractCObject controller)
+        public override void SleepRoutines(AbstractCObject controller)
         {
-            for(int i = allComponents.Count-1; i>= 0; i--)
+            for(int i = allRoutines.Count-1; i>= 0; i--)
             {
-                T component = allComponents[i];
-                component.Sleep(controller);                
+                T routine = allRoutines[i];
+                routine.Sleep(controller);                
             }
         }
-        public override void InitializeComponents(AbstractCObject controller)
+        public override void InitializeRoutines(AbstractCObject controller)
         {
             this.controller = controller;
             if(this.controller == null)
@@ -55,20 +55,20 @@ namespace sapra.ObjectController
                 Debug.Log("Error initializing components, no CObject was set");
                 return;
             }
-            onlyEnabledComponents.Clear();
-            for(int i = allComponents.Count-1; i>= 0; i--)
+            onlyEnabledRoutines.Clear();
+            for(int i = allRoutines.Count-1; i>= 0; i--)
             {
-                T component = allComponents[i];
-                if(component.wantsAwakened && !component.awakened)      
-                    component.Awake(controller);
-                if(!component.wantsAwakened && component.awakened)  
-                    component.Sleep(controller);    
+                T routine = allRoutines[i];
+                if(routine.wantsAwakened && !routine.awakened)      
+                    routine.Awake(controller);
+                if(!routine.wantsAwakened && routine.awakened)  
+                    routine.Sleep(controller);    
 
-                if(component.wantsAwakened && component.awakened)
-                    onlyEnabledComponents.Add(component);          
+                if(routine.wantsAwakened && routine.awakened)
+                    onlyEnabledRoutines.Add(routine);          
             }            
         }
-        public override void GetAllComponents()
+        public override void GetAllRoutines()
         {
             List<Assembly> assemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
             List<T> newList = new List<T>();
@@ -76,27 +76,27 @@ namespace sapra.ObjectController
             {
                 newList.AddRange(GetComponentsInAssembly(assembly));
             }
-            allComponents = newList;
+            allRoutines = newList;
         }
         #endregion
         #region Components requests
         public Z RequestRoutine<Z>(bool required) where Z : T
         {
-            foreach (T component in allComponents)
+            foreach (T routine in allRoutines)
             {
-                if(component is Z)
+                if(routine is Z)
                 {
                     if(required)
                     {
-                        if(!component.awakened)
-                            component.Awake(controller);
-                        return component as Z;
+                        if(!routine.awakened)
+                            routine.Awake(controller);
+                        return routine as Z;
                     }
-                    else if(component.wantsAwakened)
+                    else if(routine.wantsAwakened)
                     {
-                        if(!component.awakened)
-                            component.Awake(controller);
-                        return component as Z;
+                        if(!routine.awakened)
+                            routine.Awake(controller);
+                        return routine as Z;
                     }
                 }
             }
@@ -108,9 +108,9 @@ namespace sapra.ObjectController
     [System.Serializable]
     public abstract class AbstractModule
     {
-        public abstract void InitializeComponents(AbstractCObject controller);
-        public abstract void SleepComponents(AbstractCObject controller);
-        public abstract void GetAllComponents();
+        public abstract void InitializeRoutines(AbstractCObject controller);
+        public abstract void SleepRoutines(AbstractCObject controller);
+        public abstract void GetAllRoutines();
         public bool onlyEnabled = true;
     }
 }

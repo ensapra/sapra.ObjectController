@@ -55,12 +55,12 @@ namespace sapra.ObjectController
             {
                 foreach(AbstractModule module in modules)
                 {
-                    module.SleepComponents(this);
+                    module.SleepRoutines(this);
                 }
             }
             foreach(AbstractModule module in modules)
             {
-                module.InitializeComponents(this);
+                module.InitializeRoutines(this);
             }
         }
         public void SwitchTo(bool showEnabled)
@@ -69,12 +69,12 @@ namespace sapra.ObjectController
             foreach(AbstractModule module in modules)
                 module.onlyEnabled = showEnabled;
         } 
-        public void GetAllComponents()
+        public void GetAllRoutines()
         {
             addModules();
             foreach(AbstractModule module in modules)
             {
-                module.GetAllComponents();
+                module.GetAllRoutines();
             }
         }   
         protected void AddModule(AbstractModule module)

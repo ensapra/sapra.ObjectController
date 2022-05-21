@@ -17,7 +17,7 @@ namespace sapra.ObjectController.Editor
         {
             if(enabledActives == null)
                 MakeList(property);   
-            SerializedProperty listProperty = property.FindPropertyRelative("allComponents");
+            SerializedProperty listProperty = property.FindPropertyRelative("allRoutines");
             if(listProperty.isExpanded)
             {           
                 SerializedProperty enabledList = property.FindPropertyRelative("sortedShorterList");
