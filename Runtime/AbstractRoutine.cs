@@ -22,7 +22,7 @@ namespace sapra.ObjectController
             isAwake = true;
             transform = controller.transform;
             rb = controller.rb;
-            AwakeObject(controller);
+            //AwakeObject(controller);
             AwakeComponent(controller);
         }
         public void Sleep(AbstractCObject controller)
@@ -30,8 +30,8 @@ namespace sapra.ObjectController
             SleepComponent(controller);
             isAwake = false;
         }
-        protected virtual void AwakeObject(AbstractCObject controller){}
-        protected abstract void AwakeComponent(AbstractCObject controller);
+        //protected virtual void AwakeObject(AbstractCObject controller){}
+        protected virtual void AwakeComponent(AbstractCObject controller){}
         protected virtual void SleepComponent(AbstractCObject controller){}
     }
 }

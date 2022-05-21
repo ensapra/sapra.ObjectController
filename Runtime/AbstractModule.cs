@@ -11,7 +11,7 @@ namespace sapra.ObjectController
     {
         protected AbstractCObject controller;
         
-        [SerializeReference] public List<T> allComponents = new List<T>();
+        [SerializeReference] [HideInInspector] public List<T> allComponents = new List<T>();
         public List<T> onlyEnabledComponents = new List<T>();
         private List<T> GetComponentsInAssembly(Assembly assem)
         {
