@@ -20,7 +20,7 @@ namespace sapra.ObjectController
         private SDimensions _sDimensions;
         private float heightLerped; 
         public override int priorityID => 10;
-        protected override void AwakeComponent(AbstractCObject controller)        {
+        protected override void AwakeRoutine(AbstractCObject controller)        {
             PassiveModule passiveModule = controller.RequestModule<PassiveModule>();
             StatModule statModule = controller.RequestModule<StatModule>();
             ActiveModule activeModule = controller.RequestModule<ActiveModule>();

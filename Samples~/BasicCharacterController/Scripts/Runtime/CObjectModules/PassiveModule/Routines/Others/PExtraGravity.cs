@@ -25,7 +25,7 @@ namespace sapra.ObjectController
         private SDimensions _sDimensions;
         [Tooltip("Points of interest to modify Gravity")]
         public Vector3[] positions = new Vector3[]{Vector3.zero};
-        protected override void AwakeComponent(AbstractCObject controller)        {
+        protected override void AwakeRoutine(AbstractCObject controller)        {
             PassiveModule passiveModule = controller.RequestModule<PassiveModule>();
             _pFloatDetection = passiveModule.RequestRoutine<PFloatDetection>(true);
             _pWalkableDetection = passiveModule.RequestRoutine<PWalkableDetection>(true);

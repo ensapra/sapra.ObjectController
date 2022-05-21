@@ -28,7 +28,7 @@ namespace sapra.ObjectController
         }
 
 
-        protected override void AwakeComponent(AbstractCObject controller)        {
+        protected override void AwakeRoutine(AbstractCObject controller)        {
             direction = controller.gravityDirection;
             gravityMultiplierBase = controller.gravityMultiplier;
             _pDirectionManager = controller.RequestModule<PassiveModule>().RequestRoutine<PDirectionManager>(true);

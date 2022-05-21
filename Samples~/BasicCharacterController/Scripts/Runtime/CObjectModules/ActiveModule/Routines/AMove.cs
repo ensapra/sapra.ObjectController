@@ -15,7 +15,7 @@ namespace sapra.ObjectController
         private Stat desiredVelocity;
         private SForces _sForces;
         private bool overriden;
-        protected override void AwakeComponent(AbstractCObject controller)        {
+        protected override void AwakeRoutine(AbstractCObject controller)        {
             PassiveModule passiveModule = controller.RequestModule<PassiveModule>();
             _pWalkableDetection = passiveModule.RequestRoutine<PWalkableDetection>(true);
             _pDirectionManager = passiveModule.RequestRoutine<PDirectionManager>(true);

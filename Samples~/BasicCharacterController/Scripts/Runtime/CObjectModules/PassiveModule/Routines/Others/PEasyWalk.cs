@@ -18,7 +18,7 @@ namespace sapra.ObjectController
         public float smoothness = 10;
         public override PassivePriority whenDo => PassivePriority.BeforeActive;
         
-        protected override void AwakeComponent(AbstractCObject controller)        {
+        protected override void AwakeRoutine(AbstractCObject controller)        {
             PassiveModule passiveModule = controller.RequestModule<PassiveModule>();
             _pWalkableDetection = passiveModule.RequestRoutine<PWalkableDetection>(true);
             _pFloatDetection = passiveModule.RequestRoutine<PFloatDetection>(false);

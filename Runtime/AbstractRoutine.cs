@@ -23,15 +23,15 @@ namespace sapra.ObjectController
             transform = controller.transform;
             rb = controller.rb;
             //AwakeObject(controller);
-            AwakeComponent(controller);
+            AwakeRoutine(controller);
         }
         public void Sleep(AbstractCObject controller)
         {
-            SleepComponent(controller);
+            SleepRoutine(controller);
             isAwake = false;
         }
         //protected virtual void AwakeObject(AbstractCObject controller){}
-        protected virtual void AwakeComponent(AbstractCObject controller){}
-        protected virtual void SleepComponent(AbstractCObject controller){}
+        protected virtual void AwakeRoutine(AbstractCObject controller){}
+        protected virtual void SleepRoutine(AbstractCObject controller){}
     }
 }

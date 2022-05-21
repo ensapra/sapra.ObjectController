@@ -15,7 +15,7 @@ namespace sapra.ObjectController
         [Header("Result")]
         public bool topWall;
         public float distance;
-        protected override void AwakeComponent(AbstractCObject controller)        {
+        protected override void AwakeRoutine(AbstractCObject controller)        {
             _sDimensions = controller.RequestModule<StatModule>().RequestRoutine<SDimensions>(true);
         }
 

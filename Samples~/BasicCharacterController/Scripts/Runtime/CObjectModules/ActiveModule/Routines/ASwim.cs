@@ -21,7 +21,7 @@ namespace sapra.ObjectController
 
         private Vector3 finalDirection;
         private bool insideWater;
-        protected override void AwakeComponent(AbstractCObject controller)        {
+        protected override void AwakeRoutine(AbstractCObject controller)        {
             PassiveModule passiveModule = controller.RequestModule<PassiveModule>();
             StatModule statModule = controller.RequestModule<StatModule>();
             _pFloatDetection = passiveModule.RequestRoutine<PFloatDetection>(true);

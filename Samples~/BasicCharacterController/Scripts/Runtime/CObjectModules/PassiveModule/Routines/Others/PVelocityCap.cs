@@ -13,7 +13,7 @@ namespace sapra.ObjectController
         public float maxVelocity = -50;
         InputValues _input;
         ActiveModule activeModule;
-        protected override void AwakeComponent(AbstractCObject controller)        {
+        protected override void AwakeRoutine(AbstractCObject controller)        {
             activeModule = controller.RequestModule<ActiveModule>();
             _pWalkableDetection = controller.RequestModule<PassiveModule>().RequestRoutine<PWalkableDetection>(false);
             _input = controller.RequestComponent<InputValueHolder>(true).input;

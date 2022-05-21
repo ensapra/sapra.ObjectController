@@ -29,7 +29,7 @@ namespace sapra.ObjectController
         private Stat minJumpVelocity;
 
         private Vector3 latestVelocity;
-        protected override void AwakeComponent(AbstractCObject controller)        {
+        protected override void AwakeRoutine(AbstractCObject controller)        {
             StatModule statModule = controller.RequestModule<StatModule>();
             PassiveModule passiveModule = controller.RequestModule<PassiveModule>();
             _sDimensions = statModule.RequestRoutine<SDimensions>(true);

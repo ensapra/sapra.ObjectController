@@ -24,7 +24,7 @@ namespace sapra.ObjectController
             return false;
         }
 
-        protected override void AwakeComponent(AbstractCObject controller)        {
+        protected override void AwakeRoutine(AbstractCObject controller)        {
             StatModule statModule = controller.RequestModule<StatModule>();
             _pRoofDetection = controller.RequestModule<PassiveModule>().RequestRoutine<PRoofDetection>(false);
             _sDimensions = statModule.RequestRoutine<SDimensions>(false);
