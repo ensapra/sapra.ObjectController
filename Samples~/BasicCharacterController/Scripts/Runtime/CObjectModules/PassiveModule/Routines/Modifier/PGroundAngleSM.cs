@@ -24,13 +24,13 @@ namespace sapra.ObjectController
                     return true;                
             return false;
         }
-        protected override void AwakeComponent(AbstractCObject cObject)        {
-            PassiveModule passiveModule = cObject.FindModule<PassiveModule>();
-            StatModule statModule = cObject.FindModule<StatModule>();
-            _pWalkableDetection = passiveModule.RequestComponent<PWalkableDetection>(false);
-            _sDimensions = statModule.RequestComponent<SDimensions>(false);
-            maximumVelocity = statModule.RequestComponent<SForces>(true).maximumSpeed.Select();
-            desiredVelocity = statModule.RequestComponent<SForces>(true).selectedSpeed.Select();
+        protected override void AwakeComponent(AbstractCObject controller)        {
+            PassiveModule passiveModule = controller.RequestModule<PassiveModule>();
+            StatModule statModule = controller.RequestModule<StatModule>();
+            _pWalkableDetection = passiveModule.RequestRoutine<PWalkableDetection>(false);
+            _sDimensions = statModule.RequestRoutine<SDimensions>(false);
+            maximumVelocity = statModule.RequestRoutine<SForces>(true).maximumSpeed.Select();
+            desiredVelocity = statModule.RequestRoutine<SForces>(true).selectedSpeed.Select();
         }
 
         public override void DoPassive(Vector3 position, InputValues input)

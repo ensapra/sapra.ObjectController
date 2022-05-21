@@ -19,19 +19,13 @@ namespace sapra.ObjectController
             return inputHolder.input;
         else
             return null;}}
-        [HideInInspector]
 
-        private void Awake()
+        void Start()
         {
-            rb = GetComponent<Rigidbody>();
-            gravityDirection = Physics.gravity.normalized;
-            gravityMultiplier = Physics.gravity.magnitude;
             inputHolder = GetComponent<InputValueHolder>();
-            onlyEnabled = true;
         }
         void FixedUpdate()
         {      
-            Time.timeScale = TimeScale;
             statModule.Run(continuosCheck);
             passiveModule.Run(PassivePriority.FirstOfAll, _input, continuosCheck);
             passiveModule.Run(PassivePriority.BeforeActive, _input, continuosCheck);

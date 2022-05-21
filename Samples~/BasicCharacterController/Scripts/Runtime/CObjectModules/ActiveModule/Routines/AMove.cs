@@ -15,12 +15,12 @@ namespace sapra.ObjectController
         private Stat desiredVelocity;
         private SForces _sForces;
         private bool overriden;
-        protected override void AwakeComponent(AbstractCObject cObject)        {
-            PassiveModule passiveModule = cObject.FindModule<PassiveModule>();
-            _pWalkableDetection = passiveModule.RequestComponent<PWalkableDetection>(true);
-            _pDirectionManager = passiveModule.RequestComponent<PDirectionManager>(true);
-            passiveModule.RequestComponent<PVelocityCap>(true);
-            SForces _sForces = cObject.FindModule<StatModule>().RequestComponent<SForces>(true);
+        protected override void AwakeComponent(AbstractCObject controller)        {
+            PassiveModule passiveModule = controller.RequestModule<PassiveModule>();
+            _pWalkableDetection = passiveModule.RequestRoutine<PWalkableDetection>(true);
+            _pDirectionManager = passiveModule.RequestRoutine<PDirectionManager>(true);
+            passiveModule.RequestRoutine<PVelocityCap>(true);
+            SForces _sForces = controller.RequestModule<StatModule>().RequestRoutine<SForces>(true);
             sprintVelocity = _sForces.maximumSpeed;
             walkVelocity = _sForces.minimumSpeed.Select();
             normalVelocity = _sForces.passiveSpeed.Select();
@@ -47,7 +47,7 @@ namespace sapra.ObjectController
             
             Vector3 movementDirection = _pDirectionManager.GetDirection(_input);
             rb.velocity =  Vector3.ClampMagnitude(movementDirection * clampedMagnitude*desiredVelocity.value,desiredVelocity.value);
-            _pDirectionManager.RotateBody(-cObject.gravityDirection, _input);      
+            _pDirectionManager.RotateBody(-controller.gravityDirection, _input);      
         }
         public override bool WantActive(InputValues input)
         {

@@ -15,8 +15,8 @@ namespace sapra.ObjectController
         [Header("Result")]
         public bool topWall;
         public float distance;
-        protected override void AwakeComponent(AbstractCObject cObject)        {
-            _sDimensions = cObject.FindModule<StatModule>().RequestComponent<SDimensions>(true);
+        protected override void AwakeComponent(AbstractCObject controller)        {
+            _sDimensions = controller.RequestModule<StatModule>().RequestRoutine<SDimensions>(true);
         }
 
         public override void DoPassive(Vector3 position, InputValues input)
@@ -25,13 +25,13 @@ namespace sapra.ObjectController
             Vector3 point = new Vector3(1,0,1);
             RaycastHit hit;      
             float tempDistance = _sDimensions.characterHeight;
-            if(Physics.Raycast(position, -cObject.gravityDirection, out hit,_sDimensions.characterHeight,topWallLayer))  
+            if(Physics.Raycast(position, -controller.gravityDirection, out hit,_sDimensions.characterHeight,topWallLayer))  
                 tempDistance = hit.distance;
             
             if(rb)
                 position += rb.velocity*Time.deltaTime; 
 
-            if(Physics.SphereCast(position, radius, -cObject.gravityDirection, out hit, _sDimensions.characterHeight,topWallLayer))
+            if(Physics.SphereCast(position, radius, -controller.gravityDirection, out hit, _sDimensions.characterHeight,topWallLayer))
             {
                 if(hit.distance < tempDistance)
                     tempDistance = hit.distance;

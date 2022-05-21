@@ -25,20 +25,20 @@ namespace sapra.ObjectController
         private SDimensions _sDimensions;
         [Tooltip("Points of interest to modify Gravity")]
         public Vector3[] positions = new Vector3[]{Vector3.zero};
-        protected override void AwakeComponent(AbstractCObject cObject)        {
-            PassiveModule passiveModule = cObject.FindModule<PassiveModule>();
-            _pFloatDetection = passiveModule.RequestComponent<PFloatDetection>(true);
-            _pWalkableDetection = passiveModule.RequestComponent<PWalkableDetection>(true);
-            _pCustomGravity = passiveModule.RequestComponent<PCustomGravity>(true);
-            _pDirectionManager = passiveModule.RequestComponent<PDirectionManager>(true);
+        protected override void AwakeComponent(AbstractCObject controller)        {
+            PassiveModule passiveModule = controller.RequestModule<PassiveModule>();
+            _pFloatDetection = passiveModule.RequestRoutine<PFloatDetection>(true);
+            _pWalkableDetection = passiveModule.RequestRoutine<PWalkableDetection>(true);
+            _pCustomGravity = passiveModule.RequestRoutine<PCustomGravity>(true);
+            _pDirectionManager = passiveModule.RequestRoutine<PDirectionManager>(true);
 
-            _sDimensions = cObject.FindModule<StatModule>().RequestComponent<SDimensions>(true);
+            _sDimensions = controller.RequestModule<StatModule>().RequestRoutine<SDimensions>(true);
         }
         public override void DoPassive(Vector3 position, InputValues input)
         {
             if(!_pCustomGravity.useGravity)
                 return;
-            gravity = cObject.gravityDirection*cObject.gravityMultiplier;
+            gravity = controller.gravityDirection*controller.gravityMultiplier;
             for (int i = 0; i < positions.Length; i++)
             {
                 Vector3 pos = transform.TransformPoint(positions[i]);
@@ -50,7 +50,7 @@ namespace sapra.ObjectController
         private void Gravities(Vector3 position, InputValues _input)
         {
             Vector3 ForceVector = Vector3.zero; 
-            Vector3 hor = rb.velocity - Vector3.Project(rb.velocity,-cObject.gravityDirection);
+            Vector3 hor = rb.velocity - Vector3.Project(rb.velocity,-controller.gravityDirection);
 
             if(_pFloatDetection != null && _pFloatDetection.floating)
             {

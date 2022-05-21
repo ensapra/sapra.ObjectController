@@ -29,15 +29,15 @@ namespace sapra.ObjectController
         private Stat minJumpVelocity;
 
         private Vector3 latestVelocity;
-        protected override void AwakeComponent(AbstractCObject cObject)        {
-            StatModule statModule = cObject.FindModule<StatModule>();
-            PassiveModule passiveModule = cObject.FindModule<PassiveModule>();
-            _sDimensions = statModule.RequestComponent<SDimensions>(true);
-            _pWalkableDetection = passiveModule.RequestComponent<PWalkableDetection>(true);
-            _pRoofDetection = passiveModule.RequestComponent<PRoofDetection>(true);
-            _pFloatDetection =  passiveModule.RequestComponent<PFloatDetection>(false);
-            _pDirectionManager = passiveModule.RequestComponent<PDirectionManager>(true);
-            SForces _sForces = statModule.RequestComponent<SForces>(true);
+        protected override void AwakeComponent(AbstractCObject controller)        {
+            StatModule statModule = controller.RequestModule<StatModule>();
+            PassiveModule passiveModule = controller.RequestModule<PassiveModule>();
+            _sDimensions = statModule.RequestRoutine<SDimensions>(true);
+            _pWalkableDetection = passiveModule.RequestRoutine<PWalkableDetection>(true);
+            _pRoofDetection = passiveModule.RequestRoutine<PRoofDetection>(true);
+            _pFloatDetection =  passiveModule.RequestRoutine<PFloatDetection>(false);
+            _pDirectionManager = passiveModule.RequestRoutine<PDirectionManager>(true);
+            SForces _sForces = statModule.RequestRoutine<SForces>(true);
             maxFJump = _sForces.maxFJump.Select();
             maxJumpVelocity = _sForces.maximumSpeed.Select();
             minJumpVelocity = _sForces.minimumSpeed.Select();
@@ -56,17 +56,17 @@ namespace sapra.ObjectController
                 animationPlayed = false;
                 //Reduce jump forward speed on multiple jumps, for bunny hopping
                 if(jumpingTimerCor != null)
-                    cObject.StopCoroutine(jumpingTimerCor);
+                    controller.StopCoroutine(jumpingTimerCor);
                 //Ghost Jump
                 if(ghostJumpTimerCor != null)
                 {
-                    cObject.StopCoroutine(ghostJumpTimerCor);
+                    controller.StopCoroutine(ghostJumpTimerCor);
                     ghostJumpTimerCor = null;
                 }
                 Vector3 direction = _pDirectionManager.getLocalDirection();
                 Vector3 jumpVector = JumpVector(direction.magnitude*transform.forward)*(1-jumpsMade.Remap(0,5,0,0.7f));
-                jumpingTimerCor = cObject.StartCoroutine(jumpingTimer());
-                jumpVector += maxFJump.value * -cObject.gravityDirection;
+                jumpingTimerCor = controller.StartCoroutine(jumpingTimer());
+                jumpVector += maxFJump.value * -controller.gravityDirection;
                 rb.velocity = jumpVector;
                 sequence = jumpingSequence.jumping;     
                 _pWalkableDetection.Walkable = false;   
@@ -103,9 +103,9 @@ namespace sapra.ObjectController
             }
             else
             {
-                float velVal = Vector3.Dot(rb.velocity, -cObject.gravityDirection);
+                float velVal = Vector3.Dot(rb.velocity, -controller.gravityDirection);
                 if(ghostJumpTimerCor == null && sequence == jumpingSequence.readyToJump)
-                    ghostJumpTimerCor = cObject.StartCoroutine(ghostJump());
+                    ghostJumpTimerCor = controller.StartCoroutine(ghostJump());
                 if(sequence == jumpingSequence.jumping && velVal <= 0)
                     sequence = jumpingSequence.falling;
             }
@@ -130,7 +130,7 @@ namespace sapra.ObjectController
         private Vector3 JumpVector(Vector3 desiredDirectionSimple)
         {
             //Velocitat i direcció del salt
-            Vector3 horizontal = latestVelocity- Vector3.Project(latestVelocity, -cObject.gravityDirection);
+            Vector3 horizontal = latestVelocity- Vector3.Project(latestVelocity, -controller.gravityDirection);
             float reference = horizontal.magnitude;
             float minVel = minJumpVelocity.value+1;
             float maxVel = maxJumpVelocity.value+5;
@@ -139,10 +139,10 @@ namespace sapra.ObjectController
             float desiredVelocity = Mathf.Clamp(reference, minVel, maxVel);
             if(reference < minimumVel)
                 desiredVelocity = minimumVel;
-            Vector3 finalVector = (desiredDirectionSimple-Vector3.Project(desiredDirectionSimple, -cObject.gravityDirection)).normalized*desiredVelocity;
+            Vector3 finalVector = (desiredDirectionSimple-Vector3.Project(desiredDirectionSimple, -controller.gravityDirection)).normalized*desiredVelocity;
             float angleFront = Vector3.Angle(transform.forward, _pWalkableDetection.normal)-90;
             if(angleFront > _sDimensions.maxWalkableAngle)
-                finalVector = (_pWalkableDetection.normal-Vector3.Project(_pWalkableDetection.normal, -cObject.gravityDirection)).normalized*minimumVel;
+                finalVector = (_pWalkableDetection.normal-Vector3.Project(_pWalkableDetection.normal, -controller.gravityDirection)).normalized*minimumVel;
             return finalVector;
         }
     }

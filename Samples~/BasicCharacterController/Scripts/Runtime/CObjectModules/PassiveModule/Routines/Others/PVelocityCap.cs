@@ -13,16 +13,16 @@ namespace sapra.ObjectController
         public float maxVelocity = -50;
         InputValues _input;
         ActiveModule activeModule;
-        protected override void AwakeComponent(AbstractCObject cObject)        {
-            activeModule = cObject.FindModule<ActiveModule>();
-            _pWalkableDetection = cObject.FindModule<PassiveModule>().RequestComponent<PWalkableDetection>(false);
-            _input = cObject.RequestComponent<InputValueHolder>(true).input;
+        protected override void AwakeComponent(AbstractCObject controller)        {
+            activeModule = controller.RequestModule<ActiveModule>();
+            _pWalkableDetection = controller.RequestModule<PassiveModule>().RequestRoutine<PWalkableDetection>(false);
+            _input = controller.RequestComponent<InputValueHolder>(true).input;
         }
         public override void DoPassive(Vector3 position, InputValues input)
         {
-            float value = Vector3.Dot(rb.velocity, -cObject.gravityDirection);
+            float value = Vector3.Dot(rb.velocity, -controller.gravityDirection);
             if (value < maxVelocity)        
-                rb.velocity = rb.velocity - Vector3.Project(rb.velocity, cObject.gravityDirection) - maxVelocity*cObject.gravityDirection;
+                rb.velocity = rb.velocity - Vector3.Project(rb.velocity, controller.gravityDirection) - maxVelocity*controller.gravityDirection;
             
             if(_pWalkableDetection == null || _input == null)
                 return;        

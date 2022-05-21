@@ -13,8 +13,8 @@ namespace sapra.ObjectController
         public UnityEvent whenNullAction;
         [SerializeReference]
         public List<AbstractActive> sortedShorterList = new List<AbstractActive>();
-        public override void InitializeComponents(AbstractCObject cObject)        {
-            base.InitializeComponents(cObject);
+        public override void InitializeComponents(AbstractCObject controller)        {
+            base.InitializeComponents(controller);
             GenerateSortedList();
         }
         public void GenerateSortedList()
@@ -39,7 +39,7 @@ namespace sapra.ObjectController
         public void Run(InputValues _input, bool continuosCheck)
         {
             if(continuosCheck)
-                InitializeComponents(this.cObject);
+                InitializeComponents(this.controller);
             if(_input == null)
                 return;
             bool foundCurrentAction = false;

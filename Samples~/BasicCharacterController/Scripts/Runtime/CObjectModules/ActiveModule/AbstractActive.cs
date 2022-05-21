@@ -10,7 +10,7 @@ namespace sapra.ObjectController
         public abstract int priorityID{get;}
         public bool isActive{get{
             if(activeModule == null)
-                activeModule = this.cObject.FindModule<ActiveModule>();
+                activeModule = this.controller.RequestModule<ActiveModule>();
             return activeModule.currentAction == this;}}
         public CurrentEvents events = new CurrentEvents();
         public abstract bool WantActive(InputValues input);

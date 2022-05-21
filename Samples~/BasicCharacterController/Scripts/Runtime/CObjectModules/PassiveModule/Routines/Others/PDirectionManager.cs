@@ -12,7 +12,6 @@ namespace sapra.ObjectController
         public override PassivePriority whenDo => PassivePriority.AfterActive;
         public MovementMode currentMovementType = MovementMode.ThirdPerson;
         private PWalkableDetection _pWalkableDetection;
-        private Rigidbody rigidbody;
         [Tooltip("Direction reference to specify what is forward and what is right")]
         [SerializeField] private Transform directionalReference;
         private float xRotation;
@@ -25,7 +24,7 @@ namespace sapra.ObjectController
         {
             if(directionalReference == null)
                 directionalReference = this.transform;
-            Vector3 up = _pWalkableDetection != null ? _pWalkableDetection.normal : -cObject.gravityDirection;
+            Vector3 up = _pWalkableDetection != null ? _pWalkableDetection.normal : -controller.gravityDirection;
             Vector3 forward = -Vector3.Cross(up, directionalReference.right);
             localDirectionRaw = input._inputVectorRaw.y*forward +input._inputVectorRaw.x*directionalReference.right;
             localDirection = input._inputVector.y*forward +input._inputVector.x*directionalReference.right;
@@ -45,9 +44,8 @@ namespace sapra.ObjectController
         {
             directionalReference = transform;
         }
-        protected override void AwakeComponent(AbstractCObject cObject)        {
-            _pWalkableDetection = cObject.FindModule<PassiveModule>().RequestComponent<PWalkableDetection>(false);
-            rigidbody = cObject.RequestComponent<Rigidbody>(true);
+        protected override void AwakeComponent(AbstractCObject controller)        {
+            _pWalkableDetection = controller.RequestModule<PassiveModule>().RequestRoutine<PWalkableDetection>(false);
         }
         public Vector3 GetDirection(InputValues _input)
         {
@@ -68,20 +66,16 @@ namespace sapra.ObjectController
         }
         public Vector3 correctForward()
         {
-            Vector3 groundNormal = _pWalkableDetection != null ? _pWalkableDetection.normal : -cObject.gravityDirection;      
+            Vector3 groundNormal = _pWalkableDetection != null ? _pWalkableDetection.normal : -controller.gravityDirection;      
             Vector3 normalForward = -Vector3.Cross(groundNormal, transform.right).normalized;
             return normalForward;
         }
         public Vector3 getLocalDirection()
-        {
-/*             Vector3 groundNormal = _pWalkableDetection != null ? _pWalkableDetection.normal : -cObject.gravityDirection; 
-            Vector3 finalDir = Vector3.ProjectOnPlane(localDirection, groundNormal).normalized;        */         
+        {  
             return localDirection;
         }
         public Vector3 getLocalDirectionRaw()
         {
-/*             Vector3 groundNormal = _pWalkableDetection != null ? _pWalkableDetection.normal : -cObject.gravityDirection; 
-            Vector3 finalDir = Vector3.ProjectOnPlane(localDirectionRaw, groundNormal).normalized;     */            
             return localDirectionRaw;
         }
         public void RotateBody(Vector3 upVector, InputValues _input)
@@ -89,13 +83,8 @@ namespace sapra.ObjectController
             switch(currentMovementType)
             {
                 case MovementMode.ThirdPerson:
-                    ForcedRotation(rb, RotationMode.ForwardAndUpward,  localDirectionRaw, -cObject.gravityDirection);
+                    ForcedRotation(rb, RotationMode.ForwardAndUpward,  localDirectionRaw, -controller.gravityDirection);
                     break;
-    /*             case MovementMode.FirstPerson:
-                    break;
-                    Vector3 forward = Vector3.Cross(upVector, TargetPivot.right);
-                    ForcedRotation(1, RotationMode.ForwardAndUpward,forward ,upVector);
-                    break; */
             }
         }        
         public void ForcedRotation(Rigidbody rb,  RotationMode rotationMode, Vector3 vector1, Vector3 vector2)

@@ -18,20 +18,20 @@ namespace sapra.ObjectController
             if(rb.useGravity)
                 rb.useGravity = false;
             //direction = -camera.transform.up;
-            cObject.gravityDirection = direction.normalized;
-            cObject.gravityMultiplier = gravityMultiplierBase;
+            controller.gravityDirection = direction.normalized;
+            controller.gravityMultiplier = gravityMultiplierBase;
             if(useGravity)
                 rb.AddForce(direction.normalized*gravityMultiplierBase, ForceMode.Acceleration);
             if(alwaysUpRight)
-                _pDirectionManager.ForcedRotation(0.1f,  RotationMode.DesiredAxisAndTarget, transform.up,-cObject.gravityDirection);
+                _pDirectionManager.ForcedRotation(0.1f,  RotationMode.DesiredAxisAndTarget, transform.up,-controller.gravityDirection);
             useGravity = true;
         }
 
 
-        protected override void AwakeComponent(AbstractCObject cObject)        {
-            direction = cObject.gravityDirection;
-            gravityMultiplierBase = cObject.gravityMultiplier;
-            _pDirectionManager = cObject.FindModule<PassiveModule>().RequestComponent<PDirectionManager>(true);
+        protected override void AwakeComponent(AbstractCObject controller)        {
+            direction = controller.gravityDirection;
+            gravityMultiplierBase = controller.gravityMultiplier;
+            _pDirectionManager = controller.RequestModule<PassiveModule>().RequestRoutine<PDirectionManager>(true);
         }
     }
 }

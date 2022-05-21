@@ -20,19 +20,19 @@ namespace sapra.ObjectController
         private SDimensions _sDimensions;
         private float heightLerped; 
         public override int priorityID => 10;
-        protected override void AwakeComponent(AbstractCObject cObject)        {
-            PassiveModule passiveModule = cObject.FindModule<PassiveModule>();
-            StatModule statModule = cObject.FindModule<StatModule>();
-            ActiveModule activeModule = cObject.FindModule<ActiveModule>();
+        protected override void AwakeComponent(AbstractCObject controller)        {
+            PassiveModule passiveModule = controller.RequestModule<PassiveModule>();
+            StatModule statModule = controller.RequestModule<StatModule>();
+            ActiveModule activeModule = controller.RequestModule<ActiveModule>();
 
-            _aMove = activeModule.RequestComponent<AMove>(true);
-            _pWalkableDetection = passiveModule.RequestComponent<PWalkableDetection>(true);
-            _pRoofDetection = passiveModule.RequestComponent<PRoofDetection>(true);
-            _pColliderSettings = passiveModule.RequestComponent<PColliderSettings>(true);
-            _pFloatDetection = passiveModule.RequestComponent<PFloatDetection>(false);
-            _sDimensions = statModule.RequestComponent<SDimensions>(true);
-            crouchVelocity = statModule.RequestComponent<SForces>(true).minimumSpeed.Select();
-            desiredVelocity = statModule.RequestComponent<SForces>(true).selectedSpeed.Select();
+            _aMove = activeModule.RequestRoutine<AMove>(true);
+            _pWalkableDetection = passiveModule.RequestRoutine<PWalkableDetection>(true);
+            _pRoofDetection = passiveModule.RequestRoutine<PRoofDetection>(true);
+            _pColliderSettings = passiveModule.RequestRoutine<PColliderSettings>(true);
+            _pFloatDetection = passiveModule.RequestRoutine<PFloatDetection>(false);
+            _sDimensions = statModule.RequestRoutine<SDimensions>(true);
+            crouchVelocity = statModule.RequestRoutine<SForces>(true).minimumSpeed.Select();
+            desiredVelocity = statModule.RequestRoutine<SForces>(true).selectedSpeed.Select();
         }
 
         public override void DoActive(InputValues input)

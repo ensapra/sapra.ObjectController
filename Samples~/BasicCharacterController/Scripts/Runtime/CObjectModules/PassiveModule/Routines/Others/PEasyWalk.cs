@@ -18,12 +18,12 @@ namespace sapra.ObjectController
         public float smoothness = 10;
         public override PassivePriority whenDo => PassivePriority.BeforeActive;
         
-        protected override void AwakeComponent(AbstractCObject cObject)        {
-            PassiveModule passiveModule = cObject.FindModule<PassiveModule>();
-            _pWalkableDetection = passiveModule.RequestComponent<PWalkableDetection>(true);
-            _pFloatDetection = passiveModule.RequestComponent<PFloatDetection>(false);
-            _pColliderSettings = passiveModule.RequestComponent<PColliderSettings>(true);
-            _sDimensions = cObject.FindModule<StatModule>().RequestComponent<SDimensions>(true);
+        protected override void AwakeComponent(AbstractCObject controller)        {
+            PassiveModule passiveModule = controller.RequestModule<PassiveModule>();
+            _pWalkableDetection = passiveModule.RequestRoutine<PWalkableDetection>(true);
+            _pFloatDetection = passiveModule.RequestRoutine<PFloatDetection>(false);
+            _pColliderSettings = passiveModule.RequestRoutine<PColliderSettings>(true);
+            _sDimensions = controller.RequestModule<StatModule>().RequestRoutine<SDimensions>(true);
         }
 
         public override void DoPassive(Vector3 position, InputValues input)
@@ -35,7 +35,7 @@ namespace sapra.ObjectController
             }
             if(_pFloatDetection?.floating == true)
                 return;
-            Vector3 finalPos = position - Vector3.Project(position, -cObject.gravityDirection) + -cObject.gravityDirection*(_pWalkableDetection.point.y-_sDimensions.footOffset.y);
+            Vector3 finalPos = position - Vector3.Project(position, -controller.gravityDirection) + -controller.gravityDirection*(_pWalkableDetection.point.y-_sDimensions.footOffset.y);
             transform.position = Vector3.Lerp(transform.position, finalPos, Time.deltaTime*smoothness);
             Vector3 deletedVelocity = Vector3.Project(-rb.velocity, _pWalkableDetection.normal);
             rb.velocity += deletedVelocity;

@@ -60,7 +60,7 @@ namespace sapra.ObjectController
             }
         }
 
-        protected override void AwakeComponent(AbstractCObject cObject)        {
+        protected override void AwakeComponent(AbstractCObject controller)        {
         }
     }
 }
