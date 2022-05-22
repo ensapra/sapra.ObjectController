@@ -84,7 +84,7 @@ namespace sapra.ObjectController
         {
             foreach (T routine in allRoutines)
             {
-                if(routine is Z)
+                if(routine.GetType().IsEquivalentTo(typeof(Z)))
                 {
                     if(required)
                     {
