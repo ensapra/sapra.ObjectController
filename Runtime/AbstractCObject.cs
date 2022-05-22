@@ -44,6 +44,7 @@ namespace sapra.ObjectController
                     return moduleFound as T;
                 }
             }
+            Debug.Log("Missing " + T.GetType().ToString());
             return null;
         }
         public AbstractModule RequestModule(System.Type moduleType)
@@ -55,6 +56,7 @@ namespace sapra.ObjectController
                     return moduleFound;
                 }
             }
+            Debug.Log("Missing " + T.GetType().ToString());
             return null;
         }
         #endregion
