@@ -35,6 +35,7 @@ namespace sapra.ObjectController
                 requested = this.gameObject.AddComponent<T>();
             return requested;
         }
+
         public T RequestModule<T>() where T : AbstractModule
         {
             foreach(AbstractModule moduleFound in modules)
@@ -44,7 +45,7 @@ namespace sapra.ObjectController
                     return moduleFound as T;
                 }
             }
-            Debug.Log("Missing " + T.GetType().ToString());
+            Debug.LogError("Missing " + typeof(T).ToString());
             return null;
         }
         public AbstractModule RequestModule(System.Type moduleType)
@@ -56,7 +57,7 @@ namespace sapra.ObjectController
                     return moduleFound;
                 }
             }
-            Debug.Log("Missing " + T.GetType().ToString());
+            Debug.LogError("Missing " + moduleType.GetType().ToString());
             return null;
         }
         #endregion
