@@ -102,9 +102,9 @@ namespace sapra.ObjectController
             }
             return null;
         }
-        public T RequestRoutine(System.Type routineType, bool required)
+        public override AbstractRoutine RequestRoutine(System.Type routineType, bool required)
         {
-            foreach (T routine in allRoutines)
+            foreach (AbstractRoutine routine in allRoutines)
             {
                 if(routine.GetType().IsEquivalentTo(routineType))
                 {
@@ -130,6 +130,7 @@ namespace sapra.ObjectController
     [System.Serializable]
     public abstract class AbstractModule
     {
+        public abstract AbstractRoutine RequestRoutine(System.Type routineType, bool required);
         public abstract void InitializeRoutines(AbstractCObject controller);
         public abstract void SleepRoutines(AbstractCObject controller);
         public abstract void GetAllRoutines();
