@@ -66,7 +66,7 @@ namespace sapra.ObjectController.Editor
         }
         protected virtual void ObjectList(SerializedProperty module)
         {
-            SerializedProperty prop = module.FindPropertyRelative("allComponents");
+            SerializedProperty prop = module.FindPropertyRelative("allRoutines");
             bool onlyEnabled = module.FindPropertyRelative("onlyEnabled").boolValue;
             EditorGUI.indentLevel += 1;
             GUILayout.Space(5);
@@ -102,7 +102,7 @@ namespace sapra.ObjectController.Editor
             toggleRect.y += EditorGUIUtility.standardVerticalSpacing;
 
             GUI.Box(boxRect, "");
-            SerializedProperty prop = module.FindPropertyRelative("allComponents");
+            SerializedProperty prop = module.FindPropertyRelative("allRoutines");
             prop.isExpanded = EditorGUI.Foldout(toggleRect, prop.isExpanded, UpperSplit(module.name), true, headerStyle);
             if(GUI.Button(buttonRect, "Clear"))
             {
