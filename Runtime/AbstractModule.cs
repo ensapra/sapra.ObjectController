@@ -102,6 +102,28 @@ namespace sapra.ObjectController
             }
             return null;
         }
+        public T RequestRoutine(System.Type routineType, bool required)
+        {
+            foreach (T routine in allRoutines)
+            {
+                if(routine.GetType().IsEquivalentTo(routineType))
+                {
+                    if(required)
+                    {
+                        if(!routine.awakened)
+                            routine.Awake(controller);
+                        return routine;
+                    }
+                    else if(routine.wantsAwakened)
+                    {
+                        if(!routine.awakened)
+                            routine.Awake(controller);
+                        return routine;
+                    }
+                }
+            }
+            return null;
+        }
         #endregion
     }
     

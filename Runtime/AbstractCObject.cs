@@ -46,6 +46,17 @@ namespace sapra.ObjectController
             }
             return null;
         }
+        public AbstractModule RequestModule(System.Type moduleType)
+        {
+            foreach(AbstractModule moduleFound in modules)
+            {
+                if(moduleFound.GetType().IsEquivalentTo(moduleType))
+                {
+                    return moduleFound;
+                }
+            }
+            return null;
+        }
         #endregion
 
         public void InitializeObject(bool forcedRestart)
