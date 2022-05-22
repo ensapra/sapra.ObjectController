@@ -9,7 +9,7 @@ namespace sapra.ObjectController
     [System.Serializable]
     public abstract class AbstractModule<T> : AbstractModule where T : AbstractRoutine
     {
-        protected AbstractCObject controller;
+        [SerializeReference] [HideInInspector] protected AbstractCObject controller;
         
         [SerializeReference] [HideInInspector] public List<T> allRoutines = new List<T>();
         public List<T> onlyEnabledRoutines = new List<T>();
