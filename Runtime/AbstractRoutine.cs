@@ -7,14 +7,15 @@ namespace sapra.ObjectController
     [System.Serializable]
     public abstract class AbstractRoutine
     {
-        [SerializeField] [HideInInspector] private bool wantsAwake = false;
-        [SerializeField] [HideInInspector] private bool isAwake;
         protected Transform transform;
         protected Rigidbody rb;
+
+        [SerializeField] [HideInInspector] private bool wantsAwake = false;
+        [SerializeField] [HideInInspector] private bool isAwake;
         internal bool wantsAwakened{get{return wantsAwake;}}
         internal bool awakened{get{return isAwake;}}
+
         protected AbstractCObject controller;
-        
         internal void Awake(AbstractCObject controller)
         {
             this.controller = controller;
@@ -29,8 +30,14 @@ namespace sapra.ObjectController
             SleepRoutine(controller);
             isAwake = false;
         }
-        //protected virtual void AwakeObject(AbstractCObject controller){}
+        /// <summary>
+        /// Automatically called once the Routine is initialized. Equivalent of Awake on MonoBehaviour
+        /// <summary/>
         protected virtual void AwakeRoutine(AbstractCObject controller){}
+
+        /// <summary>
+        /// Automatically called once the Routine is disabled.
+        /// <summary/>
         protected virtual void SleepRoutine(AbstractCObject controller){}
     }
 }

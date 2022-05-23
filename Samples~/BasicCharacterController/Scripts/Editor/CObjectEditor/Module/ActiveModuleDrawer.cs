@@ -62,11 +62,10 @@ namespace sapra.ObjectController.Editor
                     {
                         var element = enabledActives.serializedProperty.GetArrayElementAtIndex(index);
                         rect.y += 2;
-                        string[] propertyName = element.managedReferenceFullTypename.Split('.');
                         if(element.type.Equals(selected.type))
-                            EditorGUI.LabelField(new Rect(rect.x,rect.y, rect.width, EditorGUIUtility.singleLineHeight),ObjectName(propertyName[propertyName.Length-1]) + " <- Current Action", workingListStyle);
+                            EditorGUI.LabelField(new Rect(rect.x,rect.y, rect.width, EditorGUIUtility.singleLineHeight),ObjectName(element.managedReferenceFullTypename) + " <- Current Action", workingListStyle);
                         else
-                            EditorGUI.LabelField(new Rect(rect.x,rect.y, rect.width, EditorGUIUtility.singleLineHeight),ObjectName(propertyName[propertyName.Length-1]));
+                            EditorGUI.LabelField(new Rect(rect.x,rect.y, rect.width, EditorGUIUtility.singleLineHeight),ObjectName(element.managedReferenceFullTypename));
                 };
         }
 

@@ -11,8 +11,11 @@ namespace sapra.ObjectController
     {
         [SerializeReference] [HideInInspector] protected AbstractCObject controller;
         
-        [SerializeReference] [HideInInspector] public List<T> allRoutines = new List<T>();
-        public List<T> onlyEnabledRoutines = new List<T>();
+        [SerializeReference] [HideInInspector] internal List<T> allRoutines = new List<T>();
+        /// <summary>
+        /// Enabled components
+        /// <summary/>
+        protected List<T> onlyEnabledRoutines = new List<T>();
         private List<T> GetComponentsInAssembly(Assembly assem)
         {
             IEnumerable<Type> q = from t in assem.GetTypes()
@@ -81,6 +84,9 @@ namespace sapra.ObjectController
         }
         #endregion
         #region Components requests
+        /// <summary>
+        /// Returns the requested Routine if it has been enabled, otherwise returns true. If required is True, and the component hasn't been enabled, it will automatically enable it
+        /// <summary/>
         public Z RequestRoutine<Z>(bool required) where Z : T
         {
             foreach (T routine in allRoutines)
@@ -103,6 +109,9 @@ namespace sapra.ObjectController
             }
             return null;
         }
+        /// <summary>
+        /// Returns the requested Routine if it has been enabled, otherwise returns true. If required is True, and the component hasn't been enabled, it will automatically enable it
+        /// <summary/>
         public override sealed AbstractRoutine RequestRoutine(System.Type routineType, bool required)
         {
             foreach (AbstractRoutine routine in allRoutines)
@@ -135,6 +144,9 @@ namespace sapra.ObjectController
         internal abstract void InitializeRoutines(AbstractCObject controller);
         internal abstract void SleepRoutines(AbstractCObject controller);
         internal abstract void LoadRoutines();
+        /// <summary>
+        /// Method called after all routines have been enabled. Equivalent to Awake of Monobehaviours
+        /// <summary/>
         protected virtual void InitializeModule(){}
         public bool onlyEnabled = true;
     }

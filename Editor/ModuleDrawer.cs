@@ -15,6 +15,9 @@ namespace sapra.ObjectController.Editor
         protected GUIStyle addItems;
         protected GUIStyle workingListStyle;
 
+        /// <summary>
+        /// Used to add extra layout after the basic Module Layout
+        /// <summary/>
         protected virtual void ExtraModuleData(SerializedProperty property, GUIContent label){}
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
@@ -56,7 +59,7 @@ namespace sapra.ObjectController.Editor
                 workingListStyle.fontStyle = FontStyle.Bold;
             }
         }
-        public void SerializeModule(SerializedProperty module, Rect position)
+        private void SerializeModule(SerializedProperty module, Rect position)
         {
             if(module == null)
                 return;
@@ -122,6 +125,9 @@ namespace sapra.ObjectController.Editor
                 item.FindPropertyRelative("wantsAwake").boolValue = false;
             }
         }
+        /// <summary>
+        /// Generates the default FoldoutMenu of routines to be selected
+        /// <summary/>
         protected virtual void GenerateFoldoutMenu(SerializedProperty list, SerializedProperty property)
         {
             GenericMenu newMenu = new GenericMenu();
@@ -156,6 +162,9 @@ namespace sapra.ObjectController.Editor
             }
             return false;
         }
+        /// <summary>
+        /// Generates the Header of a Routine
+        /// <summary/>
         protected void AbstractRoutineHeader(Rect position, SerializedProperty AbstractRoutine)
         {
             string correctPropertyName = ObjectName(AbstractRoutine.managedReferenceFullTypename);
@@ -194,6 +203,9 @@ namespace sapra.ObjectController.Editor
             }
             return result;
         }
+        /// <summary>
+        /// Returns the name of a routine, without the first letter
+        /// <summary/>
         protected string ObjectName(string name)
         {
             string[] propertyName = name.Split('.');

@@ -26,6 +26,9 @@ namespace sapra.ObjectController
         }
 
         #region Object Requests
+        /// <summary>
+        /// Returns a component on the gameObject if exists. If required is True, if the component doesn't exist it will add it.
+        /// <summary/>
         public T RequestComponent<T>(bool required) where T : Component
         {
             T requested = GetComponent<T>();
@@ -33,7 +36,9 @@ namespace sapra.ObjectController
                 requested = this.gameObject.AddComponent<T>();
             return requested;
         }
-
+        /// <summary>
+        /// Returns a module of the current controller if it has been added, otherwise returns null
+        /// <summary/>
         public T RequestModule<T>() where T : AbstractModule
         {
             foreach(AbstractModule moduleFound in modules)
@@ -46,6 +51,9 @@ namespace sapra.ObjectController
             Debug.LogError("Missing " + typeof(T).ToString());
             return null;
         }
+        /// <summary>
+        /// Returns a module of the current controller if it has been added, otherwise returns null
+        /// <summary/>
         public AbstractModule RequestModule(System.Type moduleType)
         {
             foreach(AbstractModule moduleFound in modules)
@@ -86,11 +94,17 @@ namespace sapra.ObjectController
                 module.LoadRoutines();
             }
         }   
+        /// <summary>
+        /// If the module hasn't been added already, it hads it to the existing list of modules
+        /// <summary/>
         protected void AddModule(AbstractModule module)
         {
             if(!modules.Contains(module))
                 modules.Add(module);
         }
+        /// <summary>
+        /// ReInitializes all the routines to regrab dependancies, cleans errors of existing routines on the lists, and removes missing serialized references.
+        /// <summary/>
         public void ReInitializeRoutines()
         {
             foreach(AbstractModule module in modules)
@@ -100,6 +114,9 @@ namespace sapra.ObjectController
         }
 
         #region Abstract
+        /// <summary>
+        /// Fill with AddModule() of all the modules that will be used on the controller, so that they can be found by routines
+        /// <summar/>
         protected abstract void addModules();
         #endregion
 
