@@ -24,7 +24,6 @@ namespace sapra.ObjectController
             List<T> temp = new List<T>();
             foreach (Type item in q)
             {
-                Debug.Log(item);
                 T ObjectFound = allRoutines.Find(x => x != null && x.GetType() == item);
                 if(ObjectFound == null)
                 {
@@ -80,10 +79,6 @@ namespace sapra.ObjectController
             foreach(Assembly assembly in assemblies)
             {
                 newList.AddRange(GetComponentsInAssembly(assembly));
-            }
-            foreach(T t in newList)
-            {
-                Debug.Log(t);
             }
             allRoutines = newList;
         }
