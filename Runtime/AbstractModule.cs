@@ -85,6 +85,13 @@ namespace sapra.ObjectController
         #endregion
         #region Components requests
         /// <summary>
+        /// Returns list of enabled routines
+        /// <summary/>
+        public List<T> RequestEnabledRoutines()
+        {
+            return onlyEnabledRoutines;
+        }
+        /// <summary>
         /// Returns the requested Routine if it has been enabled, otherwise returns true. If required is True, and the component hasn't been enabled, it will automatically enable it
         /// <summary/>
         public Z RequestRoutine<Z>(bool required) where Z : T
