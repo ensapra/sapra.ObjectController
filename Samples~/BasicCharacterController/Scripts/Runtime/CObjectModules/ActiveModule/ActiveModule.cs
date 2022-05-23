@@ -13,8 +13,8 @@ namespace sapra.ObjectController
         public UnityEvent whenNullAction;
         [SerializeReference]
         public List<AbstractActive> sortedShorterList = new List<AbstractActive>();
-        public override void InitializeRoutines(AbstractCObject controller)        {
-            base.InitializeRoutines(controller);
+        protected override void InitializeModule()        
+        {
             GenerateSortedList();
         }
         public void GenerateSortedList()
@@ -36,10 +36,8 @@ namespace sapra.ObjectController
                 }
             }
         }
-        public void Run(InputValues _input, bool continuosCheck)
+        public void Run(InputValues _input)
         {
-            if(continuosCheck)
-                InitializeRoutines(this.controller);
             if(_input == null)
                 return;
             bool foundCurrentAction = false;

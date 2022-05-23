@@ -7,10 +7,8 @@ namespace sapra.ObjectController
     [System.Serializable]
     public class StatModule : AbstractModule<AbstractStat>
     {        
-        public void Run(bool continuosCheck)
+        public void Run()
         {
-            if(continuosCheck)
-                InitializeRoutines(this.controller);
             foreach(AbstractStat stat in onlyEnabledRoutines)
             {
                 stat.DoExtra();

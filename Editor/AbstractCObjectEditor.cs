@@ -5,12 +5,12 @@ using sapra.ObjectController;
 namespace sapra.ObjectController.Editor
 {
     [CustomEditor(typeof(AbstractCObject), true)]
-    public class CObjectEditor : UnityEditor.Editor
+    public class AbstractCObjectEditor : UnityEditor.Editor
     {
         void OnEnable()
         {
             AbstractCObject component = this.target as AbstractCObject;
-            component.GetAllRoutines();
+            component.LoadModuleRoutines();
         }
         public override void OnInspectorGUI()
         {

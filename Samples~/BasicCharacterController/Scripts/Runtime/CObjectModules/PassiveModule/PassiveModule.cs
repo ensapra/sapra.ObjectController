@@ -6,10 +6,8 @@ namespace sapra.ObjectController
     [System.Serializable]
     public class PassiveModule : AbstractModule<AbstractPassive>
     {
-        public void Run(PassivePriority wichOnes, InputValues _input, bool continuosCheck)
+        public void Run(PassivePriority wichOnes, InputValues _input)
         {   
-            if(continuosCheck)
-                InitializeRoutines(this.controller);
             for(int i = 0; i < onlyEnabledRoutines.Count; i++)
             {
                 AbstractPassive passive = onlyEnabledRoutines[i];

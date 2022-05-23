@@ -1,6 +1,6 @@
 {
-    "name": "sapra.object-controller.Editor",
-    "rootNamespace": "sapra",
+    "name": "sapra.ObjectController.Editor",
+    "rootNamespace": "",
     "references": [
         "GUID:92ce4a4593469dc4291939cc2ce99948"
     ],

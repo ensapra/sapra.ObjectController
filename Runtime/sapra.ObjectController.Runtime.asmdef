@@ -1,6 +1,6 @@
 {
-    "name": "sapra.object-controller.Runtime",
-    "rootNamespace": "sapra",
+    "name": "sapra.ObjectController.Runtime",
+    "rootNamespace": "",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],

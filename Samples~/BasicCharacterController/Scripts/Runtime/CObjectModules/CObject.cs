@@ -9,6 +9,8 @@ namespace sapra.ObjectController
     [System.Serializable]
     public class CObject : AbstractCObject 
     {
+        [Tooltip("Enables Continuous check of new components")]
+        [SerializeField] private bool continuosCheck = true;
         public ActiveModule activeModule = new ActiveModule();
         public PassiveModule passiveModule = new PassiveModule();
         public StatModule statModule = new StatModule();
@@ -26,12 +28,15 @@ namespace sapra.ObjectController
         }
         void FixedUpdate()
         {      
-            statModule.Run(continuosCheck);
-            passiveModule.Run(PassivePriority.FirstOfAll, _input, continuosCheck);
-            passiveModule.Run(PassivePriority.BeforeActive, _input, continuosCheck);
-            activeModule.Run(_input, continuosCheck);
-            passiveModule.Run(PassivePriority.AfterActive, _input, continuosCheck);
-            passiveModule.Run(PassivePriority.LastOne, _input, continuosCheck);
+            if(continuosCheck)
+                ReInitializeRoutines();
+
+            statModule.Run();
+            passiveModule.Run(PassivePriority.FirstOfAll, _input);
+            passiveModule.Run(PassivePriority.BeforeActive, _input);
+            activeModule.Run(_input);
+            passiveModule.Run(PassivePriority.AfterActive, _input);
+            passiveModule.Run(PassivePriority.LastOne, _input);
         }
         private void LateUpdate() {
             passiveModule.RunLate(_input);   

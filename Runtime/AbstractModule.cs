@@ -39,7 +39,7 @@ namespace sapra.ObjectController
             return temp;
         }
         #region  Initialization
-        public override void SleepRoutines(AbstractCObject controller)
+        internal override sealed void SleepRoutines(AbstractCObject controller)
         {
             for(int i = allRoutines.Count-1; i>= 0; i--)
             {
@@ -47,7 +47,7 @@ namespace sapra.ObjectController
                 routine.Sleep(controller);                
             }
         }
-        public override void InitializeRoutines(AbstractCObject controller)
+        internal override sealed void InitializeRoutines(AbstractCObject controller)
         {
             this.controller = controller;
             if(this.controller == null)
@@ -66,9 +66,10 @@ namespace sapra.ObjectController
 
                 if(routine.wantsAwakened && routine.awakened)
                     onlyEnabledRoutines.Add(routine);          
-            }            
+            }    
+            InitializeModule();
         }
-        public override void GetAllRoutines()
+        internal override sealed void LoadRoutines()
         {
             List<Assembly> assemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
             List<T> newList = new List<T>();
@@ -102,7 +103,7 @@ namespace sapra.ObjectController
             }
             return null;
         }
-        public override AbstractRoutine RequestRoutine(System.Type routineType, bool required)
+        public override sealed AbstractRoutine RequestRoutine(System.Type routineType, bool required)
         {
             foreach (AbstractRoutine routine in allRoutines)
             {
@@ -131,9 +132,10 @@ namespace sapra.ObjectController
     public abstract class AbstractModule
     {
         public abstract AbstractRoutine RequestRoutine(System.Type routineType, bool required);
-        public abstract void InitializeRoutines(AbstractCObject controller);
-        public abstract void SleepRoutines(AbstractCObject controller);
-        public abstract void GetAllRoutines();
+        internal abstract void InitializeRoutines(AbstractCObject controller);
+        internal abstract void SleepRoutines(AbstractCObject controller);
+        internal abstract void LoadRoutines();
+        protected virtual void InitializeModule(){}
         public bool onlyEnabled = true;
     }
 }

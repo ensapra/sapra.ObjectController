@@ -2,15 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Runtime.CompilerServices;
 
 namespace sapra.ObjectController
 {
     [RequireComponent(typeof(Rigidbody))]
     public abstract class AbstractCObject : MonoBehaviour
-    {                
-        [Tooltip("Enables Continuous check of new components")]
-        public bool continuosCheck = true;
-        
+    {                        
         [HideInInspector] public Rigidbody rb;
         [HideInInspector] [SerializeField] protected bool onlyEnabled = true;
 
@@ -62,7 +60,7 @@ namespace sapra.ObjectController
         }
         #endregion
 
-        public void InitializeObject(bool forcedRestart)
+        internal void InitializeObject(bool forcedRestart)
         {
             addModules();
             if(forcedRestart)
@@ -72,23 +70,20 @@ namespace sapra.ObjectController
                     module.SleepRoutines(this);
                 }
             }
-            foreach(AbstractModule module in modules)
-            {
-                module.InitializeRoutines(this);
-            }
+            ReInitializeRoutines();
         }
-        public void SwitchTo(bool showEnabled)
+        internal void SwitchTo(bool showEnabled)
         {
             onlyEnabled = showEnabled;
             foreach(AbstractModule module in modules)
                 module.onlyEnabled = showEnabled;
         } 
-        public void GetAllRoutines()
+        internal void LoadModuleRoutines()
         {
             addModules();
             foreach(AbstractModule module in modules)
             {
-                module.GetAllRoutines();
+                module.LoadRoutines();
             }
         }   
         protected void AddModule(AbstractModule module)
@@ -96,10 +91,16 @@ namespace sapra.ObjectController
             if(!modules.Contains(module))
                 modules.Add(module);
         }
+        public void ReInitializeRoutines()
+        {
+            foreach(AbstractModule module in modules)
+            {
+                module.InitializeRoutines(this);
+            }
+        }
 
         #region Abstract
         protected abstract void addModules();
-
         #endregion
 
     }
