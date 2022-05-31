@@ -1,6 +1,6 @@
 {
   "name": "com.sapra.object-controller",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "displayName": "Object Controller",
   "description": "Object Controller that allows for multitud of process, \nstack inside an easy to edit and see monobehaviour",
   "unity": "2021.3",
