@@ -68,7 +68,7 @@ namespace sapra.ObjectController
         }
         #endregion
 
-        internal void InitializeObject(bool forcedRestart)
+        private void InitializeObject(bool forcedRestart)
         {
             addModules();
             if(forcedRestart)
@@ -80,12 +80,6 @@ namespace sapra.ObjectController
             }
             ReInitializeRoutines();
         }
-        internal void SwitchTo(bool showEnabled)
-        {
-            onlyEnabled = showEnabled;
-            foreach(AbstractModule module in modules)
-                module.onlyEnabled = showEnabled;
-        } 
         internal void LoadModuleRoutines()
         {
             addModules();
@@ -93,6 +87,7 @@ namespace sapra.ObjectController
             {
                 module.LoadRoutines();
             }
+            InitializeObject(true);
         }   
         /// <summary>
         /// If the module hasn't been added already, it hads it to the existing list of modules

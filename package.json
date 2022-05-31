@@ -27,5 +27,9 @@
       "description": "Contains implementations of a character controller, capable to Swim, Walk, Jump, Move in the Air, and other actions",
       "path": "Samples~/BasicCharacterController"
     }
-  ]
+  ],
+  "dependencies": {
+      "com.unity.inputsystem": "1.2.0"
+  }
+
 }
