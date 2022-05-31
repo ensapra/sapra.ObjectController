@@ -80,12 +80,6 @@ namespace sapra.ObjectController
             }
             ReInitializeRoutines();
         }
-        internal void SwitchTo(bool showEnabled)
-        {
-            onlyEnabled = showEnabled;
-            foreach(AbstractModule module in modules)
-                module.onlyEnabled = showEnabled;
-        } 
         internal void LoadModuleRoutines()
         {
             addModules();

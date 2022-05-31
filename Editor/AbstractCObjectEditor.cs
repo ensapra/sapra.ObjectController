@@ -22,29 +22,17 @@ namespace sapra.ObjectController.Editor
         void LoadReloadButton()
         {
             EditorGUILayout.BeginHorizontal();
-            bool currentEnabled = serializedObject.FindProperty("onlyEnabled").boolValue;
             if(GUILayout.Button("Reload requirements"))
             {
-                loadRequirements(currentEnabled);
+                loadRequirements();
             }        
-            string text;
-            if(currentEnabled)
-                text = "Show all";
-            else
-                text = "Show only enabled";
-            if(GUILayout.Button(text))
-            {
-                currentEnabled = !currentEnabled;
-                loadRequirements(currentEnabled);
-            }
             EditorGUILayout.EndHorizontal();
         }
-        void loadRequirements(bool showEnabled)
+        void loadRequirements()
         {
             AbstractCObject component = this.target as AbstractCObject;
             Undo.RecordObject(component, "Reloaded requirements in " + target.name);
             component.LoadModuleRoutines();
-            component.SwitchTo(showEnabled);
             serializedObject.ApplyModifiedProperties();      
         }
     }

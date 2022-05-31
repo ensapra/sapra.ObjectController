@@ -148,6 +148,5 @@ namespace sapra.ObjectController
         /// Method called after all routines have been enabled. Equivalent to Awake of Monobehaviours
         /// <summary/>
         protected virtual void InitializeModule(){}
-        public bool onlyEnabled = true;
     }
 }

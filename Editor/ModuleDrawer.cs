@@ -15,6 +15,7 @@ namespace sapra.ObjectController.Editor
         protected GUIStyle addItems;
         protected GUIStyle workingListStyle;
 
+        private bool onlyEnabled = true;
         /// <summary>
         /// Used to add extra layout after the basic Module Layout
         /// <summary/>
@@ -65,12 +66,11 @@ namespace sapra.ObjectController.Editor
                 return;
 
             ModuleHeader(position, module);
-            ObjectList(module);
+            ObjectList(module, onlyEnabled);
         }
-        protected virtual void ObjectList(SerializedProperty module)
+        protected virtual void ObjectList(SerializedProperty module, bool onlyEnabled)
         {
             SerializedProperty prop = module.FindPropertyRelative("allRoutines");
-            bool onlyEnabled = module.FindPropertyRelative("onlyEnabled").boolValue;
             EditorGUI.indentLevel += 1;
             GUILayout.Space(5);
             if(prop.isExpanded)
@@ -94,17 +94,26 @@ namespace sapra.ObjectController.Editor
         {
             Rect boxRect = new Rect(position.x-15, position.y, position.width+15, position.height+5);
             Rect buttonRect = new Rect(position);
-            buttonRect.xMax -= 20;
+            buttonRect.xMax -= 42;
             buttonRect.xMin += 150;
             buttonRect.y += EditorGUIUtility.standardVerticalSpacing;
+            Rect onlyEnabledRect = new Rect(position);
+            onlyEnabledRect.xMin = buttonRect.xMax+2;
+            onlyEnabledRect.xMax = buttonRect.xMax+22;
+            onlyEnabledRect.y += EditorGUIUtility.standardVerticalSpacing;
             Rect dropDownRect = new Rect(position);
-            dropDownRect.xMin = buttonRect.xMax;
-            dropDownRect.y += 2;
+            dropDownRect.xMin = onlyEnabledRect.xMax;
+            dropDownRect.y += EditorGUIUtility.standardVerticalSpacing*1.5f;
             Rect toggleRect = new Rect(position);
             toggleRect.xMax = buttonRect.xMin;
             toggleRect.y += EditorGUIUtility.standardVerticalSpacing;
 
             GUI.Box(boxRect, "");
+            string enabledText = onlyEnabled ? "E" : "A";
+            if(GUI.Button(onlyEnabledRect, enabledText)) {
+                onlyEnabled = !onlyEnabled;
+            }
+
             SerializedProperty prop = module.FindPropertyRelative("allRoutines");
             prop.isExpanded = EditorGUI.Foldout(toggleRect, prop.isExpanded, UpperSplit(module.name), true, headerStyle);
             if(GUI.Button(buttonRect, "Clear"))
