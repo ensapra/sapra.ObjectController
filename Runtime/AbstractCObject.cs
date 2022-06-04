@@ -66,6 +66,13 @@ namespace sapra.ObjectController
             Debug.LogError("Missing " + moduleType.GetType().ToString());
             return null;
         }
+        /// <summary>
+        /// Returns all the modules added
+        /// <summary/>
+        public List<AbstractModule> RequestModules()
+        {
+            return modules;
+        }
         #endregion
 
         private void InitializeObject(bool forcedRestart)
