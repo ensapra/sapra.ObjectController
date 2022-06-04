@@ -142,6 +142,13 @@ namespace sapra.ObjectController
             }
             return null;
         }
+        /// <summary>
+        /// Returns the type of the current module
+        /// <summary/>
+        public override Type GetModuleType()
+        {
+            return typeof(T);
+        }
         #endregion
     }
     
@@ -152,6 +159,7 @@ namespace sapra.ObjectController
         internal abstract void InitializeRoutines(AbstractCObject controller);
         internal abstract void SleepRoutines(AbstractCObject controller);
         internal abstract void LoadRoutines();
+        public abstract Type GetModuleType();
         /// <summary>
         /// Method called after all routines have been enabled. Equivalent to Awake of Monobehaviours
         /// <summary/>
