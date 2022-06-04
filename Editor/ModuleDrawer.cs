@@ -26,9 +26,9 @@ namespace sapra.ObjectController.Editor
             EditorGUI.BeginProperty(position, label, property);
             CreateGUIStyles();
             SerializeModule(property, position);
-            EditorGUI.indentLevel += 1;
+            EditorGUI.indentLevel+=2;
             ExtraModuleData(property, label);
-            EditorGUI.indentLevel -= 1;
+            EditorGUI.indentLevel-=2;
             property.serializedObject.ApplyModifiedProperties();
             EditorGUI.indentLevel = indent;
             EditorGUI.EndProperty();

@@ -22,6 +22,7 @@ namespace sapra.ObjectController.Editor
         void LoadReloadButton()
         {
             EditorGUILayout.BeginHorizontal();
+            EditorGUI.indentLevel--;
             if(GUILayout.Button("Reload requirements"))
             {
                 loadRequirements();
