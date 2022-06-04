@@ -15,7 +15,7 @@ namespace sapra.ObjectController
         internal bool wantsAwakened{get{return wantsAwake;}}
         internal bool awakened{get{return isAwake;}}
 
-        protected AbstractCObject controller;
+        [SerializeField] protected AbstractCObject controller;
         internal void Awake(AbstractCObject controller)
         {
             this.controller = controller;
