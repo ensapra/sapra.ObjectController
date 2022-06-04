@@ -26,9 +26,9 @@ namespace sapra.ObjectController.Editor
             EditorGUI.BeginProperty(position, label, property);
             CreateGUIStyles();
             SerializeModule(property, position);
-            EditorGUI.indentLevel+=2;
+            EditorGUI.indentLevel++;
             ExtraModuleData(property, label);
-            EditorGUI.indentLevel-=2;
+            EditorGUI.indentLevel--;
             property.serializedObject.ApplyModifiedProperties();
             EditorGUI.indentLevel = indent;
             EditorGUI.EndProperty();
@@ -164,9 +164,11 @@ namespace sapra.ObjectController.Editor
             {     
                 Rect position = EditorGUILayout.GetControlRect();           
                 AbstractRoutineHeader(position, item);
+                EditorGUI.indentLevel += 2;
                 if(item.isExpanded)                
                     EditorGUILayout.PropertyField(item);
                 GUILayout.Space(4);
+                EditorGUI.indentLevel -= 2;
                 return true;
             }
             return false;
