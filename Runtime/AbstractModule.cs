@@ -149,14 +149,6 @@ namespace sapra.ObjectController
         {
             return typeof(T);
         }
-        
-        /// <summary>
-        /// Returns list of enabled routines as AbstractRoutine 
-        /// <summary/>
-        public override List<AbstractRoutine> RequestEnabledRoutinesSimple()
-        {
-            return onlyEnabledRoutines;
-        }
         #endregion
     }
     
@@ -168,7 +160,6 @@ namespace sapra.ObjectController
         internal abstract void SleepRoutines(AbstractCObject controller);
         internal abstract void LoadRoutines();
         public abstract Type GetModuleType();
-        public abstract List<AbstractRoutine> RequestEnabledRoutinesSimple();
         /// <summary>
         /// Method called after all routines have been enabled. Equivalent to Awake of Monobehaviours
         /// <summary/>
