@@ -22,8 +22,8 @@ namespace sapra.ObjectController.Editor
         void LoadReloadButton()
         {
             EditorGUILayout.BeginHorizontal();
-            Rect rect = GUILayoutUtility.GetRect();
-            rect.x = 0;
+            Rect rect = EditorGUILayout.GetControlRect();
+            rect = new Rect(rect.x-15, rect.y, rect.width+15, rect.height+5);
             if(GUI.Button(rect, "Reload requirements"))
             {
                 loadRequirements();
