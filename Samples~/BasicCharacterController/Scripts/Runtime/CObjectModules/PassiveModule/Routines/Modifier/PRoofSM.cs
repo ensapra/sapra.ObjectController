@@ -38,7 +38,7 @@ namespace sapra.ObjectController
         {
             if(activeFactor())
             {
-                float _factor = 1-_pRoofDetection.distance.Remap(0.6f,_sDimensions.halfHeight,0,1);
+                float _factor = 1-Mathf.InverseLerp(0.6f, _sDimensions.halfHeight, _pRoofDetection.distance);
                 _factor = Mathf.Clamp(_factor, 0, 1);
                 _factor = _factor*(maximumVelocity.value-minimumVelocity.value) + minimumVelocity.value;
                 desiredVelocity.createBoundaries(0,_factor);        

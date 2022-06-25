@@ -18,7 +18,6 @@ namespace sapra.ObjectController
         private PColliderSettings _pColliderSettings;
         private PFloatDetection _pFloatDetection;
         private SDimensions _sDimensions;
-        private float heightLerped; 
         public override int priorityID => 10;
         protected override void AwakeRoutine(AbstractCObject controller)        {
             PassiveModule passiveModule = controller.RequestModule<PassiveModule>();
@@ -64,15 +63,6 @@ namespace sapra.ObjectController
                 return true;          
             
             return false;
-        }
-        
-        public override void DoAnimationParameters()
-        {
-            float distanceRemaped = _pRoofDetection.distance.Remap(crouchHeight,1,0, 1);
-            if(isActive)
-                heightLerped = Mathf.Lerp(heightLerped, 0, Time.deltaTime*10);
-            else
-                heightLerped = Mathf.Lerp(heightLerped, distanceRemaped, Time.deltaTime*10);
         }
     }
 }

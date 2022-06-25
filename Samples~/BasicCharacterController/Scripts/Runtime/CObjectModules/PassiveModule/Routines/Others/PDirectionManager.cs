@@ -124,7 +124,7 @@ namespace sapra.ObjectController
 
         private float GetSWalKRot(Rigidbody rb)
         {           
-            float pointSWalkRot = rb.velocity.magnitude.Remap(10,13, 0, 1);
+            float pointSWalkRot = Mathf.InverseLerp(10,13, rb.velocity.magnitude);
             pointSWalkRot = Mathf.Clamp(pointSWalkRot, 0, 1);
             return (12-Mathf.Lerp(5f, 10f, pointSWalkRot))*Time.deltaTime;
         }

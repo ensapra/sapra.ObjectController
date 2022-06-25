@@ -39,7 +39,7 @@ namespace sapra.ObjectController
             {
                 float _factor = maximumVelocity.value;
                 if (_pWalkableDetection.angleFront > _sDimensions.startDecreaseVelAngle)        
-                    _factor = _factor*(1-_pWalkableDetection.angle.Remap(_sDimensions.startDecreaseVelAngle,_sDimensions.maxWalkableAngle,0,1));
+                    _factor = _factor*(1-Mathf.InverseLerp(_sDimensions.startDecreaseVelAngle,_sDimensions.maxWalkableAngle, _pWalkableDetection.angle));
                 desiredVelocity.createBoundaries(0,_factor);        
             }
         }

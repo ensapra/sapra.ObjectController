@@ -64,14 +64,13 @@ namespace sapra.ObjectController
                     ghostJumpTimerCor = null;
                 }
                 Vector3 direction = _pDirectionManager.getLocalDirection();
-                Vector3 jumpVector = JumpVector(direction.magnitude*transform.forward)*(1-jumpsMade.Remap(0,5,0,0.7f));
+                Vector3 jumpVector = JumpVector(direction.magnitude*transform.forward)*(1-Mathf.InverseLerp(0,5, jumpsMade)*0.7f);
                 jumpingTimerCor = controller.StartCoroutine(jumpingTimer());
                 jumpVector += maxFJump.value * -controller.gravityDirection;
                 rb.velocity = jumpVector;
                 sequence = jumpingSequence.jumping;     
                 _pWalkableDetection.Walkable = false;   
             }
-            //transform.RotateBody(1, jumpVector, transform.up, RotationMode.ForwardAndUpward);                   
         }
 
         public override bool WantActive(InputValues input)

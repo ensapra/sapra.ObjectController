@@ -38,7 +38,7 @@ namespace sapra.ObjectController
         {
             if(activeFactor())
             {
-                float _factor = 1-_pFloatDetection.distance.Remap(0,_sDimensions.shoulderLevel,0,1);
+                float _factor = 1-Mathf.InverseLerp(0, _sDimensions.shoulderLevel,_pFloatDetection.distance);
                 _factor = Mathf.Clamp(_factor, 0 ,1);
                 _factor = ((maximumVelocity.value-speedBeforeSwim.value)*_factor)+speedBeforeSwim.value;
                 desiredVelocity.createBoundaries(0,_factor);        
