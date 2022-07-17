@@ -16,7 +16,6 @@ namespace sapra.ObjectController
         [HideInInspector] public float gravityMultiplier;
         
         private List<AbstractModule> modules = new List<AbstractModule>();
-        
         void Awake() {
             rb = GetComponent<Rigidbody>();
             gravityDirection = Physics.gravity.normalized;
