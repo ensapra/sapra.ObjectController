@@ -17,6 +17,9 @@ namespace sapra.ObjectController
         /// Enabled components
         /// <summary/>
         protected List<T> onlyEnabledRoutines = new List<T>();
+            
+        public override object[] EnabledRoutinesObject => onlyEnabledRoutines.Cast<object>().ToArray();
+
         private List<T> GetComponentsInAssembly(Assembly assem)
         {
             IEnumerable<Type> q = from t in assem.GetTypes()
@@ -156,6 +159,7 @@ namespace sapra.ObjectController
     public abstract class AbstractModule
     {
         public abstract AbstractRoutine RequestRoutine(System.Type routineType, bool required);
+        public abstract object[] EnabledRoutinesObject{get;}
         internal abstract void InitializeRoutines(AbstractCObject controller);
         internal abstract void SleepRoutines(AbstractCObject controller);
         internal abstract void LoadRoutines();
