@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEditor;
 using System.Text.RegularExpressions;
 using sapra.ObjectController;
+using System.IO;
+using System.Reflection;
 
 namespace sapra.ObjectController.Editor
 {
@@ -176,10 +178,10 @@ namespace sapra.ObjectController.Editor
         /// <summary>
         /// Generates the Header of a Routine
         /// <summary/>
-        protected void AbstractRoutineHeader(Rect position, SerializedProperty AbstractRoutine)
+        protected void AbstractRoutineHeader(Rect position, SerializedProperty AbstractRoutineProperty)
         {
-            string correctPropertyName = ObjectName(AbstractRoutine.managedReferenceFullTypename);
-            SerializedProperty enabledBool = AbstractRoutine.FindPropertyRelative("wantsAwake");
+            string correctPropertyName = ObjectName(AbstractRoutineProperty.managedReferenceFullTypename);
+            SerializedProperty enabledBool = AbstractRoutineProperty.FindPropertyRelative("wantsAwake");
 
             Rect boxPosition = position;
             boxPosition.height = 22;
@@ -189,11 +191,28 @@ namespace sapra.ObjectController.Editor
             Rect buttonPosition = boxPosition;
             buttonPosition.xMin = togglePosition.xMax;
             
+            Event current = Event.current;
             GUI.Box(boxPosition, "", boxButtonStyle);
             enabledBool.boolValue = GUI.Toggle(togglePosition,enabledBool.boolValue, "");
-            if(GUI.Button(buttonPosition, correctPropertyName, buttonStyle)) {
-                AbstractRoutine.isExpanded = !AbstractRoutine.isExpanded;
-            }
+            GUI.Label(buttonPosition, correctPropertyName, buttonStyle);
+            if(buttonPosition.Contains(current.mousePosition) && current.type == EventType.MouseDown)
+            {
+                if(current.button == 1)
+                {
+                    GenericMenu menu = new GenericMenu();
+                    menu.AddItem(new GUIContent("Edit Script"),false, () => 
+                    {
+                        OpenFile(AbstractRoutineProperty.managedReferenceValue.GetType());                 
+                    });
+                    menu.ShowAsContext();
+                    current.Use();
+                }
+                else if (current.button == 0)
+                {
+                    AbstractRoutineProperty.isExpanded = !AbstractRoutineProperty.isExpanded;
+                    current.Use();
+                }
+            }        
         }
         string UpperSplit(string name)
         {
@@ -225,6 +244,18 @@ namespace sapra.ObjectController.Editor
             lastBit = propertyName[propertyName.Length-1];
             string noFirst = lastBit.Substring(1);
             return UpperSplit(noFirst);
+        }
+
+        public void OpenFile(System.Type type)
+        {
+            string[] Guid = AssetDatabase.FindAssets( string.Format( "{0} t:script", type.Name));
+            if(Guid.Length > 0)
+            {
+                string dataPath = Application.dataPath;
+                dataPath = dataPath.Replace("/Assets", "/");
+                var path = dataPath + AssetDatabase.GUIDToAssetPath(Guid[0]);
+                System.Diagnostics.Process.Start(@path);
+            }   
         }
     }
 }
