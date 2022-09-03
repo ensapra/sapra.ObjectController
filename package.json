@@ -1,6 +1,6 @@
 {
   "name": "com.sapra.object-controller",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "displayName": "Object Controller",
   "description": "Object Controller that allows for multitud of process, \nstack inside an easy to edit and see monobehaviour",
   "unity": "2021.3",
@@ -29,7 +29,6 @@
     }
   ],
   "dependencies": {
-      "com.unity.inputsystem": "1.2.0"
+    "com.unity.inputsystem": "1.2.0"
   }
-
 }
