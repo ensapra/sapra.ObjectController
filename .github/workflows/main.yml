@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - "main"
+    paths-ignore:
+      - 'package.json'
+      - 'CHANGELOG.md'
 
 jobs:
   bump-version:
@@ -14,10 +17,14 @@ jobs:
       - name: "Checkout source code"
         uses: "actions/checkout@v2"
         with:
-          ref: ${{ github.ref }}
+          token: ${{ secrets.TOKEN_ACTION }}
       - name: "cat package.json"
         run: cat ./package.json
       - name: "Automated Version Bump"
         uses: "phips28/gh-action-bump-version@master"
+        with: 
+          github-token: ${{ secrets.TOKEN_ACTION }}
       - name: "cat package.json"
         run: cat ./package.json
+        
+        
