@@ -252,7 +252,7 @@ namespace sapra.ObjectController.Editor
             if(Guid.Length > 0)
             {
                 string dataPath = Application.dataPath;
-                dataPath = dataPath.Replace("/Assets", "/");
+                dataPath = Directory.GetParent(dataPath).FullName + "/";
                 var path = dataPath + AssetDatabase.GUIDToAssetPath(Guid[0]);
                 System.Diagnostics.Process.Start(@path);
             }   
