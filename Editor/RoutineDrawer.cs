@@ -14,6 +14,7 @@ namespace sapra.ObjectController.Editor
             SerializedProperty item = property.FindPropertyRelative("wantsAwake");
             var depth = item.depth;
             int count = 0;
+            
             while(item.NextVisible(false) && item.depth >= depth)
             {
                 SerializedProperty isUsed = item.FindPropertyRelative("isUsed");

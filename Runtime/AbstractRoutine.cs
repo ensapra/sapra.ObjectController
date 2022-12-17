@@ -30,6 +30,7 @@ namespace sapra.ObjectController
             SleepRoutine(controller);
             isAwake = false;
         }
+
         /// <summary>
         /// Automatically called once the Routine is initialized. Equivalent of Awake on MonoBehaviour
         /// <summary/>
