@@ -26,13 +26,13 @@ namespace sapra.ObjectController.Editor
                 else
                     finalName = "Others/" +finalName;
                 GUIContent content = new GUIContent(finalName);
-                bool enabled = item.FindPropertyRelative("wantsAwake").boolValue;
+                bool enabled = item.FindPropertyRelative("_isEnabled").boolValue;
                 if(enabled)            
                     newMenu.AddDisabledItem(content);
                 else
                 {
                     newMenu.AddItem(content, false, ()=>{
-                        item.FindPropertyRelative("wantsAwake").boolValue = true;
+                        item.FindPropertyRelative("_isEnabled").boolValue = true;
                         property.serializedObject.ApplyModifiedProperties();
                     });
                 }

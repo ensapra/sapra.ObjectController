@@ -11,7 +11,7 @@ namespace sapra.ObjectController.Editor
         {
             position.y += EditorGUIUtility.standardVerticalSpacing*2;
             EditorGUI.BeginProperty(position, label, property);
-            SerializedProperty item = property.FindPropertyRelative("wantsAwake");
+            SerializedProperty item = property.FindPropertyRelative("_isEnabled");
             var depth = item.depth;
             int count = 0;
             
@@ -39,7 +39,7 @@ namespace sapra.ObjectController.Editor
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
             float height = EditorGUIUtility.standardVerticalSpacing;
-            SerializedProperty item = property.FindPropertyRelative("wantsAwake");
+            SerializedProperty item = property.FindPropertyRelative("_isEnabled");
             var depth = item.depth;
             int count = 0;
             while(item.NextVisible(false) && item.depth >= depth)

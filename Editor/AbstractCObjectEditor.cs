@@ -10,7 +10,7 @@ namespace sapra.ObjectController.Editor
         void OnEnable()
         {
             AbstractCObject component = this.target as AbstractCObject;
-            component.LoadModuleRoutines();
+            component.InitializeController();
         }
         public override void OnInspectorGUI()
         {
@@ -34,7 +34,7 @@ namespace sapra.ObjectController.Editor
         {
             AbstractCObject component = this.target as AbstractCObject;
             Undo.RecordObject(component, "Reloaded requirements in " + target.name);
-            component.LoadModuleRoutines();
+            component.InitializeController();
             serializedObject.ApplyModifiedProperties();      
         }
     }

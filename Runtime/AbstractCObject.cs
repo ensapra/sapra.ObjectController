@@ -21,7 +21,7 @@ namespace sapra.ObjectController
             gravityDirection = Physics.gravity.normalized;
             gravityMultiplier = Physics.gravity.magnitude;
             onlyEnabled = true;
-            InitializeObject(true);
+            InitializeController();
         }
 
         #region Object Requests
@@ -74,27 +74,31 @@ namespace sapra.ObjectController
         }
         #endregion
 
-        private void InitializeObject(bool forcedRestart)
+        public void InitializeController()
         {
             addModules();
-            if(forcedRestart)
+            foreach(AbstractModule module in modules)
+            {
+                module.InitializeRoutines(this);
+            }
+            /* if(forcedRestart)
             {
                 foreach(AbstractModule module in modules)
                 {
                     module.SleepRoutines(this);
                 }
             }
-            ReInitializeRoutines();
+            ReInitializeRoutines(); */
         }
-        internal void LoadModuleRoutines()
+/*         internal void LoadModuleRoutines()
         {
             addModules();
             foreach(AbstractModule module in modules)
             {
-                module.LoadRoutines();
+                module.InitializeRoutines(this);
             }
             InitializeObject(true);
-        }   
+        }    */
         /// <summary>
         /// If the module hasn't been added already, it hads it to the existing list of modules
         /// <summary/>
@@ -103,7 +107,8 @@ namespace sapra.ObjectController
             if(!modules.Contains(module))
                 modules.Add(module);
         }
-        /// <summary>
+
+/*         /// <summary>
         /// ReInitializes all the routines to regrab dependancies, cleans errors of existing routines on the lists, and removes missing serialized references.
         /// <summary/>
         public void ReInitializeRoutines()
@@ -112,7 +117,7 @@ namespace sapra.ObjectController
             {
                 module.InitializeRoutines(this);
             }
-        }
+        } */
 
         #region Abstract
         /// <summary>

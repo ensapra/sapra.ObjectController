@@ -6,10 +6,11 @@ using System.Text.RegularExpressions;
 using sapra.ObjectController;
 using System.IO;
 using System.Reflection;
-
+using System.Linq;
 namespace sapra.ObjectController.Editor
 {
-    public abstract class ModuleDrawer : PropertyDrawer
+    [CustomPropertyDrawer(typeof(AbstractModule), true)]
+    public class ModuleDrawer : PropertyDrawer
     {
         protected GUIStyle boxButtonStyle;
         protected GUIStyle buttonStyle;
@@ -17,10 +18,12 @@ namespace sapra.ObjectController.Editor
         protected GUIStyle addItems;
         protected GUIStyle workingListStyle;
 
-        private bool onlyEnabled = true;
+        //private bool deleteUnused = false;
         /// <summary>
         /// Used to add extra layout after the basic Module Layout
         /// <summary/>
+
+        protected List<AbstractRoutine> AllRoutines = new List<AbstractRoutine>();
         protected virtual void ExtraModuleData(SerializedProperty property, GUIContent label){}
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
@@ -68,27 +71,38 @@ namespace sapra.ObjectController.Editor
                 return;
 
             ModuleHeader(position, module);
-            ObjectList(module, onlyEnabled);
+            ObjectList(module);
         }
-        protected virtual void ObjectList(SerializedProperty module, bool onlyEnabled)
+        protected void ObjectList(SerializedProperty module)
         {
-            SerializedProperty prop = module.FindPropertyRelative("allRoutines");
+            SerializedProperty prop = module.FindPropertyRelative("onlyEnabledRoutines");
             EditorGUI.indentLevel += 1;
             GUILayout.Space(5);
             if(prop.isExpanded)
             {
-                bool anElement = false;
                 for(int i = 0; i < prop.arraySize; i++)
                 {
                     SerializedProperty item = prop.GetArrayElementAtIndex(i);
-                    bool result = LoadAbstractRoutine(item, i, onlyEnabled);
-                    anElement = anElement || result;
+                    LoadAbstractRoutine(item);
                 }
-                if(!anElement)     
+
+                if(prop.arraySize <= 0)     
                 {       
                     EditorGUILayout.LabelField("No components enabled on this module");
                     GUILayout.Space(EditorGUIUtility.singleLineHeight);
                 }
+                //Load cached routines
+                SerializedProperty createdRoutines = module.FindPropertyRelative("cachedRoutines");
+                if(createdRoutines.arraySize > 0)     
+                {       
+                    GUILayout.Space(EditorGUIUtility.singleLineHeight);
+                    EditorGUILayout.LabelField("Saved routines");
+                }
+                for(int i = 0; i < createdRoutines.arraySize; i++)
+                {
+                    SerializedProperty item = createdRoutines.GetArrayElementAtIndex(i);
+                    LoadAbstractRoutine(item);
+                }               
             }
             EditorGUI.indentLevel -= 1;
         }
@@ -110,13 +124,19 @@ namespace sapra.ObjectController.Editor
             toggleRect.xMax = buttonRect.xMin;
             toggleRect.y += EditorGUIUtility.standardVerticalSpacing;
 
+            SerializedProperty removeUnused = module.FindPropertyRelative("RemoveUnused");
+            bool deleteUnused = removeUnused.boolValue;
             GUI.Box(boxRect, "");
-            string enabledText = onlyEnabled ? "E" : "A";
-            if(GUI.Button(onlyEnabledRect, enabledText)) {
-                onlyEnabled = !onlyEnabled;
+            string deleteUnusedText = deleteUnused ? "R" : "K";
+            Color current = GUI.color;
+            if(deleteUnused)
+                GUI.color = Color.red;
+            if(GUI.Button(onlyEnabledRect, deleteUnusedText)) {
+                removeUnused.boolValue = !removeUnused.boolValue;
             }
+            GUI.color = current;
 
-            SerializedProperty prop = module.FindPropertyRelative("allRoutines");
+            SerializedProperty prop = module.FindPropertyRelative("onlyEnabledRoutines");
             prop.isExpanded = EditorGUI.Foldout(toggleRect, prop.isExpanded, UpperSplit(module.name), true, headerStyle);
             if(GUI.Button(buttonRect, "Clear"))
             {
@@ -133,55 +153,77 @@ namespace sapra.ObjectController.Editor
             for(int i = 0; i < list.arraySize; i++)
             {
                 SerializedProperty item = list.GetArrayElementAtIndex(i);
-                item.FindPropertyRelative("wantsAwake").boolValue = false;
+                item.FindPropertyRelative("_isEnabled").boolValue = false;
             }
         }
         /// <summary>
         /// Generates the default FoldoutMenu of routines to be selected
         /// <summary/>
-        protected virtual void GenerateFoldoutMenu(SerializedProperty list, SerializedProperty property)
+        protected void GenerateFoldoutMenu(SerializedProperty list, SerializedProperty property)
         {
+            AbstractModule module = property.GetSerializedObject() as AbstractModule;
+            List<System.Type> types = module.GetAssemblyRoutines();
+            AbstractRoutine[] routines = module.EnabledRoutinesObject;
+            
             GenericMenu newMenu = new GenericMenu();
-            for(int i = 0; i < list.arraySize; i++)
+            for(int i = 0; i < types.Count; i++)
             {
-                SerializedProperty item = list.GetArrayElementAtIndex(i);
-                GUIContent content = new GUIContent(ObjectName(item.managedReferenceFullTypename));
-                bool enabled = item.FindPropertyRelative("wantsAwake").boolValue;
-                if(enabled)            
-                    newMenu.AddDisabledItem(content);
+                System.Type target = types[i];
+                System.Attribute[] attrs = System.Attribute.GetCustomAttributes(target);
+                string routeName = ObjectName(target.FullName);
+                foreach(System.Attribute attr in attrs)
+                {
+                    if(attr is RoutineCategoryAttribute)
+                    {
+                        routeName = ((RoutineCategoryAttribute)attr).Category + routeName;
+                    }
+                }
+
+                GUIContent content = new GUIContent(routeName);
+                bool exists = routines != null && routines.Any<AbstractRoutine>(a => a != null && a.GetType().IsEquivalentTo(target));
+                AbstractRoutine foundRoutine = null;
+                                
+                if(exists)
+                {
+                    foundRoutine = routines.First<AbstractRoutine>(a => a != null && a.GetType().IsEquivalentTo(target));
+                    if(foundRoutine.isEnabled)
+                        newMenu.AddDisabledItem(content);
+                    else
+                    {
+                        newMenu.AddItem(content, false, ()=>{
+                            foundRoutine.Enable();
+                            property.serializedObject.ApplyModifiedProperties();
+                        });
+                    }
+                }
                 else
                 {
                     newMenu.AddItem(content, false, ()=>{
-                        item.FindPropertyRelative("wantsAwake").boolValue = true;
+                        module.RequestRoutine(target, true);
                         property.serializedObject.ApplyModifiedProperties();
                     });
                 }
             }
             newMenu.ShowAsContext();
         }
-        private bool LoadAbstractRoutine(SerializedProperty item, int index, bool onlyEnabled)
+        private void LoadAbstractRoutine(SerializedProperty item)
         {
-            SerializedProperty enabledBool = item.FindPropertyRelative("wantsAwake");
-            if(!onlyEnabled || enabledBool.boolValue)
-            {     
-                Rect position = EditorGUILayout.GetControlRect();           
-                AbstractRoutineHeader(position, item);
-                EditorGUI.indentLevel += 2;
-                if(item.isExpanded)                
-                    EditorGUILayout.PropertyField(item);
-                GUILayout.Space(4);
-                EditorGUI.indentLevel -= 2;
-                return true;
-            }
-            return false;
+            Rect position = EditorGUILayout.GetControlRect();           
+            AbstractRoutineHeader(position, item);
+            EditorGUI.indentLevel += 2;
+            if(item.isExpanded)                
+                EditorGUILayout.PropertyField(item);
+            GUILayout.Space(4);
+            EditorGUI.indentLevel -= 2;
         }
+
         /// <summary>
         /// Generates the Header of a Routine
         /// <summary/>
         protected void AbstractRoutineHeader(Rect position, SerializedProperty AbstractRoutineProperty)
         {
             string correctPropertyName = ObjectName(AbstractRoutineProperty.managedReferenceFullTypename);
-            SerializedProperty enabledBool = AbstractRoutineProperty.FindPropertyRelative("wantsAwake");
+            SerializedProperty enabledBool = AbstractRoutineProperty.FindPropertyRelative("_isEnabled");
 
             Rect boxPosition = position;
             boxPosition.height = 22;
@@ -214,6 +256,7 @@ namespace sapra.ObjectController.Editor
                 }
             }        
         }
+
         string UpperSplit(string name)
         {
             name = name[0].ToString().ToUpper() + name.Substring(1);
