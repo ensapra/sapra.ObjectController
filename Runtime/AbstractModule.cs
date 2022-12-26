@@ -44,7 +44,7 @@ namespace sapra.ObjectController
             for(int i = cachedRoutines.Count-1; i>= 0; i--)
             {
                 T routine = cachedRoutines[i];
-                if(routine.isEnabled)
+                if(routine != null && routine.isEnabled)
                 {
                     onlyEnabledRoutines.Add(routine);       
                     cachedRoutines.RemoveAt(i);     
@@ -58,6 +58,12 @@ namespace sapra.ObjectController
             for(int i = onlyEnabledRoutines.Count-1; i>= 0; i--)
             {
                 T routine = onlyEnabledRoutines[i];
+                if(routine == null)
+                {
+                    onlyEnabledRoutines.RemoveAt(i);       
+                    continue;
+                }
+                
                 if(routine.isEnabled)      
                     routine.Awake(controller);
                 if(!routine.isEnabled)  
@@ -153,7 +159,5 @@ namespace sapra.ObjectController
         /// Method called after all routines have been enabled. Equivalent to Awake of Monobehaviours
         /// <summary/>
         protected virtual void InitializeModule(){}
-
-        
     }
 }

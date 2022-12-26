@@ -81,24 +81,7 @@ namespace sapra.ObjectController
             {
                 module.InitializeRoutines(this);
             }
-            /* if(forcedRestart)
-            {
-                foreach(AbstractModule module in modules)
-                {
-                    module.SleepRoutines(this);
-                }
-            }
-            ReInitializeRoutines(); */
         }
-/*         internal void LoadModuleRoutines()
-        {
-            addModules();
-            foreach(AbstractModule module in modules)
-            {
-                module.InitializeRoutines(this);
-            }
-            InitializeObject(true);
-        }    */
         /// <summary>
         /// If the module hasn't been added already, it hads it to the existing list of modules
         /// <summary/>
@@ -107,17 +90,6 @@ namespace sapra.ObjectController
             if(!modules.Contains(module))
                 modules.Add(module);
         }
-
-/*         /// <summary>
-        /// ReInitializes all the routines to regrab dependancies, cleans errors of existing routines on the lists, and removes missing serialized references.
-        /// <summary/>
-        public void ReInitializeRoutines()
-        {
-            foreach(AbstractModule module in modules)
-            {
-                module.InitializeRoutines(this);
-            }
-        } */
 
         #region Abstract
         /// <summary>

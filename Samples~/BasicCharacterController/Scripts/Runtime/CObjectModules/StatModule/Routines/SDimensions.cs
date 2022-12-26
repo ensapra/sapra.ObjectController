@@ -12,7 +12,7 @@ namespace sapra.ObjectController
         public float characterHeight = 2;
         [Tooltip("Normalized amount of body height to shoulder level")]
         [Range(0.1f,0.99f)] public float shoulderLevel = 0.75f;
-        public float halfHeight{get{return characterHeight/2f;}}
+        public float CharacterHeight/2f{get{return characterHeight/2f;}}
         [Tooltip("Character basic radious of collider")]
         public float characterRadious = 0.5f;
         [Tooltip("Character maximum walkable angle")]
@@ -42,7 +42,7 @@ namespace sapra.ObjectController
                 if(tempHeight != -1)
                     return tempHeight;
                 else
-                    return halfHeight;
+                    return CharacterHeight/2f;
             }
             set{
                 tempHeight = value;

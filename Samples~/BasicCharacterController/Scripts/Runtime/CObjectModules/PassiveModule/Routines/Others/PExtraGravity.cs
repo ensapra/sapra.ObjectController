@@ -87,7 +87,7 @@ namespace sapra.ObjectController
             {
                 if(_pFloatDetection.surfaceState == SurfaceStates.surface && _pFloatDetection.distance < 0)
                 {
-                    float factor = (-1*_pFloatDetection.distance)/(_sDimensions.halfHeight*0.3f);
+                    float factor = (-1*_pFloatDetection.distance)/(_sDimensions.CharacterHeight/2f*0.3f);
                     temporalResult += (gravity*factor*fallSpeed)/positions.Length;
                 }
                 else

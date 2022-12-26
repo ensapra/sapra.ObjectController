@@ -26,7 +26,7 @@ namespace sapra.ObjectController
 
         public override void DoPassive(Vector3 position, InputValues input)
         {
-            position = position+_sDimensions.footOffset+_sDimensions.halfHeight*-controller.gravityDirection;
+            position = position+_sDimensions.footOffset+_sDimensions.CharacterHeight/2f*-controller.gravityDirection;
             RaycastHit hit;
             if(Physics.Raycast(position, transform.forward,out hit, maxDetectionDistance+_sDimensions.characterRadious, ladderMask))
             {
@@ -64,7 +64,7 @@ namespace sapra.ObjectController
                 Debug.DrawRay(raycastPosition, -upVector.normalized*_sDimensions.characterHeight, Color.green);
             if(Physics.Raycast(raycastPosition, -upVector, out topHit, _sDimensions.characterHeight, _pWalkableDetection.groundMask))
             {
-                if(topHit.distance > _sDimensions.halfHeight)
+                if(topHit.distance > _sDimensions.CharacterHeight/2f)
                 {                
                     topPosition = topHit.point-_sDimensions.footOffset;
                     return true;        

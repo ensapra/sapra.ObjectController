@@ -32,7 +32,7 @@ namespace sapra.ObjectController
         public override void DoPassive(Vector3 positionIni, InputValues input)
         {
             float maxDistance = (_sDimensions.characterHeight)*1.2f;
-            Vector3 position = positionIni+_sDimensions.forcesCenterOffset+(_sDimensions.halfHeight)*-controller.gravityDirection;
+            Vector3 position = positionIni+_sDimensions.forcesCenterOffset+(_sDimensions.CharacterHeight/2f)*-controller.gravityDirection;
             float radius = _sDimensions.characterRadious;
             Vector3 normalVector = Vector3.zero;
             float distanceToSurface = maxDistance;

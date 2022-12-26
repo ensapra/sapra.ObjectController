@@ -119,7 +119,7 @@ namespace sapra.ObjectController
         }
         public void ChangeCollider()
         {
-            _pColliderSettings.ChangeSettings(_sDim.halfHeight, _sDim.halfHeight);
+            _pColliderSettings.ChangeSettings(_sDim.CharacterHeight/2f, _sDim.CharacterHeight/2f);
         }
     }
 }

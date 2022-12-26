@@ -19,7 +19,7 @@ namespace sapra.ObjectController
                     return temporalHeight;
                 }
                 else
-                    return _sDim.halfHeight;
+                    return _sDim.CharacterHeight/2f;
             }
             set{
                 temporalHeight = value;

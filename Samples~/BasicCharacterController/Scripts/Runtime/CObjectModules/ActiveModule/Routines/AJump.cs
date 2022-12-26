@@ -84,7 +84,7 @@ namespace sapra.ObjectController
                 if(sequence == jumpingSequence.readyToJump)
                     final = true;
             }
-            if(_pRoofDetection.distance < _sDimensions.halfHeight)
+            if(_pRoofDetection.distance < _sDimensions.CharacterHeight/2f)
                 final = false;
             if(animationPlayed)
                 final = true;
