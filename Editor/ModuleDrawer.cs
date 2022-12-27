@@ -7,6 +7,8 @@ using sapra.ObjectController;
 using System.IO;
 using System.Reflection;
 using System.Linq;
+
+
 namespace sapra.ObjectController.Editor
 {
     [CustomPropertyDrawer(typeof(AbstractModule), true)]
@@ -28,6 +30,7 @@ namespace sapra.ObjectController.Editor
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             var indent = EditorGUI.indentLevel;
+            property.serializedObject.Update();
             EditorGUI.BeginProperty(position, label, property);
             CreateGUIStyles();
             SerializeModule(property, position);
@@ -164,7 +167,9 @@ namespace sapra.ObjectController.Editor
             AbstractModule module = property.GetSerializedObject() as AbstractModule;
             List<System.Type> types = module.GetAssemblyRoutines();
             AbstractRoutine[] routines = module.EnabledRoutinesObject;
-            
+            AbstractRoutine[] cached = module.ChachedRoutinesObject;
+            SerializedProperty cachedList = property.FindPropertyRelative("cachedRoutines");
+
             GenericMenu newMenu = new GenericMenu();
             for(int i = 0; i < types.Count; i++)
             {
@@ -180,28 +185,52 @@ namespace sapra.ObjectController.Editor
                 }
 
                 GUIContent content = new GUIContent(routeName);
-                bool exists = routines != null && routines.Any<AbstractRoutine>(a => a != null && a.GetType().IsEquivalentTo(target));
-                AbstractRoutine foundRoutine = null;
-                                
+                bool exists = routines != null && routines.Any(a => a != null && a.GetType().IsEquivalentTo(target));
                 if(exists)
                 {
-                    foundRoutine = routines.First<AbstractRoutine>(a => a != null && a.GetType().IsEquivalentTo(target));
-                    if(foundRoutine.isEnabled)
+                    (AbstractRoutine rot, int index) foundRoutine = routines.Select((obj, index) => (obj,index)).First(a => a.obj != null && a.obj.GetType().IsEquivalentTo(target));
+                    if(foundRoutine.rot.isEnabled)
+                    {
+                        //The object exists and is enabled
                         newMenu.AddDisabledItem(content);
+                    }
                     else
                     {
+                        //The object exists but is not enabled
                         newMenu.AddItem(content, false, ()=>{
-                            foundRoutine.Enable();
+                            SerializedProperty routineFound = list.GetArrayElementAtIndex(foundRoutine.index);
+                            routineFound.FindPropertyRelative("_isEnabled").boolValue = true;
                             property.serializedObject.ApplyModifiedProperties();
                         });
                     }
                 }
                 else
                 {
-                    newMenu.AddItem(content, false, ()=>{
-                        module.RequestRoutine(target, true);
-                        property.serializedObject.ApplyModifiedProperties();
-                    });
+                    exists = cached != null && cached.Any(a => a != null && a.GetType().IsEquivalentTo(target));
+                    if(exists)
+                    {
+                        //Exists on cache
+                        (AbstractRoutine rot, int index) foundRoutine = cached.Select((obj, index) => (obj,index)).First(a => a.obj != null && a.obj.GetType().IsEquivalentTo(target));
+                        newMenu.AddItem(content, false, ()=>{
+                            list.InsertArrayElementAtIndex(list.arraySize-1);
+                            SerializedProperty newClass = list.GetArrayElementAtIndex(list.arraySize-1);
+                            newClass.managedReferenceValue = cachedList.GetArrayElementAtIndex(foundRoutine.index).managedReferenceValue;
+                            newClass.FindPropertyRelative("_isEnabled").boolValue = true;
+                            cachedList.DeleteArrayElementAtIndex(foundRoutine.index);
+                            property.serializedObject.ApplyModifiedProperties();
+                        });
+                    }
+                    else
+                    {
+                        //The object doesn't exist on the main array, so create it again
+                        newMenu.AddItem(content, false, ()=>{
+                            list.InsertArrayElementAtIndex(list.arraySize-1);
+                            SerializedProperty newClass = list.GetArrayElementAtIndex(list.arraySize-1);
+                            newClass.managedReferenceValue = System.Activator.CreateInstance(target);
+                            newClass.FindPropertyRelative("_isEnabled").boolValue = true;
+                            property.serializedObject.ApplyModifiedProperties();
+                        });
+                    }
                 }
             }
             newMenu.ShowAsContext();

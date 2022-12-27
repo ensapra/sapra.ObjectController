@@ -20,6 +20,8 @@ namespace sapra.ObjectController
         [SerializeReference] [HideInInspector] private List<T> cachedRoutines = new List<T>();
 
         public override AbstractRoutine[] EnabledRoutinesObject => onlyEnabledRoutines.ToArray();
+        internal override AbstractRoutine[] ChachedRoutinesObject => cachedRoutines.ToArray();
+
         [SerializeField] [HideInInspector] private bool RemoveUnused = false;
 
         #region  Initialization
@@ -148,13 +150,14 @@ namespace sapra.ObjectController
     public abstract class AbstractModule
     {
         //public abstract AbstractRoutine RequestRoutine(System.Type routineType, bool required);
-        public abstract AbstractRoutine[] EnabledRoutinesObject{get;}
+        public abstract AbstractRoutine[] EnabledRoutinesObject{get;}      
+        internal abstract AbstractRoutine[] ChachedRoutinesObject{get;}        
         internal abstract void InitializeRoutines(AbstractCObject controller);
         internal abstract void SleepRoutines(AbstractCObject controller);
         internal abstract List<Type> GetAssemblyRoutines();
         internal abstract AbstractRoutine RequestRoutine(System.Type type, bool required);
-        //internal abstract void LoadRoutines();
         public abstract Type GetModuleType();
+
         /// <summary>
         /// Method called after all routines have been enabled. Equivalent to Awake of Monobehaviours
         /// <summary/>
