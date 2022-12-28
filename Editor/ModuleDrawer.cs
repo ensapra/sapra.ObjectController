@@ -212,6 +212,8 @@ namespace sapra.ObjectController.Editor
                         //Exists on cache
                         (AbstractRoutine rot, int index) foundRoutine = cached.Select((obj, index) => (obj,index)).First(a => a.obj != null && a.obj.GetType().IsEquivalentTo(target));
                         newMenu.AddItem(content, false, ()=>{
+                            if(list.arraySize <= 0)
+                                list.arraySize = 1;
                             list.InsertArrayElementAtIndex(list.arraySize-1);
                             SerializedProperty newClass = list.GetArrayElementAtIndex(list.arraySize-1);
                             newClass.managedReferenceValue = cachedList.GetArrayElementAtIndex(foundRoutine.index).managedReferenceValue;
@@ -224,6 +226,8 @@ namespace sapra.ObjectController.Editor
                     {
                         //The object doesn't exist on the main array, so create it again
                         newMenu.AddItem(content, false, ()=>{
+                            if(list.arraySize <= 0)
+                                list.arraySize = 1;
                             list.InsertArrayElementAtIndex(list.arraySize-1);
                             SerializedProperty newClass = list.GetArrayElementAtIndex(list.arraySize-1);
                             newClass.managedReferenceValue = System.Activator.CreateInstance(target);
