@@ -1,68 +1,67 @@
 ﻿using UnityEngine;
+using sapra.ObjectController;
 
-namespace sapra.ObjectController
+[System.Serializable][RoutineCategory("Complex")]
+public class ACrouch : AbstractActive
 {
-    [System.Serializable]
-    public class ACrouch : AbstractActive
+    [Tooltip("Character crouch height")]
+    public float crouchHeight = 1f;
+    [Tooltip("Character crouch radius")]
+    public float crouchRadius = 0.5f;
+    public float crouchHeadDistanceOffset = 0.3f;
+
+    private AMove _aMove;
+    private PRoofDetection _pRoofDetection;
+    private PGroundDetection _pGroundDetection;
+    private PColliderSettings _pColliderSettings;
+    private PWaterDetection _pWaterDetection;
+    private StatsContainer _statContainer;
+    private float heightLerped; 
+    [NoEdit] [SerializeField] private float refHeightSpeed;
+    public override int priorityID => 10;
+    protected override void AwakeRoutine(AbstractCObject controller)
     {
-        [Tooltip("Character crouch height")]
-        public float crouchHeight = 0.5f;
-        [Tooltip("Character crouch radius")]
-        public float crouchRadius = 0.5f;
-        private Stat crouchVelocity;
-        private Stat desiredVelocity;
+        PassiveModule passiveModule = controller.RequestModule<PassiveModule>();
+        ActiveModule activeModule = controller.RequestModule<ActiveModule>();
+        _statContainer = controller.RequestComponent<StatsContainer>(true);
+        _aMove = activeModule.RequestRoutine<AMove>(true);
+        _pGroundDetection = passiveModule.RequestRoutine<PGroundDetection>(true);
+        _pRoofDetection = passiveModule.RequestRoutine<PRoofDetection>(true);
+        _pColliderSettings = passiveModule.RequestRoutine<PColliderSettings>(true);
+        _pWaterDetection = passiveModule.RequestRoutine<PWaterDetection>(false);
+    }
 
-        private AMove _aMove;
-        private PRoofDetection _pRoofDetection;
-        private PWalkableDetection _pWalkableDetection;
-        private PColliderSettings _pColliderSettings;
-        private PFloatDetection _pFloatDetection;
-        private SDimensions _sDimensions;
-        public override int priorityID => 10;
-        protected override void AwakeRoutine(AbstractCObject controller)        {
-            PassiveModule passiveModule = controller.RequestModule<PassiveModule>();
-            StatModule statModule = controller.RequestModule<StatModule>();
-            ActiveModule activeModule = controller.RequestModule<ActiveModule>();
+    public override void DoActive(InputValues input)
+    {
+        _aMove.setVelocity(_statContainer.MinimumSpeed);
+        _aMove.DoActive(input);
+        if(_pColliderSettings != null)
+            _pColliderSettings.ChangeSettings(crouchHeight/2f, crouchRadius);    
+    }
 
-            _aMove = activeModule.RequestRoutine<AMove>(true);
-            _pWalkableDetection = passiveModule.RequestRoutine<PWalkableDetection>(true);
-            _pRoofDetection = passiveModule.RequestRoutine<PRoofDetection>(true);
-            _pColliderSettings = passiveModule.RequestRoutine<PColliderSettings>(true);
-            _pFloatDetection = passiveModule.RequestRoutine<PFloatDetection>(false);
-            _sDimensions = statModule.RequestRoutine<SDimensions>(true);
-            crouchVelocity = statModule.RequestRoutine<SForces>(true).minimumSpeed.Select();
-            desiredVelocity = statModule.RequestRoutine<SForces>(true).selectedSpeed.Select();
-        }
+    public override void DoPassiveBeforeAction()
+    {
+        float clampedDistance = Mathf.Clamp(_pRoofDetection.detectionResult.distance-crouchHeadDistanceOffset, crouchHeight, _statContainer.CharacterHeight);
+        float normalRadious = Mathf.Lerp(crouchRadius, _statContainer.CharacterRadius,Mathf.InverseLerp(crouchHeight, _statContainer.CharacterHeight, clampedDistance));
 
-        public override void DoActive(InputValues input)
+        if(clampedDistance < _statContainer.CharacterHeight && clampedDistance > crouchHeight*1.1f)
         {
-            _aMove.setVelocity(crouchVelocity);
-            _aMove.DoActive(input);
-            if(_pColliderSettings != null)
-                _pColliderSettings.ChangeSettings(crouchHeight, crouchRadius);    
-        }
-
-        public override void DoPassive()
-        {
-            if(_pRoofDetection.topWall && _pRoofDetection.distance > crouchHeight*1.2f)
-            {
-                float finalDistance = Mathf.Clamp(_pRoofDetection.distance, crouchHeight, _sDimensions.characterHeight);
-                _pColliderSettings.ChangeSettings(finalDistance, crouchRadius); 
-            }
-        }
-        public override bool WantActive(InputValues input)
-        {
-            if(!_pWalkableDetection.Walkable)
-                return false;
-            if(_pFloatDetection != null && _pFloatDetection.distance > crouchHeight*0.8f)
-                return false;
-            if(input._wantCrouch && !input._wantRun)
-                return true;
-
-            if(_pRoofDetection.topWall && _pRoofDetection.distance < crouchHeight*1.2f)
-                return true;          
-            
-            return false;
+            _pColliderSettings.ChangeSettings(clampedDistance/2f, normalRadious); 
         }
     }
+    public override bool WantActive(InputValues input)
+    {
+        if(!_pGroundDetection.Walkable)
+            return false;
+        if(_pWaterDetection != null && _pWaterDetection.NormalizedDistance > crouchHeight*0.8f/_statContainer.CharacterHeight)
+            return false;
+        if(input._wantCrouch && !input._wantRun)
+            return true;
+
+        if(_pRoofDetection.detectionResult.distance-crouchHeadDistanceOffset <= crouchHeight*1.1f)
+            return true;          
+        
+        return false;
+    }
+    
 }

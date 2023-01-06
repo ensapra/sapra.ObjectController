@@ -1,36 +1,44 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using sapra.InputHandler;
+using sapra.ObjectController;
 
-namespace sapra.ObjectController
+[System.Serializable][RoutineCategory("Others")]
+public class PVelocityCap : AbstractPassive
 {
-    [System.Serializable]
-    public class PVelocityCap : AbstractPassive
+    private PGroundDetection _pGroundDetection;
+    [Tooltip("Maximum allowed velocity on the controller")]
+    public float maxVelocity = -50;
+    private InputValues _input;
+    private ActiveModule activeModule;
+
+    protected override void AwakeRoutine(AbstractCObject controller)
     {
-        public override PassivePriority whenDo => PassivePriority.LastOne;
-        private PWalkableDetection _pWalkableDetection;
-        [Tooltip("Maximum allowed velocity on the Object")]
-        public float maxVelocity = -50;
-        InputValues _input;
-        ActiveModule activeModule;
-        protected override void AwakeRoutine(AbstractCObject controller)        {
-            activeModule = controller.RequestModule<ActiveModule>();
-            _pWalkableDetection = controller.RequestModule<PassiveModule>().RequestRoutine<PWalkableDetection>(false);
-            _input = controller.RequestComponent<InputValueHolder>(true).input;
-        }
-        public override void DoPassive(Vector3 position, InputValues input)
+        PassiveModule passiveModule = controller.RequestModule<PassiveModule>();
+        activeModule = controller.RequestModule<ActiveModule>();
+        _pGroundDetection = passiveModule.RequestRoutine<PGroundDetection>(false);
+        _input = controller.RequestComponent<InputContainer>(true).input;
+    }
+    public override void DoPassive(PassivePriority currentPassivePriority, Vector3 position, InputValues input)
+    {
+        if(currentPassivePriority == PassivePriority.LastOne)
         {
             float value = Vector3.Dot(rb.velocity, -controller.gravityDirection);
             if (value < maxVelocity)        
                 rb.velocity = rb.velocity - Vector3.Project(rb.velocity, controller.gravityDirection) - maxVelocity*controller.gravityDirection;
             
-            if(_pWalkableDetection == null || _input == null)
+            if(_pGroundDetection == null || _input == null)
                 return;        
                 
-            if(_pWalkableDetection != null &&_pWalkableDetection.Walkable && activeModule.currentAction == null)
-                if(!_pWalkableDetection.rbFound)                
-                    rb.velocity = Vector3.zero;                
-        }
-
+            if(_pGroundDetection != null &&_pGroundDetection.Walkable && activeModule.currentAction == null)
+                if(!_pGroundDetection.detectionResult.rb)                
+                    rb.velocity = Vector3.zero;       //Needs to be checked 
+        }    
+/*         if(currentPassivePriority == PassivePriority.FirstOfAll)
+        {
+            if(_pGroundDetection != null &&_pGroundDetection.Walkable)
+                if(!_pGroundDetection.detectionResult.rb)                
+                    rb.velocity = Vector3.zero;       
+        }     */
     }
+
 }

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4443231687248390234}
   - component: {fileID: 4443231687248390236}
   - component: {fileID: 4443231687248390235}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 4443231687626015786}
   - component: {fileID: 4443231687626015788}
   - component: {fileID: 4443231687626015787}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -178,10 +178,11 @@ GameObject:
   - component: {fileID: 7348706204606188122}
   - component: {fileID: 4065207201635072040}
   - component: {fileID: 579449160559341569}
-  - component: {fileID: 1817959979351100138}
-  - component: {fileID: 266981340819343972}
-  - component: {fileID: 2939124342832522952}
-  m_Layer: 8
+  - component: {fileID: 5736948998599036282}
+  - component: {fileID: 1705036053128247940}
+  - component: {fileID: 2948295665037075906}
+  - component: {fileID: 2948295665037075911}
+  m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -234,7 +235,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &1817959979351100138
+--- !u!114 &5736948998599036282
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -243,11 +244,280 @@ MonoBehaviour:
   m_GameObject: {fileID: 6062233765835570514}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e925402be5db824ab2301c945391909, type: 3}
+  m_Script: {fileID: 11500000, guid: ac4c2b785520ccb4393b2f999f5b5217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debug: 0
+  CharacterHeight: 2
+  CharacterRadius: 0.5
+  WalkableAngle: 40
+  footOffsetLocal: {x: 0, y: 0, z: 0}
+  currentRadious: 0
+  currentHeight: 0
+--- !u!114 &1705036053128247940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6062233765835570514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adbd65a8732781b4690e1a7a39d4f7d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rb: {fileID: 0}
+  onlyEnabled: 1
+  gravityDirection: {x: 0, y: 0, z: 0}
+  gravityMultiplier: 0
+  continuosCheck: 0
+  activeModule:
+    controller: {fileID: 1705036053128247940}
+    onlyEnabledRoutines:
+    - rid: 3404129936681205760
+    - rid: 3404129936681205764
+    - rid: 3404129936681205761
+    - rid: 3404129936681205762
+    - rid: 3404129936681205763
+    cachedRoutines: []
+    RemoveUnused: 0
+    currentAction:
+      rid: -2
+    sortedShorterList:
+    - rid: 3404129936681205762
+    - rid: 3404129936681205760
+    - rid: 3404129936681205763
+    - rid: 3404129936681205764
+    - rid: 3404129936681205761
+  passiveModule:
+    controller: {fileID: 1705036053128247940}
+    onlyEnabledRoutines:
+    - rid: 3404129936681205765
+    - rid: 3404129936681205772
+    - rid: 3404129936681205766
+    - rid: 3404129936681205767
+    - rid: 3404129936681205768
+    - rid: 3404129936681205769
+    - rid: 3404129936681205773
+    - rid: 3404129936681205770
+    - rid: 3404129936681205775
+    - rid: 3404129936681205771
+    cachedRoutines: []
+    RemoveUnused: 0
+  helperModule:
+    controller: {fileID: 1705036053128247940}
+    onlyEnabledRoutines:
+    - rid: 3404129936681205774
+    cachedRoutines: []
+    RemoveUnused: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 3404129936681205760
+      type: {class: AAirMove, ns: , asm: sapra.ObjectController.Samples.Runtime}
+      data:
+        _isEnabled: 1
+        controller: {fileID: 1705036053128247940}
+        events:
+          onActivateAction:
+            m_PersistentCalls:
+              m_Calls: []
+          onDeactivateAction:
+            m_PersistentCalls:
+              m_Calls: []
+        rotationSpeed: 0
+    - rid: 3404129936681205761
+      type: {class: AJump, ns: , asm: sapra.ObjectController.Samples.Runtime}
+      data:
+        _isEnabled: 1
+        controller: {fileID: 1705036053128247940}
+        events:
+          onActivateAction:
+            m_PersistentCalls:
+              m_Calls: []
+          onDeactivateAction:
+            m_PersistentCalls:
+              m_Calls: []
+        ghostJumpTreshold: 0.5
+        sequence: 0
+    - rid: 3404129936681205762
+      type: {class: AMove, ns: , asm: sapra.ObjectController.Samples.Runtime}
+      data:
+        _isEnabled: 1
+        controller: {fileID: 1705036053128247940}
+        events:
+          onActivateAction:
+            m_PersistentCalls:
+              m_Calls: []
+          onDeactivateAction:
+            m_PersistentCalls:
+              m_Calls: []
+        minRotationSpeed: 0.1
+        maxRotationSpeed: 0.25
+    - rid: 3404129936681205763
+      type: {class: ASwim, ns: , asm: sapra.ObjectController.Samples.Runtime}
+      data:
+        _isEnabled: 1
+        controller: {fileID: 1705036053128247940}
+        events:
+          onActivateAction:
+            m_PersistentCalls:
+              m_Calls: []
+          onDeactivateAction:
+            m_PersistentCalls:
+              m_Calls: []
+        minRotationSpeed: 0.1
+        maxRotationSpeed: 0.25
+    - rid: 3404129936681205764
+      type: {class: ACrouch, ns: , asm: sapra.ObjectController.Samples.Runtime}
+      data:
+        _isEnabled: 1
+        controller: {fileID: 1705036053128247940}
+        events:
+          onActivateAction:
+            m_PersistentCalls:
+              m_Calls: []
+          onDeactivateAction:
+            m_PersistentCalls:
+              m_Calls: []
+        crouchHeight: 1
+        crouchRadius: 0.5
+        crouchHeadDistanceOffset: 0.3
+        refHeightSpeed: 0
+    - rid: 3404129936681205765
+      type: {class: PColliderSettings, ns: , asm: sapra.ObjectController.Samples.Runtime}
+      data:
+        _isEnabled: 1
+        controller: {fileID: 1705036053128247940}
+    - rid: 3404129936681205766
+      type: {class: PDirectionManager, ns: , asm: sapra.ObjectController.Samples.Runtime}
+      data:
+        _isEnabled: 1
+        controller: {fileID: 1705036053128247940}
+        movementMode: 0
+        rotateType: 1
+        verticalAxis: 2
+        firstPersonCameraBoundary: {x: -90, y: 90}
+        directionalReference: {fileID: 0}
+    - rid: 3404129936681205767
+      type: {class: PExtraGravity, ns: , asm: sapra.ObjectController.Samples.Runtime}
+      data:
+        _isEnabled: 1
+        controller: {fileID: 1705036053128247940}
+        airResistance: 5
+        fallSpeed: 8
+    - rid: 3404129936681205768
+      type: {class: PGroundDetection, ns: , asm: sapra.ObjectController.Samples.Runtime}
+      data:
+        _isEnabled: 1
+        controller: {fileID: 1705036053128247940}
+        groundMask:
+          serializedVersion: 2
+          m_Bits: 1
+        debug: 0
+        detectionResult:
+          distance: 0
+          angle: 0
+          normal: {x: 0, y: 0, z: 0}
+          point: {x: 0, y: 0, z: 0}
+          rb: {fileID: 0}
+        Walkable: 0
+        AngleFront: 0
+        NormalizedDistance: 0
+    - rid: 3404129936681205769
+      type: {class: PRoofDetection, ns: , asm: sapra.ObjectController.Samples.Runtime}
+      data:
+        _isEnabled: 1
+        controller: {fileID: 1705036053128247940}
+        topWallLayer:
+          serializedVersion: 2
+          m_Bits: 1
+        debug: 0
+        detectionResult:
+          distance: 0
+          angle: 0
+          normal: {x: 0, y: 0, z: 0}
+          point: {x: 0, y: 0, z: 0}
+          rb: {fileID: 0}
+    - rid: 3404129936681205770
+      type: {class: PVelocityCap, ns: , asm: sapra.ObjectController.Samples.Runtime}
+      data:
+        _isEnabled: 1
+        controller: {fileID: 1705036053128247940}
+        maxVelocity: -50
+    - rid: 3404129936681205771
+      type: {class: PWaterDetection, ns: , asm: sapra.ObjectController.Samples.Runtime}
+      data:
+        _isEnabled: 1
+        controller: {fileID: 1705036053128247940}
+        waterMask:
+          serializedVersion: 2
+          m_Bits: 16
+        CanFloat: 1
+        waterResistance: 7
+        buoyancy: 3
+        shoulderLevel: 0.75
+        offsetPositions: []
+        detectionResult:
+          distance: 0
+          angle: 0
+          normal: {x: 0, y: 0, z: 0}
+          point: {x: 0, y: 0, z: 0}
+          rb: {fileID: 0}
+        Floating: 0
+        surfaceState: 0
+        NormalizedDistance: 0
+        debug: 0
+    - rid: 3404129936681205772
+      type: {class: PCustomGravity, ns: , asm: sapra.ObjectController.Samples.Runtime}
+      data:
+        _isEnabled: 1
+        controller: {fileID: 1705036053128247940}
+        direction: {x: 0, y: 0, z: 0}
+        gravityMultiplierBase: 0
+        GravityApplied: 0
+    - rid: 3404129936681205773
+      type: {class: PSlopeWalker, ns: , asm: sapra.ObjectController.Samples.Runtime}
+      data:
+        _isEnabled: 1
+        controller: {fileID: 1705036053128247940}
+        slopeHeight: 0.5
+        smoothness: 0.25
+    - rid: 3404129936681205774
+      type: {class: HSurfaceDetection, ns: , asm: sapra.ObjectController.Samples.Runtime}
+      data:
+        _isEnabled: 1
+        controller: {fileID: 1705036053128247940}
+    - rid: 3404129936681205775
+      type: {class: PVerticalMovement, ns: , asm: sapra.ObjectController.Samples.Runtime}
+      data:
+        _isEnabled: 1
+        controller: {fileID: 1705036053128247940}
+        ladderMask:
+          serializedVersion: 2
+          m_Bits: 0
+        _canVerticalMove: 0
+        upVector: {x: 0, y: 0, z: 0}
+        normalVector: {x: 0, y: 0, z: 0}
+        pointOnTheLadder: {x: 0, y: 0, z: 0}
+        maxDetectionDistance: 2
+        debug: 0
+--- !u!114 &2948295665037075906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6062233765835570514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f9d4b226bf5e74ba7af72c7a5ec19c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   inputSO: {fileID: 0}
---- !u!114 &266981340819343972
+--- !u!114 &2948295665037075911
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -259,392 +529,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbc7917981360934fb6a570d9fee2343, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2939124342832522952
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6062233765835570514}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 200c2ba452db09946950e0b777abd264, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rb: {fileID: 0}
-  onlyEnabled: 0
-  gravityDirection: {x: 0, y: 0, z: 0}
-  gravityMultiplier: 0
-  continuosCheck: 1
-  activeModule:
-    onlyEnabled: 0
-    controller: {fileID: 2939124342832522952}
-    allRoutines:
-    - rid: 6984394157430407168
-    - rid: 6984394157430407169
-    - rid: 6984394157430407170
-    - rid: 6984394157430407171
-    - rid: 6984394157430407172
-    currentAction:
-      rid: -2
-    whenNullAction:
-      m_PersistentCalls:
-        m_Calls: []
-    sortedShorterList:
-    - rid: 6984394157430407172
-    - rid: 6984394157430407171
-    - rid: 6984394157430407170
-    - rid: 6984394157430407169
-    - rid: 6984394157430407168
-  passiveModule:
-    onlyEnabled: 0
-    controller: {fileID: 2939124342832522952}
-    allRoutines:
-    - rid: 6984394157430407173
-    - rid: 6984394157430407174
-    - rid: 6984394157430407175
-    - rid: 6984394157430407176
-    - rid: 6984394157430407177
-    - rid: 6984394157430407178
-    - rid: 6984394157430407179
-    - rid: 6984394157430407180
-    - rid: 6984394157430407181
-    - rid: 6984394157430407182
-    - rid: 6984394157430407183
-    - rid: 6984394157430407184
-    - rid: 6984394157430407185
-  statModule:
-    onlyEnabled: 0
-    controller: {fileID: 2939124342832522952}
-    allRoutines:
-    - rid: 6984394157430407186
-    - rid: 6984394157430407187
-  references:
-    version: 2
-    RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
-    - rid: 6984394157430407168
-      type: {class: AAirMove, ns: sapra.ObjectController, asm: sapra.ObjectController.Samples.Runtime}
-      data:
-        wantsAwake: 1
-        isAwake: 1
-        events:
-          onActivateAction:
-            m_PersistentCalls:
-              m_Calls: []
-          onDeactivateAction:
-            m_PersistentCalls:
-              m_Calls: []
-    - rid: 6984394157430407169
-      type: {class: ACrouch, ns: sapra.ObjectController, asm: sapra.ObjectController.Samples.Runtime}
-      data:
-        wantsAwake: 1
-        isAwake: 1
-        events:
-          onActivateAction:
-            m_PersistentCalls:
-              m_Calls: []
-          onDeactivateAction:
-            m_PersistentCalls:
-              m_Calls: []
-        crouchHeight: 0.5
-        crouchRadius: 0.5
-    - rid: 6984394157430407170
-      type: {class: AJump, ns: sapra.ObjectController, asm: sapra.ObjectController.Samples.Runtime}
-      data:
-        wantsAwake: 1
-        isAwake: 1
-        events:
-          onActivateAction:
-            m_PersistentCalls:
-              m_Calls: []
-          onDeactivateAction:
-            m_PersistentCalls:
-              m_Calls: []
-        ghostJumpTreshold: 0.5
-        sequence: 0
-    - rid: 6984394157430407171
-      type: {class: AMove, ns: sapra.ObjectController, asm: sapra.ObjectController.Samples.Runtime}
-      data:
-        wantsAwake: 1
-        isAwake: 1
-        events:
-          onActivateAction:
-            m_PersistentCalls:
-              m_Calls: []
-          onDeactivateAction:
-            m_PersistentCalls:
-              m_Calls: []
-    - rid: 6984394157430407172
-      type: {class: ASwim, ns: sapra.ObjectController, asm: sapra.ObjectController.Samples.Runtime}
-      data:
-        wantsAwake: 1
-        isAwake: 1
-        events:
-          onActivateAction:
-            m_PersistentCalls:
-              m_Calls: []
-          onDeactivateAction:
-            m_PersistentCalls:
-              m_Calls: []
-    - rid: 6984394157430407173
-      type: {class: PFloatDetection, ns: sapra.ObjectController, asm: sapra.ObjectController.Samples.Runtime}
-      data:
-        wantsAwake: 1
-        isAwake: 1
-        passivePlace: 0
-        floatingMask:
-          serializedVersion: 2
-          m_Bits: 16
-        debug: 0
-        distance: 0
-        normal: {x: 0, y: 0, z: 0}
-        surfaceState: 0
-    - rid: 6984394157430407174
-      type: {class: PRoofDetection, ns: sapra.ObjectController, asm: sapra.ObjectController.Samples.Runtime}
-      data:
-        wantsAwake: 1
-        isAwake: 1
-        passivePlace: 0
-        topWallLayer:
-          serializedVersion: 2
-          m_Bits: 1
-        topWall: 0
-        distance: 0
-    - rid: 6984394157430407175
-      type: {class: PWalkableDetection, ns: sapra.ObjectController, asm: sapra.ObjectController.Samples.Runtime}
-      data:
-        wantsAwake: 1
-        isAwake: 1
-        passivePlace: 0
-        groundMask:
-          serializedVersion: 2
-          m_Bits: 64
-        debug: 0
-        Walkable: 0
-        angleFront: 0
-        angle: 0
-        distance: 0
-        normal: {x: 0, y: 0, z: 0}
-        point: {x: 0, y: 0, z: 0}
-        rbFound: {fileID: 0}
-    - rid: 6984394157430407176
-      type: {class: PGroundAngleSM, ns: sapra.ObjectController, asm: sapra.ObjectController.Samples.Runtime}
-      data:
-        wantsAwake: 0
-        isAwake: 0
-    - rid: 6984394157430407177
-      type: {class: PRoofSM, ns: sapra.ObjectController, asm: sapra.ObjectController.Samples.Runtime}
-      data:
-        wantsAwake: 0
-        isAwake: 0
-    - rid: 6984394157430407178
-      type: {class: PWaterLineSM, ns: sapra.ObjectController, asm: sapra.ObjectController.Samples.Runtime}
-      data:
-        wantsAwake: 0
-        isAwake: 0
-    - rid: 6984394157430407179
-      type: {class: PColliderSettings, ns: sapra.ObjectController, asm: sapra.ObjectController.Samples.Runtime}
-      data:
-        wantsAwake: 1
-        isAwake: 1
-    - rid: 6984394157430407180
-      type: {class: PCustomGravity, ns: sapra.ObjectController, asm: sapra.ObjectController.Samples.Runtime}
-      data:
-        wantsAwake: 1
-        isAwake: 1
-        direction: {x: 0, y: 0, z: 0}
-        gravityMultiplierBase: 0
-        useGravity: 0
-        alwaysUpRight: 0
-    - rid: 6984394157430407181
-      type: {class: PDirectionManager, ns: sapra.ObjectController, asm: sapra.ObjectController.Samples.Runtime}
-      data:
-        wantsAwake: 1
-        isAwake: 1
-        currentMovementType: 0
-        directionalReference: {fileID: 0}
-        firstPersonCameraBoundary: {x: -90, y: 90}
-    - rid: 6984394157430407182
-      type: {class: PEasyWalk, ns: sapra.ObjectController, asm: sapra.ObjectController.Samples.Runtime}
-      data:
-        wantsAwake: 1
-        isAwake: 1
-        slopeHeight: 0.5
-        smoothness: 10
-    - rid: 6984394157430407183
-      type: {class: PExtraGravity, ns: sapra.ObjectController, asm: sapra.ObjectController.Samples.Runtime}
-      data:
-        wantsAwake: 1
-        isAwake: 1
-        passivePlace: 1
-        fallSpeed: 8
-        buoyancy: 0.7
-        airResistance: 5
-        waterResistance: 7
-        positions:
-        - {x: 0, y: 0, z: 0}
-    - rid: 6984394157430407184
-      type: {class: PVelocityCap, ns: sapra.ObjectController, asm: sapra.ObjectController.Samples.Runtime}
-      data:
-        wantsAwake: 1
-        isAwake: 1
-        maxVelocity: -50
-    - rid: 6984394157430407185
-      type: {class: PVerticalMovement, ns: sapra.ObjectController, asm: sapra.ObjectController.Samples.Runtime}
-      data:
-        wantsAwake: 0
-        isAwake: 0
-        ladderMask:
-          serializedVersion: 2
-          m_Bits: 0
-        _canVerticalMove: 0
-        upVector: {x: 0, y: 0, z: 0}
-        normalVector: {x: 0, y: 0, z: 0}
-        pointOnTheLadder: {x: 0, y: 0, z: 0}
-        maxDetectionDistance: 2
-        debug: 0
-    - rid: 6984394157430407186
-      type: {class: SDimensions, ns: sapra.ObjectController, asm: sapra.ObjectController.Samples.Runtime}
-      data:
-        wantsAwake: 1
-        isAwake: 1
-        characterHeight: 2
-        shoulderLevel: 0.75
-        characterRadious: 0.5
-        maxWalkableAngle: 40
-        startDecreaseVelAngle: 10
-        footOffsetLocal: {x: 0, y: 0, z: 0}
-        forcesCenterLocalOffset: {x: 0, y: 0, z: 0}
-        debug: 0
-    - rid: 6984394157430407187
-      type: {class: SForces, ns: sapra.ObjectController, asm: sapra.ObjectController.Samples.Runtime}
-      data:
-        wantsAwake: 1
-        isAwake: 1
-        maximumSpeed:
-          rid: 6984394157430407190
-        maximumSlideSpeed:
-          rid: 6984394157430407191
-        maximumWaterSpeed:
-          rid: 6984394157430407192
-        maxFJump:
-          rid: 6984394157430407193
-        minimumSpeed:
-          rid: 6984394157430407194
-        passiveSpeed:
-          rid: 6984394157430407195
-        minimumSlideSpeed:
-          rid: 6984394157430407196
-        minimumWaterSpeed:
-          rid: 6984394157430407197
-        selectedSpeed:
-          rid: 6984394157430407198
-        currentRBSpeed: {x: 0, y: 0, z: 0}
-    - rid: 6984394157430407190
-      type: {class: Stat, ns: sapra.ObjectController, asm: sapra.ObjectController.Samples.Runtime}
-      data:
-        isUsed: 1
-        initialStatType:
-          rid: 6984394157430407199
-        defaultStatType:
-          rid: 6984394157430407199
-    - rid: 6984394157430407191
-      type: {class: Stat, ns: sapra.ObjectController, asm: sapra.ObjectController.Samples.Runtime}
-      data:
-        isUsed: 0
-        initialStatType:
-          rid: 6984394157430407200
-        defaultStatType:
-          rid: 6984394157430407200
-    - rid: 6984394157430407192
-      type: {class: Stat, ns: sapra.ObjectController, asm: sapra.ObjectController.Samples.Runtime}
-      data:
-        isUsed: 1
-        initialStatType:
-          rid: 6984394157430407201
-        defaultStatType:
-          rid: 6984394157430407201
-    - rid: 6984394157430407193
-      type: {class: Stat, ns: sapra.ObjectController, asm: sapra.ObjectController.Samples.Runtime}
-      data:
-        isUsed: 1
-        initialStatType:
-          rid: 6984394157430407202
-        defaultStatType:
-          rid: 6984394157430407202
-    - rid: 6984394157430407194
-      type: {class: Stat, ns: sapra.ObjectController, asm: sapra.ObjectController.Samples.Runtime}
-      data:
-        isUsed: 1
-        initialStatType:
-          rid: 6984394157430407203
-        defaultStatType:
-          rid: 6984394157430407203
-    - rid: 6984394157430407195
-      type: {class: Stat, ns: sapra.ObjectController, asm: sapra.ObjectController.Samples.Runtime}
-      data:
-        isUsed: 1
-        initialStatType:
-          rid: 6984394157430407204
-        defaultStatType:
-          rid: 6984394157430407204
-    - rid: 6984394157430407196
-      type: {class: Stat, ns: sapra.ObjectController, asm: sapra.ObjectController.Samples.Runtime}
-      data:
-        isUsed: 0
-        initialStatType:
-          rid: 6984394157430407205
-        defaultStatType:
-          rid: 6984394157430407205
-    - rid: 6984394157430407197
-      type: {class: Stat, ns: sapra.ObjectController, asm: sapra.ObjectController.Samples.Runtime}
-      data:
-        isUsed: 1
-        initialStatType:
-          rid: 6984394157430407206
-        defaultStatType:
-          rid: 6984394157430407206
-    - rid: 6984394157430407198
-      type: {class: Stat, ns: sapra.ObjectController, asm: sapra.ObjectController.Samples.Runtime}
-      data:
-        isUsed: 1
-        initialStatType:
-          rid: 6984394157430407207
-        defaultStatType:
-          rid: 6984394157430407207
-    - rid: 6984394157430407199
-      type: {class: NormalValue, ns: sapra.ObjectController, asm: sapra.ObjectController.Samples.Runtime}
-      data:
-        baseValue: 13
-    - rid: 6984394157430407200
-      type: {class: NormalValue, ns: sapra.ObjectController, asm: sapra.ObjectController.Samples.Runtime}
-      data:
-        baseValue: 15
-    - rid: 6984394157430407201
-      type: {class: NormalValue, ns: sapra.ObjectController, asm: sapra.ObjectController.Samples.Runtime}
-      data:
-        baseValue: 16
-    - rid: 6984394157430407202
-      type: {class: NormalValue, ns: sapra.ObjectController, asm: sapra.ObjectController.Samples.Runtime}
-      data:
-        baseValue: 15
-    - rid: 6984394157430407203
-      type: {class: NormalValue, ns: sapra.ObjectController, asm: sapra.ObjectController.Samples.Runtime}
-      data:
-        baseValue: 6
-    - rid: 6984394157430407204
-      type: {class: NormalValue, ns: sapra.ObjectController, asm: sapra.ObjectController.Samples.Runtime}
-      data:
-        baseValue: 10
-    - rid: 6984394157430407205
-      type: {class: NormalValue, ns: sapra.ObjectController, asm: sapra.ObjectController.Samples.Runtime}
-      data:
-        baseValue: 6
-    - rid: 6984394157430407206
-      type: {class: NormalValue, ns: sapra.ObjectController, asm: sapra.ObjectController.Samples.Runtime}
-      data:
-        baseValue: 13
-    - rid: 6984394157430407207
-      type: {class: ExternallySetValue, ns: sapra.ObjectController, asm: sapra.ObjectController.Samples.Runtime}
+  cam: {fileID: 0}

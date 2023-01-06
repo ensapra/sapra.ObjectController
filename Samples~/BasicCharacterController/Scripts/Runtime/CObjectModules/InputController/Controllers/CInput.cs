@@ -4,37 +4,42 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using sapra.ObjectController;
 
-namespace sapra.ObjectController
+namespace sapra.InputHandler
 {
-    [RequireComponent(typeof(InputValueHolder))]
+    [RequireComponent(typeof(InputContainer))]
     public class CInput : MonoBehaviour
     {
         private InputController input;
-        private Transform cam;
         private InputValues values;
-        private CObject controller;
+        private CEntity controller;
 
+        public Transform cam;
+
+        private float UpDown;
         void Awake()
         {
             input = new InputController();
-            values = GetComponent<InputValueHolder>().input;
-            controller = GetComponent<CObject>();
-            Camera cm = Camera.main;
-            if(cm != null)
-                cam = cm.transform;
+            values = GetComponent<InputContainer>().input;   
+            controller = GetComponent<CEntity>();
+            InputSystem.settings.SetInternalFeatureFlag("DISABLE_SHORTCUT_SUPPORT", true);
         }
         void Start()
         {
-            //Sets the camera to be the reference for the player in case there's an Object
-            PDirectionManager directionManager = null;
-            if(controller != null)
-                directionManager = controller.passiveModule.RequestRoutine<PDirectionManager>(false);
-            if(directionManager != null)
-                directionManager.setReference(cam);
+            if(cam != null)
+            {
+                //Sets the camera to be the reference for the player in case there's an controller
+                PDirectionManager directionManager = null;
+                PassiveModule passiveModule = controller.RequestModule<PassiveModule>();
+                if(controller != null)
+                    directionManager = passiveModule.RequestRoutine<PDirectionManager>(false);
+                if(directionManager != null)
+                        directionManager.setReference(cam);
+            }
         }
         void Update()
         {
             values.UpdateLerpedValues();
+            values._upDown += UpDown;
         }
         void OnEnable()
         {
@@ -122,10 +127,7 @@ namespace sapra.ObjectController
             input.Player.Disable();
         }
         void Move(InputAction.CallbackContext context)
-        {
-            values._inputVectorRaw = context.ReadValue<Vector2>();  
-            values._extraCameraInducedVertical = Vector3.Dot(cam.forward, transform.up)*values._inputVectorRaw.y;
-        }
+        {values._inputVectorRaw = context.ReadValue<Vector2>();}
 
         void Crouch(InputAction.CallbackContext context)
         {values._wantCrouch = context.ReadValue<float>() > 0.9f; }

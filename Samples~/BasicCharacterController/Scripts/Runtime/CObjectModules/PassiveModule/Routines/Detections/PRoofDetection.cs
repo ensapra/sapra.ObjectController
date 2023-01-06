@@ -1,45 +1,31 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using sapra.ObjectController;
 
-namespace sapra.ObjectController
+[System.Serializable][RoutineCategory("Detections")]
+public class PRoofDetection : AbstractPassive
 {
-    [System.Serializable]
-    public class PRoofDetection : AbstractPassive
+    HSurfaceDetection surfaceDetection;
+    private StatsContainer _statContainer;
+    public LayerMask topWallLayer = 1 << 0;
+    public bool debug;
+    [Header("Result")]
+    public DetectionResult detectionResult;
+    protected override void AwakeRoutine(AbstractCObject controller)
     {
-        public override PassivePriority whenDo => passivePlace;
-        [SerializeField] private PassivePriority passivePlace = PassivePriority.FirstOfAll;
-        private SDimensions _sDimensions;
-        public LayerMask topWallLayer = 1 << 0;
-        
-        [Header("Result")]
-        public bool topWall;
-        public float distance;
-        protected override void AwakeRoutine(AbstractCObject controller)        {
-            _sDimensions = controller.RequestModule<StatModule>().RequestRoutine<SDimensions>(true);
-        }
+        surfaceDetection = controller.RequestModule<HelperModule>().RequestRoutine<HSurfaceDetection>(true);
+        _statContainer = controller.RequestComponent<StatsContainer>(true);
+    }
 
-        public override void DoPassive(Vector3 position, InputValues input)
-        {        
-            float radius = _sDimensions.currentRadious-0.1f;
-            Vector3 point = new Vector3(1,0,1);
-            RaycastHit hit;      
-            float tempDistance = _sDimensions.characterHeight;
-            if(Physics.Raycast(position, -controller.gravityDirection, out hit,_sDimensions.characterHeight,topWallLayer))  
-                tempDistance = hit.distance;
-            
+    public override void DoPassive(PassivePriority currentPassivePriority, Vector3 position, InputValues input)
+    {        
+        if(currentPassivePriority == PassivePriority.FirstOfAll)
+        {
             if(rb)
                 position += rb.velocity*Time.deltaTime; 
-
-            if(Physics.SphereCast(position, radius, -controller.gravityDirection, out hit, _sDimensions.characterHeight,topWallLayer))
-            {
-                if(hit.distance < tempDistance)
-                    tempDistance = hit.distance;
-            }
-
-            topWall = tempDistance < _sDimensions.characterHeight;
-            distance = (tempDistance/2);
+            if(debug)
+                Debug.DrawRay(position, -controller.gravityDirection, Color.red);
+            detectionResult = surfaceDetection.DetectSolid(position, -controller.gravityDirection, topWallLayer, _statContainer.CharacterHeight*1.2f, false, false);
         }
-
     }
+
 }

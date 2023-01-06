@@ -1,125 +1,83 @@
 ﻿using UnityEngine;
-
 using sapra.ObjectController;
-namespace sapra.ObjectController
+
+[System.Serializable][RoutineCategory("Complex")]
+public class ASwim : AbstractActive
 {
-    [System.Serializable]
-    public class ASwim : AbstractActive
+    public override int priorityID => 2;
+
+    private PWaterDetection _pWaterDetection;
+    private PGroundDetection _pGroundDetection;
+    private PDirectionManager _pDirectionManager;
+    private StatsContainer _statContainer;
+    private PColliderSettings _pColliderSettings;
+
+    private Vector3 finalDirection;
+    private Vector3 refFinalDirection;
+    private Vector3 inputedDirection;
+    [Range(0.01f, 1)] public float minRotationSpeed = 0.1f;
+    [Range(0.01f, 1)] public float maxRotationSpeed = 0.25f;
+    protected override void AwakeRoutine(AbstractCObject controller)
     {
-        public override int priorityID => 2;
+        _statContainer = controller.RequestComponent<StatsContainer>(true);
+        PassiveModule passiveModule = controller.RequestModule<PassiveModule>();
+        _pWaterDetection = passiveModule.RequestRoutine<PWaterDetection>(true);
+        _pGroundDetection = passiveModule.RequestRoutine<PGroundDetection>(true);
+        _pColliderSettings = passiveModule.RequestRoutine<PColliderSettings>(true);
+        _pDirectionManager = passiveModule.RequestRoutine<PDirectionManager>(true);
+        passiveModule.RequestRoutine<PExtraGravity>(true);
 
-        private PFloatDetection _pFloatDetection;
-        private PWalkableDetection _pWalkableDetection;
-        private PDirectionManager _pDirectionManager;
-        private SDimensions _sDim;
-        private SForces _sForces;
-        private PColliderSettings _pColliderSettings;
-        private Stat swimVelocity;
-        private Stat sprintSwimVelocity;
-        private Stat currentSpeed;
-        private Stat desiredVelocity;
+    }
+    private void setVelocity(float targetValue)
+    {
+        _statContainer.SetDynamicSpeed(targetValue);
+    }
+    public override void DoActive(InputValues _input)
+    {            
+        if(_pColliderSettings != null)
+            ChangeCollider();
 
-        private Vector3 finalDirection;
-        private bool insideWater;
-        protected override void AwakeRoutine(AbstractCObject controller)        {
-            PassiveModule passiveModule = controller.RequestModule<PassiveModule>();
-            StatModule statModule = controller.RequestModule<StatModule>();
-            _pFloatDetection = passiveModule.RequestRoutine<PFloatDetection>(true);
-            _pWalkableDetection = passiveModule.RequestRoutine<PWalkableDetection>(true);
-            _pColliderSettings = passiveModule.RequestRoutine<PColliderSettings>(true);
-            _pDirectionManager = passiveModule.RequestRoutine<PDirectionManager>(true);
-            passiveModule.RequestRoutine<PExtraGravity>(true);
-            _sDim = statModule.RequestRoutine<SDimensions>(true);
-            _sForces = statModule.RequestRoutine<SForces>(true);
-            swimVelocity = _sForces.minimumWaterSpeed.Select();
-            sprintSwimVelocity = _sForces.maximumWaterSpeed.Select();
-            desiredVelocity = _sForces.selectedSpeed.Select();
-        }
-        private void setVelocity(Stat velocityValue)
+        if(_input._wantRun)
+            setVelocity(_statContainer.MaximumSwimSpeed);
+        else
+            setVelocity(_statContainer.MinimumSwimSpeed);
+        inputedDirection = Vector3.ClampMagnitude(inputedDirection*_statContainer.DynamicMovingSpeed, _statContainer.DynamicMovingSpeed);
+        finalDirection = Vector3.SmoothDamp(finalDirection, inputedDirection, ref refFinalDirection, .1f);
+        rb.velocity = finalDirection;
+        var speedFactor = Mathf.InverseLerp(_statContainer.MinimumSwimSpeed, _statContainer.MaximumSwimSpeed, rb.velocity.magnitude);
+        speedFactor = Mathf.Lerp(minRotationSpeed, maxRotationSpeed, 1-speedFactor);
+        _pDirectionManager.RotateBody(speedFactor);
+    }
+    public override bool WantActive(InputValues input)
+    {
+        inputedDirection = GetWaterDirection(input);
+        if(_pWaterDetection.surfaceState == SurfaceStates.inside && inputedDirection.sqrMagnitude > 0.1f)
+            return true;                    
+        else
         {
-            desiredVelocity.changeValue(velocityValue.value);
-        }
-        public override void DoActive(InputValues _input)
-        {            
-            rb.velocity = finalDirection;
-            _pDirectionManager.RotateBody(-controller.gravityDirection, _input);
-        }
-        public Vector3 removeOnBoundary(Vector3 direction, Vector3 boundaryNormal, float amount)
-        {
-            float dot = Vector3.Dot(direction.normalized, boundaryNormal);
-            if(dot < 0)               
-                direction = direction - Vector3.Project(direction, boundaryNormal)*amount;
-            return direction;
-        }
-        public Vector3 simplifyVertical(Vector3 direction, bool alsoApply)
-        {
-            Vector3 finalProj = Vector3.Project(direction, _pFloatDetection.normal);
-            Vector3 velProj = Vector3.Project(rb.velocity, _pFloatDetection.normal);
-            float dir = Vector3.Dot(finalProj, velProj);
-            if(velProj.sqrMagnitude > finalProj.sqrMagnitude && (_pFloatDetection.surfaceState == SurfaceStates.surface || alsoApply))
-            {
-                return direction-finalProj+velProj;
-            }
-            else
-            {
-               return direction;
-            }
-        }
-        public Vector3 getWaterDirection(InputValues input)
-        {
-            float upDown = input._upDownRaw;
-            float cameraInducedVertical = input._extraCameraInducedVertical;
-            Vector3 direction;
-            direction = _pDirectionManager.getLocalDirection();
-            direction += (upDown+cameraInducedVertical)*-controller.gravityDirection;
-            direction = removeExtras(direction);
-            return direction.normalized;
-        }
-        public Vector3 removeExtras(Vector3 initialDirection)
-        {
-            Vector3 finalVector = initialDirection;
-            if(_pFloatDetection.distance != 1)
-            {
-                finalVector = removeOnBoundary(finalVector, controller.gravityDirection, 1);
-                finalVector = removeOnBoundary(finalVector, -_pFloatDetection.normal, 1);
-            }
-            return finalVector;
-        }
-        public void ProcessFinalDirection(InputValues input, Vector3 inputDirection)
-        {
-            if(input._wantRun)
-                setVelocity(sprintSwimVelocity);
-            else
-                setVelocity(swimVelocity);
-
-            float inputAmount = Mathf.Clamp(input._inputVectorRaw.magnitude + Mathf.Abs(input._upDownRaw), 0,1);
-            inputDirection = Vector3.ClampMagnitude(inputDirection.normalized*inputAmount*desiredVelocity.value, desiredVelocity.value);
-            finalDirection = Vector3.Lerp(finalDirection, inputDirection, Time.deltaTime*10);
-            Vector3 position = transform.position-_sDim.currentRadious*controller.gravityDirection;
-            position += inputDirection.normalized*_sDim.currentRadious*0.8f;
-            RaycastHit hit;
-            if(Physics.Raycast(position, inputDirection, out hit, 1, _pWalkableDetection.groundMask)) 
-            {finalDirection = removeOnBoundary(finalDirection, hit.normal, (1-hit.distance));}
-            finalDirection = simplifyVertical(finalDirection, hit.point != Vector3.zero);
-        }
-        public override bool WantActive(InputValues input)
-        {
-            Vector3 inputDirection = getWaterDirection(input);
-            if(_pFloatDetection.surfaceState == SurfaceStates.inside)
-            {
-                if(_pColliderSettings != null)
-                    ChangeCollider();
-                ProcessFinalDirection(input, inputDirection);
-                if(inputDirection.sqrMagnitude > 0)
-                    return true;
-            }
-            else
-                finalDirection = rb.velocity;
+            finalDirection = rb.velocity;
             return false;
         }
-        public void ChangeCollider()
-        {
-            _pColliderSettings.ChangeSettings(_sDim.CharacterHeight/2f, _sDim.CharacterHeight/2f);
-        }
+    }
+    public Vector3 GetWaterDirection(InputValues input)
+    {
+        float upDown = input._upDownRaw;
+        Vector3 direction;
+        direction = _pDirectionManager.GetReferencedInput();
+        direction += (upDown)*-controller.gravityDirection;
+        direction = GetFinalDirection(direction);
+        return direction;
+    }
+    private Vector3 GetFinalDirection(Vector3 inputDirection)
+    {
+        if(_pGroundDetection.NormalizedDistance < 1f)
+            inputDirection -= Vector3.Project(inputDirection, -_pGroundDetection.detectionResult.normal)*(1-_pGroundDetection.NormalizedDistance);
+        if(_pWaterDetection.NormalizedDistance < 1 && Vector3.Dot(inputDirection, _pWaterDetection.detectionResult.normal) > 0)
+            inputDirection -= Vector3.Project(inputDirection, _pWaterDetection.detectionResult.normal);
+        return inputDirection;
+    }
+    public void ChangeCollider()
+    {
+        _pColliderSettings.ChangeSettings(_statContainer.CharacterHeight/2f, _statContainer.CharacterHeight/2f);
     }
 }
