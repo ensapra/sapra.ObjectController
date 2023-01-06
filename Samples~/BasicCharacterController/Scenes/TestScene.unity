@@ -1348,6 +1348,30 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1705036053128247940, guid: 3547573dd9645b84db33910983a30ea2, type: 3}
+      propertyPath: passiveModule.cachedRoutines.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1705036053128247940, guid: 3547573dd9645b84db33910983a30ea2, type: 3}
+      propertyPath: passiveModule.onlyEnabledRoutines.Array.size
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 1705036053128247940, guid: 3547573dd9645b84db33910983a30ea2, type: 3}
+      propertyPath: passiveModule.onlyEnabledRoutines.Array.data[6]
+      value: 3404129936681205770
+      objectReference: {fileID: 0}
+    - target: {fileID: 1705036053128247940, guid: 3547573dd9645b84db33910983a30ea2, type: 3}
+      propertyPath: passiveModule.onlyEnabledRoutines.Array.data[7]
+      value: 3404129936681205775
+      objectReference: {fileID: 0}
+    - target: {fileID: 1705036053128247940, guid: 3547573dd9645b84db33910983a30ea2, type: 3}
+      propertyPath: passiveModule.onlyEnabledRoutines.Array.data[8]
+      value: 3404129936681205771
+      objectReference: {fileID: 0}
+    - target: {fileID: 1705036053128247940, guid: 3547573dd9645b84db33910983a30ea2, type: 3}
+      propertyPath: managedReferences[3404129936681205773]._isEnabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2948295665037075906, guid: 3547573dd9645b84db33910983a30ea2, type: 3}
       propertyPath: inputSO
       value: 

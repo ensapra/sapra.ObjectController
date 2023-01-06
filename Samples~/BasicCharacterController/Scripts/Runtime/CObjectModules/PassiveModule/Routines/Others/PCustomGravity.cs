@@ -17,7 +17,7 @@ public class PCustomGravity : AbstractPassive
             controller.gravityDirection = direction.normalized;
             controller.gravityMultiplier = gravityMultiplierBase;
             if(useGravity)
-                rb.velocity += direction.normalized*gravityMultiplierBase;
+                rb.AddForce(direction.normalized*gravityMultiplierBase, ForceMode.Acceleration);
             GravityApplied = useGravity;
             useGravity = true;
         }

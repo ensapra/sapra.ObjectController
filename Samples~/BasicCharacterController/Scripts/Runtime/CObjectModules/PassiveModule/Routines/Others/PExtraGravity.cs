@@ -31,8 +31,9 @@ public class PExtraGravity : AbstractPassive
                 GravityForce += (gravity*fallSpeed);
                 GravityForce += (-hor*airResistance/10f);
             } 
+            rb.AddForceAtPosition(GravityForce, position, ForceMode.Acceleration);
 
-            rb.velocity += GravityForce;//(GravityForce, position, ForceMode.Acceleration);
+            //rb.velocity += GravityForce;//(GravityForce, position, ForceMode.Acceleration);
         }
     }
     protected override void AwakeRoutine(AbstractCObject controller)
