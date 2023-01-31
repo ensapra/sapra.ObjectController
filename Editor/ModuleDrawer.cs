@@ -214,7 +214,8 @@ namespace sapra.ObjectController.Editor
                         newMenu.AddItem(content, false, ()=>{
                             if(list.arraySize <= 0)
                                 list.arraySize = 1;
-                            list.InsertArrayElementAtIndex(list.arraySize-1);
+                            else
+                                list.InsertArrayElementAtIndex(list.arraySize-1);
                             SerializedProperty newClass = list.GetArrayElementAtIndex(list.arraySize-1);
                             newClass.managedReferenceValue = cachedList.GetArrayElementAtIndex(foundRoutine.index).managedReferenceValue;
                             newClass.FindPropertyRelative("_isEnabled").boolValue = true;
@@ -228,7 +229,8 @@ namespace sapra.ObjectController.Editor
                         newMenu.AddItem(content, false, ()=>{
                             if(list.arraySize <= 0)
                                 list.arraySize = 1;
-                            list.InsertArrayElementAtIndex(list.arraySize-1);
+                            else
+                                list.InsertArrayElementAtIndex(list.arraySize-1);
                             SerializedProperty newClass = list.GetArrayElementAtIndex(list.arraySize-1);
                             newClass.managedReferenceValue = System.Activator.CreateInstance(target);
                             newClass.FindPropertyRelative("_isEnabled").boolValue = true;

@@ -17,9 +17,9 @@ public class ASwim : AbstractActive
     private Vector3 inputedDirection;
     [Range(0.01f, 1)] public float minRotationSpeed = 0.1f;
     [Range(0.01f, 1)] public float maxRotationSpeed = 0.25f;
-    protected override void AwakeRoutine(AbstractCObject controller)
+    protected override void AwakeRoutine()
     {
-        _statContainer = controller.RequestComponent<StatsContainer>(true);
+        _statContainer = GetComponent<StatsContainer>(true);
         PassiveModule passiveModule = controller.RequestModule<PassiveModule>();
         _pWaterDetection = passiveModule.RequestRoutine<PWaterDetection>(true);
         _pGroundDetection = passiveModule.RequestRoutine<PGroundDetection>(true);
@@ -64,7 +64,7 @@ public class ASwim : AbstractActive
         float upDown = input._upDownRaw;
         Vector3 direction;
         direction = _pDirectionManager.GetReferencedInput();
-        direction += (upDown)*-controller.gravityDirection;
+        direction += (upDown)*-motor.gravityDirection;
         direction = GetFinalDirection(direction);
         return direction;
     }

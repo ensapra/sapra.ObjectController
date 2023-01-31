@@ -11,20 +11,20 @@ public class PVelocityCap : AbstractPassive
     private InputValues _input;
     private ActiveModule activeModule;
 
-    protected override void AwakeRoutine(AbstractCObject controller)
+    protected override void AwakeRoutine()
     {
         PassiveModule passiveModule = controller.RequestModule<PassiveModule>();
         activeModule = controller.RequestModule<ActiveModule>();
         _pGroundDetection = passiveModule.RequestRoutine<PGroundDetection>(false);
-        _input = controller.RequestComponent<InputContainer>(true).input;
+        _input = GetComponent<InputContainer>(true).input;
     }
     public override void DoPassive(PassivePriority currentPassivePriority, Vector3 position, InputValues input)
     {
         if(currentPassivePriority == PassivePriority.LastOne)
         {
-            float value = Vector3.Dot(rb.velocity, -controller.gravityDirection);
+            float value = Vector3.Dot(rb.velocity, -motor.gravityDirection);
             if (value < maxVelocity)        
-                rb.velocity = rb.velocity - Vector3.Project(rb.velocity, controller.gravityDirection) - maxVelocity*controller.gravityDirection;
+                rb.velocity = rb.velocity - Vector3.Project(rb.velocity, motor.gravityDirection) - maxVelocity*motor.gravityDirection;
             
             if(_pGroundDetection == null || _input == null)
                 return;        

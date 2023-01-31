@@ -15,10 +15,10 @@ public class PSlopeWalker : AbstractPassive
     public float smoothness = .25f;
     
     private Vector3 refPosition;
-    protected override void AwakeRoutine(AbstractCObject controller)
+    protected override void AwakeRoutine()
     {
         PassiveModule passiveModule = controller.RequestModule<PassiveModule>();
-        _statContainer = controller.RequestComponent<StatsContainer>(true);
+        _statContainer = GetComponent<StatsContainer>(true);
         _pGroundDetection = passiveModule.RequestRoutine<PGroundDetection>(true);
         _pWaterDetection = passiveModule.RequestRoutine<PWaterDetection>(false);
         _pColliderSettings = passiveModule.RequestRoutine<PColliderSettings>(true);
@@ -35,7 +35,7 @@ public class PSlopeWalker : AbstractPassive
                 _pColliderSettings.SetFactor(2-(_statContainer.currentRadious/(_statContainer.currentHeight/2f)));
                 return;
             }
-            Vector3 finalPos = position - Vector3.Project(position, -controller.gravityDirection) + -controller.gravityDirection*(_pGroundDetection.detectionResult.point.y-_statContainer.FootOffset.y);
+            Vector3 finalPos = position - Vector3.Project(position, -motor.gravityDirection) + -motor.gravityDirection*(_pGroundDetection.detectionResult.point.y-_statContainer.FootOffset.y);
             rb.MovePosition( Vector3.SmoothDamp(transform.position, finalPos, ref refPosition, smoothness));
             //transform.position = Vector3.SmoothDamp(transform.position, finalPos, ref refPosition, smoothness);
             Vector3 deletedVelocity = Vector3.Project(-rb.velocity, _pGroundDetection.detectionResult.normal);

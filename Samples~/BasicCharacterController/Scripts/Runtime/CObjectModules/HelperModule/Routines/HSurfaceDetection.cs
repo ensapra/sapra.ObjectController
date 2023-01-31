@@ -6,9 +6,9 @@ public class HSurfaceDetection : HelperRoutine
 {
     private StatsContainer _statContainer;
     
-    protected override void AwakeRoutine(AbstractCObject controller)
+    protected override void AwakeRoutine()
     {
-        _statContainer = controller.RequestComponent<StatsContainer>(true);
+        _statContainer = GetComponent<StatsContainer>(true);
     }
     public DetectionResult DetectSolid(Vector3 position, Vector3 direction, LayerMask surfaceMask,  float maxDistance, bool limitAngle, bool insideCheck = false, bool debug = false)
     {
@@ -119,7 +119,7 @@ public class PSolidDetection : AbstractPassive
 
     private float AngleFrontLerped;
     
-    protected override void AwakeRoutine(AbstractCObject controller)
+    protected override void AwakeRoutine()
     {
         AnimationModule animationModule = controller.RequestModule<AnimationModule>();
         StatModule statModule = controller.RequestModule<StatModule>();
@@ -128,7 +128,7 @@ public class PSolidDetection : AbstractPassive
     }
     public override void DoPassive(PassivePriority currentPassivePriority, Vector3 position, InputValues input)
     {
-        Vector3 topPosition = position+_sDimension.footOffset+_sDimension.currentHeight*2*-controller.gravityDirection;
+        Vector3 topPosition = position+_sDimension.footOffset+_sDimension.currentHeight*2*-motor.gravityDirection;
         float maxDistance = _sDimension.currentHeight*3;
         float radious = (_sDimension.currentRadious-0.05f);
         Vector3 hitPoint = position;
@@ -136,8 +136,8 @@ public class PSolidDetection : AbstractPassive
         Vector3 normalVector = Vector3.zero;
         RaycastHit hit;
         if(debug)
-            Debug.DrawRay(topPosition, controller.gravityDirection*maxDistance, Color.black);
-        if(Physics.Raycast(topPosition, controller.gravityDirection, out hit, maxDistance, groundMask))
+            Debug.DrawRay(topPosition, motor.gravityDirection*maxDistance, Color.black);
+        if(Physics.Raycast(topPosition, motor.gravityDirection, out hit, maxDistance, groundMask))
         {
             normalVector = hit.normal;
             hitPoint = (hit.point);
@@ -151,14 +151,14 @@ public class PSolidDetection : AbstractPassive
         }
         rbFound = hit.rigidbody;
         if(debug)
-            Debug.DrawRay(topPosition, controller.gravityDirection, Color.blue);
-        if(Physics.SphereCast(topPosition, radious, controller.gravityDirection, out hit, maxDistance, groundMask))
+            Debug.DrawRay(topPosition, motor.gravityDirection, Color.blue);
+        if(Physics.SphereCast(topPosition, radious, motor.gravityDirection, out hit, maxDistance, groundMask))
         {
-            if(Vector3.Angle(hit.normal, controller.gravityDirection) < _sDimension.maxWalkableAngle)
+            if(Vector3.Angle(hit.normal, motor.gravityDirection) < _sDimension.maxWalkableAngle)
             {
                 normalVector = (normalVector +hit.normal)/2;
                 Vector3 direction = topPosition-hit.point;
-                float dot = Vector3.Dot(direction, -controller.gravityDirection);
+                float dot = Vector3.Dot(direction, -motor.gravityDirection);
                 distanceToSurface = (distanceToSurface+dot)/2; 
                 hitPoint = (hitPoint+(hit.point))/2;
                 if(debug)
@@ -172,7 +172,7 @@ public class PSolidDetection : AbstractPassive
         point = hitPoint;
         distance = distanceToSurface; 
         angleFront = Vector3.Angle(normal, transform.forward) - 90;
-        angle = Vector3.Angle(normal, -controller.gravityDirection);  
+        angle = Vector3.Angle(normal, -motor.gravityDirection);  
         if(debug)
             Debug.DrawRay(topPosition, normal, Color.red);
         

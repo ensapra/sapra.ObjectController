@@ -6,20 +6,12 @@ using System.Runtime.CompilerServices;
 
 namespace sapra.ObjectController
 {
-    [RequireComponent(typeof(Rigidbody))]
     public abstract class AbstractCObject : MonoBehaviour
     {                        
-        [HideInInspector] public Rigidbody rb;
         [HideInInspector] [SerializeField] protected bool onlyEnabled = true;
-
-        [HideInInspector] public Vector3 gravityDirection;
-        [HideInInspector] public float gravityMultiplier;
         
         private List<AbstractModule> modules = new List<AbstractModule>();
         void Awake() {
-            rb = GetComponent<Rigidbody>();
-            gravityDirection = Physics.gravity.normalized;
-            gravityMultiplier = Physics.gravity.magnitude;
             onlyEnabled = true;
             InitializeController();
         }
@@ -28,7 +20,7 @@ namespace sapra.ObjectController
         /// <summary>
         /// Returns a component on the gameObject if exists. If required is True, if the component doesn't exist it will add it.
         /// <summary/>
-        public T RequestComponent<T>(bool required) where T : Component
+        public T GetComponent<T>(bool required) where T : Component
         {
             T requested = GetComponent<T>();
             if(requested == null && required)        
@@ -38,7 +30,7 @@ namespace sapra.ObjectController
         /// <summary>
         /// Returns a module of the current controller if it has been added, otherwise returns null
         /// <summary/>
-        public T RequestModule<T>() where T : AbstractModule
+        public T GetModule<T>() where T : AbstractModule
         {
             foreach(AbstractModule moduleFound in modules)
             {
@@ -53,7 +45,7 @@ namespace sapra.ObjectController
         /// <summary>
         /// Returns a module of the current controller if it has been added, otherwise returns null
         /// <summary/>
-        public AbstractModule RequestModule(System.Type moduleType)
+        public AbstractModule GetModule(System.Type moduleType)
         {
             foreach(AbstractModule moduleFound in modules)
             {
@@ -68,7 +60,7 @@ namespace sapra.ObjectController
         /// <summary>
         /// Returns all the modules added
         /// <summary/>
-        public List<AbstractModule> RequestModules()
+        public List<AbstractModule> GetModules()
         {
             return modules;
         }

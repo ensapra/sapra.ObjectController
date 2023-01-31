@@ -14,7 +14,7 @@ public class PCustomGravity : AbstractPassive
         {
             if(rb.useGravity)
                 rb.useGravity = false;
-            controller.gravityDirection = direction.normalized;
+            motor.gravityDirection = direction.normalized;
             controller.gravityMultiplier = gravityMultiplierBase;
             if(useGravity)
                 rb.AddForce(direction.normalized*gravityMultiplierBase, ForceMode.Acceleration);
@@ -28,10 +28,10 @@ public class PCustomGravity : AbstractPassive
         this.useGravity = false;
     }
 
-    protected override void AwakeRoutine(AbstractCObject controller)
+    protected override void AwakeRoutine()
     {
         PassiveModule passiveModule = controller.RequestModule<PassiveModule>();
-        direction = controller.gravityDirection;
+        direction = motor.gravityDirection;
         gravityMultiplierBase = controller.gravityMultiplier;
     }
 }

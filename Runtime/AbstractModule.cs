@@ -30,7 +30,7 @@ namespace sapra.ObjectController
             for(int i = onlyEnabledRoutines.Count-1; i>= 0; i--)
             {
                 T routine = onlyEnabledRoutines[i];
-                routine.Sleep(controller);                
+                routine.SleepRoutine();                
             }
         }
         internal override sealed void InitializeRoutines(AbstractCObject controller)
@@ -67,9 +67,9 @@ namespace sapra.ObjectController
                 }
                 
                 if(routine.isEnabled)      
-                    routine.Awake(controller);
+                    routine.AwakeRoutine(controller);
                 if(!routine.isEnabled)  
-                    routine.Sleep(controller);    
+                    routine.SleepRoutine();    
  
                 if(!routine.isEnabled)
                 {
@@ -83,7 +83,10 @@ namespace sapra.ObjectController
             onlyEnabledRoutines.Sort((a,b)=> a.GetType().ToString().CompareTo(b.GetType().ToString()));
             InitializeModule();
         }
-
+       public Z GetComponent<Z>(bool required = false) where Z : Component
+        {
+            return controller.GetComponent<Z>(required);
+        }
         #endregion
         #region Components requests
         private object GenerateRoutine(Type type)
@@ -95,7 +98,7 @@ namespace sapra.ObjectController
             return newRoutine;
         }
 
-        internal override AbstractRoutine RequestRoutine(System.Type type, bool required){
+        internal override AbstractRoutine GetRoutine(System.Type type, bool required){
             T foundRoutine = onlyEnabledRoutines.Find(x => x != null && x.GetType().IsEquivalentTo(type));
             if(foundRoutine != null)
                 return foundRoutine;
@@ -118,8 +121,8 @@ namespace sapra.ObjectController
         /// <summary>
         /// Returns the requested Routine if it has been enabled, otherwise returns true. If required is True, and the component hasn't been enabled, it will automatically enable it
         /// <summary/>
-        public Z RequestRoutine<Z>(bool required = false) where Z : T{
-            return RequestRoutine(typeof(Z), required) as Z;
+        public Z GetRoutine<Z>(bool required = false) where Z : T{
+            return GetRoutine(typeof(Z), required) as Z;
         }
         internal override List<Type> GetAssemblyRoutines()
         {
@@ -155,7 +158,7 @@ namespace sapra.ObjectController
         internal abstract void InitializeRoutines(AbstractCObject controller);
         internal abstract void SleepRoutines(AbstractCObject controller);
         internal abstract List<Type> GetAssemblyRoutines();
-        internal abstract AbstractRoutine RequestRoutine(System.Type type, bool required);
+        internal abstract AbstractRoutine GetRoutine(System.Type type, bool required);
         public abstract Type GetModuleType();
 
         /// <summary>

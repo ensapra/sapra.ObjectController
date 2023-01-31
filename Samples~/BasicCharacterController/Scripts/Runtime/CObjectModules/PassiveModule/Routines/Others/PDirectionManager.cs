@@ -45,7 +45,7 @@ public class PDirectionManager : AbstractPassive
             return;
         if(directionalReference == null)
             directionalReference = this.transform;
-        Vector3 up = _pGroundDetection != null && _pGroundDetection.Walkable ? _pGroundDetection.detectionResult.normal : -controller.gravityDirection;
+        Vector3 up = _pGroundDetection != null && _pGroundDetection.Walkable ? _pGroundDetection.detectionResult.normal : -motor.gravityDirection;
         Vector3 forward = -Vector3.Cross(up, directionalReference.right);
         globalDirectionRaw = input._inputVectorRaw.y*forward +input._inputVectorRaw.x*directionalReference.right;
         globalDirection = input._inputVector.y*forward +input._inputVector.x*directionalReference.right;
@@ -57,7 +57,7 @@ public class PDirectionManager : AbstractPassive
                     ForcedRotation(0.1f,  RotationMode.DesiredAxisAndTarget, transform.up,_pGroundDetection.detectionResult.normal);
                 break;
             case VerticalAxis.WithGravity:
-                ForcedRotation(0.1f,  RotationMode.DesiredAxisAndTarget, transform.up,-controller.gravityDirection);
+                ForcedRotation(0.1f,  RotationMode.DesiredAxisAndTarget, transform.up,-motor.gravityDirection);
                 break;
         }
     }
@@ -65,7 +65,7 @@ public class PDirectionManager : AbstractPassive
     {
         directionalReference = transform;
     }
-    protected override void AwakeRoutine(AbstractCObject controller)
+    protected override void AwakeRoutine()
     {
         PassiveModule passiveModule = controller.RequestModule<PassiveModule>();
         _pGroundDetection = passiveModule.RequestRoutine<PGroundDetection>(false);
@@ -86,7 +86,7 @@ public class PDirectionManager : AbstractPassive
     }
     public Vector3 CorrectForward()
     {
-        Vector3 groundNormal = _pGroundDetection != null ? _pGroundDetection.detectionResult.normal : -controller.gravityDirection;      
+        Vector3 groundNormal = _pGroundDetection != null ? _pGroundDetection.detectionResult.normal : -motor.gravityDirection;      
         Vector3 normalForward = -Vector3.Cross(groundNormal, transform.right).normalized;
         return normalForward;
     }
@@ -110,7 +110,7 @@ public class PDirectionManager : AbstractPassive
         switch(rotateType)
         {
             case RotateWith.RotateWithDirection:
-                    ForcedRotation(speed, RotationMode.ForwardAndUpward,  globalDirectionRaw, -controller.gravityDirection);
+                    ForcedRotation(speed, RotationMode.ForwardAndUpward,  globalDirectionRaw, -motor.gravityDirection);
                 break;
         }
     }        

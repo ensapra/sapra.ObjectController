@@ -23,10 +23,10 @@ public class PWaterDetection : AbstractPassive
     [NoEdit] public SurfaceStates surfaceState;
     [NoEdit] public float NormalizedDistance;
     public bool debug = false;
-    protected override void AwakeRoutine(AbstractCObject controller)
+    protected override void AwakeRoutine()
     {
         PassiveModule passiveModule = controller.RequestModule<PassiveModule>();
-        _statContainer = controller.RequestComponent<StatsContainer>(true);
+        _statContainer = GetComponent<StatsContainer>(true);
         _surfaceDetection = controller.RequestModule<HelperModule>().RequestRoutine<HSurfaceDetection>(true);
         _pGroundDetection = passiveModule.RequestRoutine<PGroundDetection>(false);
         _pCustomGravity = passiveModule.RequestRoutine<PCustomGravity>(true);
@@ -100,10 +100,10 @@ public class PWaterDetection : AbstractPassive
     }
     private float CalculteNormalDistance(Vector3 position, out DetectionResult detectionResult)
     {
-        float dotProduct = Vector3.Dot(transform.up, -controller.gravityDirection);
+        float dotProduct = Vector3.Dot(transform.up, -motor.gravityDirection);
         Vector3 UpWard = dotProduct > 0 ? transform.up*dotProduct : Vector3.zero;
         Vector3 topPosition = position+_statContainer.FootOffset+(_statContainer.CharacterHeight*1.1f)*UpWard;
-        detectionResult = _surfaceDetection.DetectSolid(topPosition, controller.gravityDirection, waterMask,(_statContainer.CharacterHeight)*1.2f, false, true, debug);
+        detectionResult = _surfaceDetection.DetectSolid(topPosition, motor.gravityDirection, waterMask,(_statContainer.CharacterHeight)*1.2f, false, true, debug);
         float normalDistance = 0;
 
         if(detectionResult.distance <= 0)
@@ -130,7 +130,7 @@ public class PWaterDetection : AbstractPassive
         _pCustomGravity.DisableGravity();    
         Vector3 temporalResult = Vector3.zero;
         var targetValue = (normalDistance-(shoulderLevel-0.5f));
-        Vector3 gravity = controller.gravityDirection*controller.gravityMultiplier;
+        Vector3 gravity = motor.gravityDirection*controller.gravityMultiplier;
         if(CanFloat)
         {
             //El -1 em contraresta la gravetat
@@ -138,7 +138,7 @@ public class PWaterDetection : AbstractPassive
             temporalResult += gravity*((1-2*targetValue)*buoyancy);
         }
         else
-            temporalResult += (controller.gravityDirection*buoyancy);
+            temporalResult += (motor.gravityDirection*buoyancy);
         
         return temporalResult;
     }

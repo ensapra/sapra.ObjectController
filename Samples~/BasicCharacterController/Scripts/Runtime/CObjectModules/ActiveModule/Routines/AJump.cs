@@ -25,14 +25,14 @@ public class AJump : AbstractActive
 
     private Vector3 latestVelocity;
 
-    protected override void AwakeRoutine(AbstractCObject controller)
+    protected override void AwakeRoutine()
     {
         PassiveModule passiveModule = controller.RequestModule<PassiveModule>();
         _pGroundDetection = passiveModule.RequestRoutine<PGroundDetection>(true);
         _pRoofDetection = passiveModule.RequestRoutine<PRoofDetection>(true);
         _pWaterDetection =  passiveModule.RequestRoutine<PWaterDetection>(false);
         _pDirectionManager = passiveModule.RequestRoutine<PDirectionManager>(true);
-        _statContainer = controller.RequestComponent<StatsContainer>(true);        
+        _statContainer = GetComponent<StatsContainer>(true);        
     }
 
     public override void DoActive(InputValues _input)
@@ -58,7 +58,7 @@ public class AJump : AbstractActive
             Vector3 direction = _pDirectionManager.GetGlobalInput();
             Vector3 jumpVector = JumpVector(direction.magnitude*transform.forward)*(1-Mathf.InverseLerp(0,5, jumpsMade)*0.7f);
             jumpingTimerCor = controller.StartCoroutine(jumpingTimer());
-            jumpVector += _statContainer.MaximumJumpForce * -controller.gravityDirection;
+            jumpVector += _statContainer.MaximumJumpForce * -motor.gravityDirection;
             rb.velocity = jumpVector;
             sequence = jumpingSequence.jumping;     
             _pGroundDetection.Walkable = false;   
@@ -95,7 +95,7 @@ public class AJump : AbstractActive
         }
         else
         {
-            float velVal = Vector3.Dot(rb.velocity, -controller.gravityDirection);
+            float velVal = Vector3.Dot(rb.velocity, -motor.gravityDirection);
             if(ghostJumpTimerCor == null && sequence == jumpingSequence.readyToJump)
                 ghostJumpTimerCor = controller.StartCoroutine(ghostJump());
             if(sequence == jumpingSequence.jumping && velVal <= 0)
@@ -122,7 +122,7 @@ public class AJump : AbstractActive
     private Vector3 JumpVector(Vector3 desiredDirectionSimple)
     {
         //Velocitat i direcció del salt
-        Vector3 horizontal = latestVelocity- Vector3.Project(latestVelocity, -controller.gravityDirection);
+        Vector3 horizontal = latestVelocity- Vector3.Project(latestVelocity, -motor.gravityDirection);
         float reference = horizontal.magnitude;
         float minVel = _statContainer.MinimumSpeed+1;
         float maxVel = _statContainer.MaximumSpeed+5;
@@ -131,10 +131,10 @@ public class AJump : AbstractActive
         float desiredVelocity = Mathf.Clamp(reference, minVel, maxVel);
         if(reference < minimumVel)
             desiredVelocity = minimumVel;
-        Vector3 finalVector = (desiredDirectionSimple-Vector3.Project(desiredDirectionSimple, -controller.gravityDirection)).normalized*desiredVelocity;
+        Vector3 finalVector = (desiredDirectionSimple-Vector3.Project(desiredDirectionSimple, -motor.gravityDirection)).normalized*desiredVelocity;
         float angleFront = Vector3.Angle(transform.forward, _pGroundDetection.detectionResult.normal)-90;
         if(angleFront > _statContainer.WalkableAngle)
-            finalVector = (_pGroundDetection.detectionResult.normal-Vector3.Project(_pGroundDetection.detectionResult.normal, -controller.gravityDirection)).normalized*minimumVel;
+            finalVector = (_pGroundDetection.detectionResult.normal-Vector3.Project(_pGroundDetection.detectionResult.normal, -motor.gravityDirection)).normalized*minimumVel;
         return finalVector;
     }
 }

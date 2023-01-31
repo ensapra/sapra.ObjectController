@@ -19,11 +19,11 @@ public class ACrouch : AbstractActive
     private float heightLerped; 
     [NoEdit] [SerializeField] private float refHeightSpeed;
     public override int priorityID => 10;
-    protected override void AwakeRoutine(AbstractCObject controller)
+    protected override void AwakeRoutine()
     {
         PassiveModule passiveModule = controller.RequestModule<PassiveModule>();
         ActiveModule activeModule = controller.RequestModule<ActiveModule>();
-        _statContainer = controller.RequestComponent<StatsContainer>(true);
+        _statContainer = GetComponent<StatsContainer>(true);
         _aMove = activeModule.RequestRoutine<AMove>(true);
         _pGroundDetection = passiveModule.RequestRoutine<PGroundDetection>(true);
         _pRoofDetection = passiveModule.RequestRoutine<PRoofDetection>(true);

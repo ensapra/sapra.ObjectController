@@ -50,12 +50,12 @@ public class PColliderSettings : AbstractPassive
     private float temporalRadious = -1;
     private float temporalFactor = -1;
     // Start is called before the first frame update
-    protected override void AwakeRoutine(AbstractCObject controller)
+    protected override void AwakeRoutine()
     {
         PassiveModule passiveModule = controller.RequestModule<PassiveModule>();
         _pGroundDetection = passiveModule.RequestRoutine<PGroundDetection>(true);
-        _statContainer = controller.RequestComponent<StatsContainer>(true);
-        colliderCom = controller.RequestComponent<CapsuleCollider>(true);
+        _statContainer = GetComponent<StatsContainer>(true);
+        colliderCom = GetComponent<CapsuleCollider>(true);
 
         if(materials.Count < 2)
         {

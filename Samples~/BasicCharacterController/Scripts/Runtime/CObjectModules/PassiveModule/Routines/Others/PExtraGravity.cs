@@ -16,8 +16,8 @@ public class PExtraGravity : AbstractPassive
         if(currentPassivePriority == PassivePriority.BeforeActive)
         {
             Vector3 GravityForce = Vector3.zero;
-            Vector3 gravity = controller.gravityDirection*controller.gravityMultiplier;
-            Vector3 hor = rb.velocity - Vector3.Project(rb.velocity,-controller.gravityDirection);
+            Vector3 gravity = motor.gravityDirection*controller.gravityMultiplier;
+            Vector3 hor = rb.velocity - Vector3.Project(rb.velocity,-motor.gravityDirection);
             if(_pWaterDetection != null && _pWaterDetection.Floating)
                 return;
 
@@ -36,7 +36,7 @@ public class PExtraGravity : AbstractPassive
             //rb.velocity += GravityForce;//(GravityForce, position, ForceMode.Acceleration);
         }
     }
-    protected override void AwakeRoutine(AbstractCObject controller)
+    protected override void AwakeRoutine()
     {
         PassiveModule passiveModule = controller.RequestModule<PassiveModule>();
         _pCustomGravity = passiveModule.RequestRoutine<PCustomGravity>(true);

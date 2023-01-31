@@ -25,7 +25,7 @@ public class PVerticalMovement : AbstractPassive
     {
         if(currentPassivePriority == PassivePriority.BeforeActive)
         {
-            position = position+_statContainer.FootOffset+_statContainer.CharacterHeight/2f*-controller.gravityDirection;
+            position = position+_statContainer.FootOffset+_statContainer.CharacterHeight/2f*-motor.gravityDirection;
             RaycastHit hit;
             if(Physics.Raycast(position, transform.forward,out hit, maxDetectionDistance+_statContainer.CharacterRadius, ladderMask))
             {
@@ -92,10 +92,10 @@ public class PVerticalMovement : AbstractPassive
         Plane middlePoint = new Plane(cross, ladderPositionOnWall);
         return middlePoint.ClosestPointOnPlane(wall.ClosestPointOnPlane(position))+_statContainer.CharacterRadius*normalVector;
     }
-    protected override void AwakeRoutine(AbstractCObject controller)
+    protected override void AwakeRoutine()
     {
         PassiveModule passiveModule = controller.RequestModule<PassiveModule>();
-        _statContainer = controller.RequestComponent<StatsContainer>(true);
+        _statContainer = GetComponent<StatsContainer>(true);
         _pGroundDetection = passiveModule.RequestRoutine<PGroundDetection>(true);
     }
 }

@@ -13,15 +13,15 @@ public class AAirMove : AbstractActive
     public override void DoActive(InputValues input)
     {
         Vector3 simplified = _pDirectionManager.GetMoveDirection(input);
-        Vector3 horizontal = rb.velocity - Vector3.Project(rb.velocity, -controller.gravityDirection);
+        Vector3 horizontal = rb.velocity - Vector3.Project(rb.velocity, -motor.gravityDirection);
         if(simplified != Vector3.zero) 
         {
             horizontal = Vector3.SmoothDamp(horizontal, simplified*horizontal.magnitude, ref refHorizontal, .04f);
             if(horizontal.magnitude < 1f)
                 horizontal = simplified;
-            horizontal = horizontal-Vector3.Project(horizontal, -controller.gravityDirection);
+            horizontal = horizontal-Vector3.Project(horizontal, -motor.gravityDirection);
         }
-        rb.velocity = horizontal+Vector3.Project(rb.velocity,-controller.gravityDirection);
+        rb.velocity = horizontal+Vector3.Project(rb.velocity,-motor.gravityDirection);
         float amount = Mathf.Clamp(1-_pGroundDetection.NormalizedDistance, 0.2f, 1);
         _pDirectionManager.RotateBody(rotationSpeed);
     }
@@ -34,7 +34,7 @@ public class AAirMove : AbstractActive
             return false;        
     }
 
-    protected override void AwakeRoutine(AbstractCObject controller)
+    protected override void AwakeRoutine()
     {
         PassiveModule passiveModule = controller.RequestModule<PassiveModule>();
         _pGroundDetection = passiveModule.RequestRoutine<PGroundDetection>(true);

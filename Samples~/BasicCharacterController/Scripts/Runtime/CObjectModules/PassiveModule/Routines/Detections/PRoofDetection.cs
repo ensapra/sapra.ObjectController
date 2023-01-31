@@ -10,10 +10,10 @@ public class PRoofDetection : AbstractPassive
     public bool debug;
     [Header("Result")]
     public DetectionResult detectionResult;
-    protected override void AwakeRoutine(AbstractCObject controller)
+    protected override void AwakeRoutine()
     {
         surfaceDetection = controller.RequestModule<HelperModule>().RequestRoutine<HSurfaceDetection>(true);
-        _statContainer = controller.RequestComponent<StatsContainer>(true);
+        _statContainer = GetComponent<StatsContainer>(true);
     }
 
     public override void DoPassive(PassivePriority currentPassivePriority, Vector3 position, InputValues input)
@@ -23,8 +23,8 @@ public class PRoofDetection : AbstractPassive
             if(rb)
                 position += rb.velocity*Time.deltaTime; 
             if(debug)
-                Debug.DrawRay(position, -controller.gravityDirection, Color.red);
-            detectionResult = surfaceDetection.DetectSolid(position, -controller.gravityDirection, topWallLayer, _statContainer.CharacterHeight*1.2f, false, false);
+                Debug.DrawRay(position, -motor.gravityDirection, Color.red);
+            detectionResult = surfaceDetection.DetectSolid(position, -motor.gravityDirection, topWallLayer, _statContainer.CharacterHeight*1.2f, false, false);
         }
     }
 

@@ -12,9 +12,9 @@ public class AMove : AbstractActive
     [Range(0.01f, 1)] public float minRotationSpeed = 0.1f;
     [Range(0.01f, 1)] public float maxRotationSpeed = 0.25f;
 
-    protected override void AwakeRoutine(AbstractCObject controller)
+    protected override void AwakeRoutine()
     {
-        _statContainer = controller.RequestComponent<StatsContainer>(true);
+        _statContainer = GetComponent<StatsContainer>(true);
         PassiveModule passiveModule = controller.RequestModule<PassiveModule>();
         _pGroundDetection = passiveModule.RequestRoutine<PGroundDetection>(true);
         _pDirectionManager = passiveModule.RequestRoutine<PDirectionManager>(true);

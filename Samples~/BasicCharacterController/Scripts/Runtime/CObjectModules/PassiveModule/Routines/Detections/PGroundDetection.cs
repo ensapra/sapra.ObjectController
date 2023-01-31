@@ -24,8 +24,8 @@ public class PGroundDetection : AbstractPassive
     {
         if(currentPassivePriority == PassivePriority.FirstOfAll)
         {
-            Vector3 topPosition = position+_statContainer.FootOffset+_statContainer.currentHeight*-controller.gravityDirection;
-            detectionResult = _surfaceDetection.DetectSolid(topPosition, controller.gravityDirection, groundMask, _statContainer.currentHeight*1.5f, true, false, debug);
+            Vector3 topPosition = position+_statContainer.FootOffset+_statContainer.currentHeight*-motor.gravityDirection;
+            detectionResult = _surfaceDetection.DetectSolid(topPosition, motor.gravityDirection, groundMask, _statContainer.currentHeight*1.5f, true, false, debug);
             if(debug)
                 Debug.DrawRay(detectionResult.point, detectionResult.normal, Color.red);
             
@@ -40,9 +40,9 @@ public class PGroundDetection : AbstractPassive
         }
     }
 
-    protected override void AwakeRoutine(AbstractCObject controller)
+    protected override void AwakeRoutine()
     {
         _surfaceDetection = controller.RequestModule<HelperModule>().RequestRoutine<HSurfaceDetection>(true);
-        _statContainer = controller.RequestComponent<StatsContainer>(true);
+        _statContainer = GetComponent<StatsContainer>(true);
     }
 }
