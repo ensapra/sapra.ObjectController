@@ -44,6 +44,20 @@ namespace sapra.ObjectController
         {
             return controller.GetModule<T>();
         }
+        
+        public Coroutine StartCoroutine(IEnumerator routine)
+        {
+            return controller.StartCoroutine(routine);
+        }
+        public void StopCoroutine(Coroutine routine)
+        {
+            controller.StopCoroutine(routine);
+        }
+
+        public void StopCoroutine(IEnumerator routine)
+        {
+            controller.StopCoroutine(routine);
+        }
 
         /// <summary>
         /// Automatically called once the Routine is initialized. Equivalent of Awake on MonoBehaviour
