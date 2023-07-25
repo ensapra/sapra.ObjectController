@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace sapra.ObjectController.Editor
 {
-    [CustomPropertyDrawer(typeof(AbstractModule), true)]
+    [CustomPropertyDrawer(typeof(Module), true)]
     public class ModuleDrawer : PropertyDrawer
     {
         protected GUIStyle boxButtonStyle;
@@ -25,7 +25,7 @@ namespace sapra.ObjectController.Editor
         /// Used to add extra layout after the basic Module Layout
         /// <summary/>
 
-        protected List<AbstractRoutine> AllRoutines = new List<AbstractRoutine>();
+        protected List<Routine> AllRoutines = new List<Routine>();
         protected virtual void ExtraModuleData(SerializedProperty property, GUIContent label){}
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
@@ -164,10 +164,10 @@ namespace sapra.ObjectController.Editor
         /// <summary/>
         protected void GenerateFoldoutMenu(SerializedProperty list, SerializedProperty property)
         {
-            AbstractModule module = property.GetSerializedObject() as AbstractModule;
+            Module module = property.GetSerializedObject() as Module;
             List<System.Type> types = module.GetAssemblyRoutines();
-            AbstractRoutine[] routines = module.EnabledRoutinesObject;
-            AbstractRoutine[] cached = module.ChachedRoutinesObject;
+            Routine[] routines = module.EnabledRoutinesObject;
+            Routine[] cached = module.ChachedRoutinesObject;
             SerializedProperty cachedList = property.FindPropertyRelative("cachedRoutines");
 
             GenericMenu newMenu = new GenericMenu();
@@ -188,7 +188,7 @@ namespace sapra.ObjectController.Editor
                 bool exists = routines != null && routines.Any(a => a != null && a.GetType().IsEquivalentTo(target));
                 if(exists)
                 {
-                    (AbstractRoutine rot, int index) foundRoutine = routines.Select((obj, index) => (obj,index)).First(a => a.obj != null && a.obj.GetType().IsEquivalentTo(target));
+                    (Routine rot, int index) foundRoutine = routines.Select((obj, index) => (obj,index)).First(a => a.obj != null && a.obj.GetType().IsEquivalentTo(target));
                     if(foundRoutine.rot.isEnabled)
                     {
                         //The object exists and is enabled
@@ -210,7 +210,7 @@ namespace sapra.ObjectController.Editor
                     if(exists)
                     {
                         //Exists on cache
-                        (AbstractRoutine rot, int index) foundRoutine = cached.Select((obj, index) => (obj,index)).First(a => a.obj != null && a.obj.GetType().IsEquivalentTo(target));
+                        (Routine rot, int index) foundRoutine = cached.Select((obj, index) => (obj,index)).First(a => a.obj != null && a.obj.GetType().IsEquivalentTo(target));
                         newMenu.AddItem(content, false, ()=>{
                             if(list.arraySize <= 0)
                                 list.arraySize = 1;

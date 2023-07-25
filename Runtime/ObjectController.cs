@@ -6,11 +6,11 @@ using System.Runtime.CompilerServices;
 
 namespace sapra.ObjectController
 {
-    public abstract class AbstractCObject : MonoBehaviour
+    public abstract class ObjectController : MonoBehaviour
     {                        
         [HideInInspector] [SerializeField] protected bool onlyEnabled = true;
         
-        private List<AbstractModule> modules = new List<AbstractModule>();
+        private List<Module> modules = new List<Module>();
         void Awake() {
             onlyEnabled = true;
             InitializeController();
@@ -30,9 +30,9 @@ namespace sapra.ObjectController
         /// <summary>
         /// Returns a module of the current controller if it has been added, otherwise returns null
         /// <summary/>
-        public T GetModule<T>() where T : AbstractModule
+        public T GetModule<T>() where T : Module
         {
-            foreach(AbstractModule moduleFound in modules)
+            foreach(Module moduleFound in modules)
             {
                 if(moduleFound.GetType().IsEquivalentTo(typeof(T)))
                 {
@@ -45,9 +45,9 @@ namespace sapra.ObjectController
         /// <summary>
         /// Returns a module of the current controller if it has been added, otherwise returns null
         /// <summary/>
-        public AbstractModule GetModule(System.Type moduleType)
+        public Module GetModule(System.Type moduleType)
         {
-            foreach(AbstractModule moduleFound in modules)
+            foreach(Module moduleFound in modules)
             {
                 if(moduleFound.GetType().IsEquivalentTo(moduleType))
                 {
@@ -60,7 +60,7 @@ namespace sapra.ObjectController
         /// <summary>
         /// Returns all the modules added
         /// <summary/>
-        public List<AbstractModule> GetModules()
+        public List<Module> GetModules()
         {
             return modules;
         }
@@ -69,7 +69,7 @@ namespace sapra.ObjectController
         public void InitializeController()
         {
             addModules();
-            foreach(AbstractModule module in modules)
+            foreach(Module module in modules)
             {
                 module.InitializeRoutines(this);
             }
@@ -77,7 +77,7 @@ namespace sapra.ObjectController
         /// <summary>
         /// If the module hasn't been added already, it hads it to the existing list of modules
         /// <summary/>
-        protected void AddModule(AbstractModule module)
+        protected void AddModule(Module module)
         {
             if(!modules.Contains(module))
                 modules.Add(module);

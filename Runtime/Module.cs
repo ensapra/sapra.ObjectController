@@ -8,9 +8,9 @@ using System;
 namespace sapra.ObjectController
 {
     [System.Serializable]
-    public abstract class AbstractModule<T> : AbstractModule where T : AbstractRoutine
+    public abstract class Module<T> : Module where T : Routine
     {
-        [SerializeReference] [HideInInspector] protected AbstractCObject controller;
+        [SerializeReference] [HideInInspector] protected ObjectController controller;
         
         /// <summary>
         /// Enabled components
@@ -19,13 +19,13 @@ namespace sapra.ObjectController
         [SerializeReference] [HideInInspector] protected List<T> onlyEnabledRoutines = new List<T>();
         [SerializeReference] [HideInInspector] private List<T> cachedRoutines = new List<T>();
 
-        public override AbstractRoutine[] EnabledRoutinesObject => onlyEnabledRoutines.ToArray();
-        internal override AbstractRoutine[] ChachedRoutinesObject => cachedRoutines.ToArray();
+        public override Routine[] EnabledRoutinesObject => onlyEnabledRoutines.ToArray();
+        internal override Routine[] ChachedRoutinesObject => cachedRoutines.ToArray();
 
         [SerializeField] [HideInInspector] private bool RemoveUnused = false;
 
         #region  Initialization
-        internal override sealed void SleepRoutines(AbstractCObject controller)
+        internal override sealed void SleepRoutines(ObjectController controller)
         {
             for(int i = onlyEnabledRoutines.Count-1; i>= 0; i--)
             {
@@ -33,7 +33,7 @@ namespace sapra.ObjectController
                 routine.SleepRoutine();                
             }
         }
-        internal override sealed void InitializeRoutines(AbstractCObject controller)
+        internal override sealed void InitializeRoutines(ObjectController controller)
         {
             this.controller = controller;
             if(this.controller == null)
@@ -98,7 +98,7 @@ namespace sapra.ObjectController
             return newRoutine;
         }
 
-        internal override AbstractRoutine GetRoutine(System.Type type, bool required){
+        internal override Routine GetRoutine(System.Type type, bool required){
             T foundRoutine = onlyEnabledRoutines.Find(x => x != null && x.GetType().IsEquivalentTo(type));
             if(foundRoutine != null)
                 return foundRoutine;
@@ -115,7 +115,7 @@ namespace sapra.ObjectController
                 return foundRoutine;
             }
 
-            return GenerateRoutine(type) as AbstractRoutine;
+            return GenerateRoutine(type) as Routine;
         }
 
         /// <summary>
@@ -150,15 +150,15 @@ namespace sapra.ObjectController
     }
     
     [System.Serializable]
-    public abstract class AbstractModule
+    public abstract class Module
     {
         //public abstract AbstractRoutine RequestRoutine(System.Type routineType, bool required);
-        public abstract AbstractRoutine[] EnabledRoutinesObject{get;}      
-        internal abstract AbstractRoutine[] ChachedRoutinesObject{get;}        
-        internal abstract void InitializeRoutines(AbstractCObject controller);
-        internal abstract void SleepRoutines(AbstractCObject controller);
+        public abstract Routine[] EnabledRoutinesObject{get;}      
+        internal abstract Routine[] ChachedRoutinesObject{get;}        
+        internal abstract void InitializeRoutines(ObjectController controller);
+        internal abstract void SleepRoutines(ObjectController controller);
         internal abstract List<Type> GetAssemblyRoutines();
-        internal abstract AbstractRoutine GetRoutine(System.Type type, bool required);
+        internal abstract Routine GetRoutine(System.Type type, bool required);
         public abstract Type GetModuleType();
 
         /// <summary>

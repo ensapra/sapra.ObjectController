@@ -4,12 +4,12 @@ using sapra.ObjectController;
 
 namespace sapra.ObjectController.Editor
 {
-    [CustomEditor(typeof(AbstractCObject), true)]
-    public class AbstractCObjectEditor : UnityEditor.Editor
+    [CustomEditor(typeof(ObjectController), true)]
+    public class ObjectControllerEditor : UnityEditor.Editor
     {
         void OnEnable()
         {
-            AbstractCObject component = this.target as AbstractCObject;
+            ObjectController component = this.target as ObjectController;
             component.InitializeController();
         }
         public override void OnInspectorGUI()
@@ -32,7 +32,7 @@ namespace sapra.ObjectController.Editor
         }
         void loadRequirements()
         {
-            AbstractCObject component = this.target as AbstractCObject;
+            ObjectController component = this.target as ObjectController;
             Undo.RecordObject(component, "Reloaded requirements in " + target.name);
             component.InitializeController();
             serializedObject.ApplyModifiedProperties();      

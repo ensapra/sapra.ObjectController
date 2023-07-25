@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 namespace sapra.ObjectController
 {
     [System.Serializable]
-    public abstract class AbstractRoutine
+    public abstract class Routine
     {
         public string name => this.GetType().ToString();
         protected Transform transform;
@@ -14,8 +14,8 @@ namespace sapra.ObjectController
 
         internal bool isEnabled{get{return _isEnabled;}}
 
-        [SerializeField] [HideInInspector] protected AbstractCObject controller;
-        internal void AwakeRoutine(AbstractCObject controller)
+        [SerializeField] [HideInInspector] protected ObjectController controller;
+        internal void AwakeRoutine(ObjectController controller)
         {
             this.controller = controller;
             this.transform = controller.transform;
@@ -40,7 +40,7 @@ namespace sapra.ObjectController
             return controller.GetComponent<T>(required);
         }
 
-        public T GetModule<T>() where T : AbstractModule
+        public T GetModule<T>() where T : Module
         {
             return controller.GetModule<T>();
         }
