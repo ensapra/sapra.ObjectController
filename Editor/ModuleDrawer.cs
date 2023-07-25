@@ -15,6 +15,7 @@ namespace sapra.ObjectController.Editor
     public class ModuleDrawer : PropertyDrawer
     {
         protected GUIStyle boxButtonStyle;
+
         protected GUIStyle buttonStyle;
         protected GUIStyle headerStyle;
         protected GUIStyle addItems;
@@ -67,6 +68,22 @@ namespace sapra.ObjectController.Editor
                 workingListStyle = new GUIStyle(GUI.skin.GetStyle("Label"));
                 workingListStyle.fontStyle = FontStyle.Bold;
             }
+        }
+        private Texture2D MakeBackgroundTexture(int width, int height, Color color)
+        {
+            Color[] pixels = new Color[width * height];
+
+            for (int i = 0; i < pixels.Length; i++)
+            {
+            pixels[i] = color;
+            }
+
+            Texture2D backgroundTexture = new Texture2D(width, height);
+
+            backgroundTexture.SetPixels(pixels);
+            backgroundTexture.Apply();
+
+            return backgroundTexture;
         }
         private void SerializeModule(SerializedProperty module, Rect position)
         {
@@ -269,7 +286,12 @@ namespace sapra.ObjectController.Editor
             buttonPosition.xMin = togglePosition.xMax;
             
             Event current = Event.current;
+
+            if(!enabledBool.boolValue)
+                GUI.backgroundColor = Color.gray;
             GUI.Box(boxPosition, "", boxButtonStyle);
+            GUI.backgroundColor = Color.white;
+
             enabledBool.boolValue = GUI.Toggle(togglePosition,enabledBool.boolValue, "");
             GUI.Label(buttonPosition, correctPropertyName, buttonStyle);
             if(buttonPosition.Contains(current.mousePosition) && current.type == EventType.MouseDown)
