@@ -4,7 +4,7 @@ using UnityEngine;
 using sapra.ObjectController;
 
 [System.Serializable]
-public abstract class MinimalRoutine : AbstractRoutine
+public abstract class MinimalRoutine : Routine
 {
 
 }

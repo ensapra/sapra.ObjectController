@@ -23,10 +23,21 @@
       "path": "Samples~/MinimalController"
     },
     {
-      "displayName": "Basic Character Controller",
+      "displayName": "Basic Controller Preset",
       "description": "Contains implementations of a character controller, capable to Swim, Walk, Jump, Move in the Air, and other actions",
-      "path": "Samples~/BasicCharacterController"
+      "path": "Samples~/BasicControllerPreset"
+    },
+    {
+      "displayName": "Empty Controller",
+      "description": "Contains the basic empty layout for a character controller without a single action in it",
+      "path": "Samples~/EmptyController"
+    },
+    {
+      "displayName": "Complex Controller Preset",
+      "description": "Contains a full character controller with working fields",
+      "path": "Samples~/ComplexControllerPreset"
     }
+    
   ],
   "dependencies": {
     "com.unity.inputsystem": "1.2.0"
