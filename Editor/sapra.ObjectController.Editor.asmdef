@@ -2,7 +2,7 @@
     "name": "sapra.ObjectController.Editor",
     "rootNamespace": "",
     "references": [
-        "GUID:92ce4a4593469dc4291939cc2ce99948"
+        "GUID:08fef8bcaa68f7e41a2b29339fa27d3e"
     ],
     "includePlatforms": [
         "Editor"
