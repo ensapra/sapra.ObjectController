@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using sapra.ObjectController;
+using NaughtyAttributes;
 
 [System.Serializable]
 public class ActiveModule : Module<ActiveRoutine>

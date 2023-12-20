@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using sapra.ObjectController;
+using NaughtyAttributes;
 
 [System.Serializable][RoutineCategory("Simple")]
 public class AJump : ActiveRoutine

@@ -8,7 +8,6 @@ using System.IO;
 using System.Reflection;
 using System.Linq;
 
-
 namespace sapra.ObjectController.Editor
 {
     [CustomPropertyDrawer(typeof(Module), true)]

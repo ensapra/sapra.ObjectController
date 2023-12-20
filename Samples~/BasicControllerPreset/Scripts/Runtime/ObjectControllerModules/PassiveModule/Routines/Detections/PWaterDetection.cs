@@ -1,5 +1,5 @@
 using UnityEngine;
-using sapra.ObjectController;
+using NaughtyAttributes;
 
 public enum SurfaceStates{inside, surface, none}
 [System.Serializable][RoutineCategory("Detections")]

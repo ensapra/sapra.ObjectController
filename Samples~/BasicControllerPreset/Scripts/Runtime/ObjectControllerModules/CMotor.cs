@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using sapra.ObjectController;
+using NaughtyAttributes;
 
 [RequireComponent(typeof(Rigidbody))]
 public class CMotor : MonoBehaviour

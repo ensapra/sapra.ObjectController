@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using sapra.ObjectController;
 using UnityEngine;
+using NaughtyAttributes;
 
 [RoutineCategory("Detections")]
 public class PGroundDetection : AbstractPassive

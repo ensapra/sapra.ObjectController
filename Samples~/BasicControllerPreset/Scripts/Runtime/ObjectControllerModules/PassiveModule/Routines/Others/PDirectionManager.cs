@@ -1,5 +1,5 @@
 using UnityEngine;
-using sapra.ObjectController;
+using NaughtyAttributes;
 
 public enum RotationMode {ForwardAndUpward, DesiredAxisAndTarget}
 

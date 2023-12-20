@@ -3,8 +3,7 @@
     "rootNamespace": "sapra",
     "references": [
         "GUID:1379fa9fc580d294eb85ee0e2e4ab705",
-        "GUID:9dbd074ca0cf61f4d907fd5993af2b29",
-        "GUID:92ce4a4593469dc4291939cc2ce99948"
+        "GUID:6e626914a40f0be44b77d6457db38c22"
     ],
     "includePlatforms": [
         "Editor"

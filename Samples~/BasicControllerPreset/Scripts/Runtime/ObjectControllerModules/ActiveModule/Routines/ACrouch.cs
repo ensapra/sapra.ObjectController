@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using sapra.ObjectController;
+using NaughtyAttributes;
 
 [System.Serializable][RoutineCategory("Complex")]
 public class ACrouch : ActiveRoutine
