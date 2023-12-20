@@ -7,8 +7,8 @@ using sapra.ObjectController;
 public class CMotor : MonoBehaviour
 {
     public Rigidbody rb;
-    [NoEdit] public Vector3 gravityDirection;
-    [NoEdit] public float gravityMultiplier;
+    [DisableIf("True")] public Vector3 gravityDirection;
+    [DisableIf("True")] public float gravityMultiplier;
 
     public Vector3 velocity{get; private set;}
     public Vector3 newVelocity{get{return _newVelocity;}}
@@ -17,9 +17,9 @@ public class CMotor : MonoBehaviour
     public Vector3 angularVelocity{get; private set;}
     public Vector3 newAngularVelocity{get{return _newAngularVelocity;}}
     private Vector3 _newAngularVelocity;
-    [NoEdit] public List<Routine> DisableGravityCount = new List<Routine>();
+    [DisableIf("True")] public List<Routine> DisableGravityCount = new List<Routine>();
     public bool Gravity => DisableGravityCount.Count <= 0;
-    [SerializeField] [NoEdit] private bool gravity;
+    [SerializeField] [DisableIf("True")] private bool gravity;
     void Start()
     {
         DisableGravityCount.Clear();

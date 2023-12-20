@@ -38,7 +38,7 @@ public class PDirectionManager : AbstractPassive
     CMotor motor;
 
     [Tooltip("Direction reference to specify what is forward and what is right")]
-    [NoEdit] public Transform directionalReference;
+    [DisableIf("True")] public Transform directionalReference;
     
     public override void DoPassive(PassivePriority currentPassivePriority, Vector3 position, InputValues input)
     {
