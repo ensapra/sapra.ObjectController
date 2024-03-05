@@ -4,131 +4,37 @@ using UnityEngine;
 using System.Reflection;
 using System.Linq;
 using System;
-
+using sapra.ObjectController;
 namespace sapra.ObjectController
 {
+
     [System.Serializable]
     public abstract class Module<T> : Module where T : Routine
-    {
-        [SerializeReference] [HideInInspector] protected ObjectController controller;
-        
+    {       
         /// <summary>
         /// Enabled components
         /// <summary/>
-
-        [SerializeReference] [HideInInspector] protected List<T> onlyEnabledRoutines = new List<T>();
-        [SerializeReference] [HideInInspector] private List<T> cachedRoutines = new List<T>();
-
-        private Dictionary<Type, T> onlyRoutines = new Dictionary<Type, T>();
-        public void UpdateList(){
-            onlyEnabledRoutines.Clear();
-            foreach(KeyValuePair<Type, T> keyValue in onlyRoutines){
-                onlyEnabledRoutines.Add(keyValue.Value);
-            }
-        }
-
-
-        public override Routine[] EnabledRoutinesObject => onlyEnabledRoutines.ToArray();
-        internal override Routine[] ChachedRoutinesObject => cachedRoutines.ToArray();
-
-        [SerializeField] [HideInInspector] private bool RemoveUnused = false;
-
+        public List<T> EnabledRoutines = new List<T>();
+        
         #region  Initialization
-        internal override sealed void SleepRoutines(ObjectController controller)
-        {
-            for(int i = onlyEnabledRoutines.Count-1; i>= 0; i--)
-            {
-                T routine = onlyEnabledRoutines[i];
-                routine.SleepRoutine();                
-            }
-        }
-        internal override sealed void InitializeRoutines(ObjectController controller)
-        {
-            this.controller = controller;
-            if(this.controller == null)
-            {
-                Debug.Log("Error initializing components, no CObject was set");
-                return;
-            }
-
-            //Check cached routines to recover info
-            for(int i = cachedRoutines.Count-1; i>= 0; i--)
-            {
-                T routine = cachedRoutines[i];
-                if(routine != null && routine.isEnabled)
-                {
-                    onlyEnabledRoutines.Add(routine);       
-                    cachedRoutines.RemoveAt(i);     
-                }  
-            }  
-
-            //Remove all the rest disabled routines if needed
-            if(RemoveUnused)
-                cachedRoutines.Clear();
-            
-            for(int i = onlyEnabledRoutines.Count-1; i>= 0; i--)
-            {
-                T routine = onlyEnabledRoutines[i];
-                if(routine == null)
-                {
-                    onlyEnabledRoutines.RemoveAt(i);       
-                    continue;
-                }
-                
-                if(routine.isEnabled)      
-                    routine.AwakeRoutine(controller);
-                if(!routine.isEnabled)  
-                {
-                    routine.SleepRoutine();    
-                    //Store to cache if needed later
-                    CacheRoutine(routine);    
-                }  
-            }    
-
-            onlyEnabledRoutines.Sort((a,b)=> a.GetType().ToString().CompareTo(b.GetType().ToString()));
-            InitializeModule();
-        }
-        private void CacheRoutine(T routine){
-            T existsOne = cachedRoutines.Find(a => a.GetType().Equals(routine.GetType()));
-            if(existsOne != null && !RemoveUnused){
-                cachedRoutines.Add(routine);
-            }
-            onlyEnabledRoutines.RemoveAll(a => a.GetType().Equals(routine.GetType()));       
-
-        }
-       public Z GetComponent<Z>(bool required = false) where Z : Component
+        public Z GetComponent<Z>(bool required = false) where Z : Component
         {
             return controller.GetComponent<Z>(required);
         }
+        internal override void EnableRoutines()
+        {
+            EnabledRoutines.Clear();
+            EnabledRoutines = baseAllRoutines.FindAll(a => a._isEnabled).Cast<T>().ToList();
+        }
         #endregion
         #region Components requests
-        private object GenerateRoutine(Type type)
+        public override Routine GenerateRoutine(Type type)
         {
             T newRoutine = Activator.CreateInstance(type) as T;
-            newRoutine.AwakeRoutine(controller);
-            onlyEnabledRoutines.Add(newRoutine);
-            onlyEnabledRoutines.Sort((a,b)=> a.GetType().ToString().CompareTo(b.GetType().ToString()));
+            newRoutine._isEnabled = true;
+            AddRoutine(newRoutine);
+            baseAllRoutines.Sort((a,b)=> a.GetType().ToString().CompareTo(b.GetType().ToString()));
             return newRoutine;
-        }
-
-        internal override Routine GetRoutine(System.Type type, bool required){
-            T foundRoutine = onlyEnabledRoutines.Find(x => x != null && x.GetType().IsEquivalentTo(type));
-            if(foundRoutine != null)
-                return foundRoutine;
-            if(!required)
-                return null;
-            
-            foundRoutine = cachedRoutines.Find(x => x != null && x.GetType().IsEquivalentTo(type));
-            if(foundRoutine != null)
-            {
-                foundRoutine.AwakeRoutine(controller);
-                cachedRoutines.Remove(foundRoutine);
-                onlyEnabledRoutines.Add(foundRoutine);
-                onlyEnabledRoutines.Sort((a,b)=> a.GetType().ToString().CompareTo(b.GetType().ToString()));
-                return foundRoutine;
-            }
-
-            return GenerateRoutine(type) as Routine;
         }
 
         /// <summary>
@@ -165,18 +71,77 @@ namespace sapra.ObjectController
     [System.Serializable]
     public abstract class Module
     {
-        //public abstract AbstractRoutine RequestRoutine(System.Type routineType, bool required);
-        public abstract Routine[] EnabledRoutinesObject{get;}      
-        internal abstract Routine[] ChachedRoutinesObject{get;}        
-        internal abstract void InitializeRoutines(ObjectController controller);
-        internal abstract void SleepRoutines(ObjectController controller);
+        [SerializeReference] [HideInInspector] protected ObjectController controller;
+        [SerializeField] [HideInInspector] protected bool RemoveUnused = false;
+        [SerializeReference] public List<Routine> baseAllRoutines = new List<Routine>();
+        internal abstract void EnableRoutines();
+        internal void InitializeRoutines(ObjectController controller){
+            this.controller = controller;
+            if(this.controller == null)
+            {
+                Debug.Log("Error initializing components, no CObject was set");
+                return;
+            }
+            UpdateList();
+            InitializeModule();
+        }
         internal abstract List<Type> GetAssemblyRoutines();
-        internal abstract Routine GetRoutine(System.Type type, bool required);
         public abstract Type GetModuleType();
+        public abstract Routine GenerateRoutine(Type type);
+        public Routine GetRoutine(Type type, bool required){
+            Routine foundRoutine = baseAllRoutines.FirstOrDefault(a => type.IsEquivalentTo(a.GetType()));
+            if(foundRoutine == default && required)
+                foundRoutine = GenerateRoutine(type);
+        
+            if(foundRoutine != null)
+            {
+                if(foundRoutine._isEnabled || required)
+                    foundRoutine.AwakeRoutine(controller);
+            }
+            return foundRoutine;
+        }
 
+        internal void UpdateList(){
+            baseAllRoutines.RemoveAll(a => a == null);
+            List<Routine> Copy = new List<Routine>(baseAllRoutines);
+            foreach(Routine target in Copy){
+                if(!target.isEnabled){
+                    target.SleepRoutine();
+                    if(RemoveUnused)
+                        baseAllRoutines.Remove(target);
+                }
+                else{
+                    target.AwakeRoutine(controller);
+                }
+                
+            }
+            
+            baseAllRoutines.Sort((a,b)=> a.GetType().ToString().CompareTo(b.GetType().ToString()));
+            EnableRoutines();
+        } 
+
+        internal void SleepRoutines(ObjectController controller)
+        {
+            for(int i = baseAllRoutines.Count-1; i>= 0; i--)
+            {
+                Routine routine = baseAllRoutines[i];
+                routine.SleepRoutine();                
+            }
+        }
+
+        public void AddRoutine(Routine routine){
+            if(!baseAllRoutines.Contains(routine))
+                baseAllRoutines.Add(routine);
+        }
+
+        public void InternalSort(){
+            baseAllRoutines.Sort((a,b)=> a.GetType().ToString().CompareTo(b.GetType().ToString()));
+
+        }
         /// <summary>
         /// Method called after all routines have been enabled. Equivalent to Awake of Monobehaviours
         /// <summary/>
         protected virtual void InitializeModule(){}
     }
 }
+

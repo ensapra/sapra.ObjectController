@@ -20,14 +20,14 @@ public class ActiveModule : Module<ActiveRoutine>
         for(int i = sortedShorterList.Count-1; i>= 0; i--)
         {
             ActiveRoutine component = sortedShorterList[i];
-            if(!onlyEnabledRoutines.Contains(component))
+            if(!baseEnabledRoutines.Contains(component))
             {
                 sortedShorterList.RemoveAt(i);
             }
         }
-        for(int i = 0; i<onlyEnabledRoutines.Count; i++)
+        for(int i = 0; i<baseEnabledRoutines.Count; i++)
         {
-            ActiveRoutine component = onlyEnabledRoutines[i];
+            ActiveRoutine component = baseEnabledRoutines[i];
             if(!sortedShorterList.Contains(component))
             {
                 sortedShorterList.Add(component);

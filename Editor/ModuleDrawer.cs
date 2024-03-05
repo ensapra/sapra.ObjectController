@@ -77,7 +77,7 @@ namespace sapra.ObjectController.Editor
         }
         protected void ObjectList(SerializedProperty module)
         {
-            SerializedProperty prop = module.FindPropertyRelative("onlyEnabledRoutines");
+            SerializedProperty prop = module.FindPropertyRelative("baseAllRoutines");
             EditorGUI.indentLevel += 1;
             GUILayout.Space(5);
             if(prop.isExpanded)
@@ -92,19 +92,7 @@ namespace sapra.ObjectController.Editor
                 {       
                     EditorGUILayout.LabelField("No components enabled on this module");
                     GUILayout.Space(EditorGUIUtility.singleLineHeight);
-                }
-                //Load cached routines
-                SerializedProperty createdRoutines = module.FindPropertyRelative("cachedRoutines");
-                if(createdRoutines.arraySize > 0)     
-                {       
-                    GUILayout.Space(EditorGUIUtility.singleLineHeight);
-                    EditorGUILayout.LabelField("Saved routines");
-                }
-                for(int i = 0; i < createdRoutines.arraySize; i++)
-                {
-                    SerializedProperty item = createdRoutines.GetArrayElementAtIndex(i);
-                    LoadAbstractRoutine(item);
-                }               
+                }      
             }
             EditorGUI.indentLevel -= 1;
         }
@@ -138,7 +126,7 @@ namespace sapra.ObjectController.Editor
             }
             GUI.color = current;
 
-            SerializedProperty prop = module.FindPropertyRelative("onlyEnabledRoutines");
+            SerializedProperty prop = module.FindPropertyRelative("baseAllRoutines");
             prop.isExpanded = EditorGUI.Foldout(toggleRect, prop.isExpanded, UpperSplit(module.name), true, headerStyle);
             if(GUI.Button(buttonRect, "Clear"))
             {
@@ -155,7 +143,9 @@ namespace sapra.ObjectController.Editor
             for(int i = 0; i < list.arraySize; i++)
             {
                 SerializedProperty item = list.GetArrayElementAtIndex(i);
-                item.FindPropertyRelative("_isEnabled").boolValue = false;
+                SerializedProperty boolVal = item.FindPropertyRelative("_isEnabled");
+                if(boolVal != null)
+                    boolVal.boolValue = false;
             }
         }
         /// <summary>
@@ -165,9 +155,7 @@ namespace sapra.ObjectController.Editor
         {
             Module module = property.GetSerializedObject() as Module;
             List<System.Type> types = module.GetAssemblyRoutines();
-            Routine[] routines = module.EnabledRoutinesObject;
-            Routine[] cached = module.ChachedRoutinesObject;
-            SerializedProperty cachedList = property.FindPropertyRelative("cachedRoutines");
+            List<Routine> routines = module.baseAllRoutines;
 
             GenericMenu newMenu = new GenericMenu();
             for(int i = 0; i < types.Count; i++)
@@ -184,58 +172,22 @@ namespace sapra.ObjectController.Editor
                 }
 
                 GUIContent content = new GUIContent(routeName);
-                bool exists = routines != null && routines.Any(a => a != null && a.GetType().IsEquivalentTo(target));
-                if(exists)
-                {
-                    (Routine rot, int index) foundRoutine = routines.Select((obj, index) => (obj,index)).First(a => a.obj != null && a.obj.GetType().IsEquivalentTo(target));
-                    if(foundRoutine.rot.isEnabled)
-                    {
-                        //The object exists and is enabled
-                        newMenu.AddDisabledItem(content);
-                    }
-                    else
-                    {
-                        //The object exists but is not enabled
-                        newMenu.AddItem(content, false, ()=>{
-                            SerializedProperty routineFound = list.GetArrayElementAtIndex(foundRoutine.index);
-                            routineFound.FindPropertyRelative("_isEnabled").boolValue = true;
-                            property.serializedObject.ApplyModifiedProperties();
-                        });
-                    }
+                (Routine rot, int index) foundRoutine = routines.Select((obj, index) => (obj,index)).FirstOrDefault(a => a.obj != null && a.obj.GetType().IsEquivalentTo(target));
+                if(foundRoutine.rot != null && foundRoutine.rot.isEnabled){
+                    newMenu.AddDisabledItem(content);
                 }
-                else
-                {
-                    exists = cached != null && cached.Any(a => a != null && a.GetType().IsEquivalentTo(target));
-                    if(exists)
-                    {
-                        //Exists on cache
-                        (Routine rot, int index) foundRoutine = cached.Select((obj, index) => (obj,index)).First(a => a.obj != null && a.obj.GetType().IsEquivalentTo(target));
-                        newMenu.AddItem(content, false, ()=>{
-                            if(list.arraySize <= 0)
-                                list.arraySize = 1;
-                            else
-                                list.InsertArrayElementAtIndex(list.arraySize-1);
-                            SerializedProperty newClass = list.GetArrayElementAtIndex(list.arraySize-1);
-                            newClass.managedReferenceValue = cachedList.GetArrayElementAtIndex(foundRoutine.index).managedReferenceValue;
-                            newClass.FindPropertyRelative("_isEnabled").boolValue = true;
-                            cachedList.DeleteArrayElementAtIndex(foundRoutine.index);
-                            property.serializedObject.ApplyModifiedProperties();
-                        });
-                    }
-                    else
-                    {
-                        //The object doesn't exist on the main array, so create it again
-                        newMenu.AddItem(content, false, ()=>{
-                            if(list.arraySize <= 0)
-                                list.arraySize = 1;
-                            else
-                                list.InsertArrayElementAtIndex(list.arraySize-1);
-                            SerializedProperty newClass = list.GetArrayElementAtIndex(list.arraySize-1);
-                            newClass.managedReferenceValue = System.Activator.CreateInstance(target);
-                            newClass.FindPropertyRelative("_isEnabled").boolValue = true;
-                            property.serializedObject.ApplyModifiedProperties();
-                        });
-                    }
+                else{
+                    newMenu.AddItem(content, false, ()=>{
+                        if(list.arraySize <= 0)
+                            list.arraySize = 1;
+                        else
+                            list.InsertArrayElementAtIndex(list.arraySize-1);
+                        SerializedProperty newClass = list.GetArrayElementAtIndex(list.arraySize-1);
+                        newClass.managedReferenceValue = System.Activator.CreateInstance(target);
+                        newClass.FindPropertyRelative("_isEnabled").boolValue = true;
+                        module.InternalSort();
+                        property.serializedObject.ApplyModifiedProperties();
+                    });
                 }
             }
             newMenu.ShowAsContext();
@@ -260,6 +212,9 @@ namespace sapra.ObjectController.Editor
             SerializedProperty enabledBool = AbstractRoutineProperty.FindPropertyRelative("_isEnabled");
             SerializedProperty awakenedBool = AbstractRoutineProperty.FindPropertyRelative("_isAwake");
 
+            if(enabledBool == null || awakenedBool == null)
+                return;
+                
             Rect boxPosition = position;
             boxPosition.height = 22;
             Rect togglePosition = boxPosition;
@@ -327,8 +282,11 @@ namespace sapra.ObjectController.Editor
             string lastBit = propertyName[propertyName.Length-1];
             propertyName = lastBit.Split(" ");
             lastBit = propertyName[propertyName.Length-1];
-            string noFirst = lastBit.Substring(1);
-            return UpperSplit(noFirst);
+            if(lastBit.Length > 1){
+                string noFirst = lastBit.Substring(1);
+                return UpperSplit(noFirst);
+            }
+            return name;
         }
 
         private void OpenFile(System.Type type)
@@ -340,7 +298,7 @@ namespace sapra.ObjectController.Editor
         }
         bool IsScript(string guid, string name){
             string path = AssetDatabase.GUIDToAssetPath(guid);
-            string fileName = Path.GetFileNameWithoutExtension(path);//path.Split("/").LastOrDefault().Replace(".cs","");
+            string fileName = Path.GetFileNameWithoutExtension(path);
             return fileName.Equals(name);
         }
     }

@@ -15,7 +15,7 @@ public class ActiveModuleDrawer : ModuleDrawer
     {
         if(enabledActives == null)
             MakeList(property);   
-        SerializedProperty listProperty = property.FindPropertyRelative("onlyEnabledRoutines");
+        SerializedProperty listProperty = property.FindPropertyRelative("baseAllRoutines");
         if(listProperty.isExpanded)
         {           
             SerializedProperty enabledList = property.FindPropertyRelative("sortedShorterList");
