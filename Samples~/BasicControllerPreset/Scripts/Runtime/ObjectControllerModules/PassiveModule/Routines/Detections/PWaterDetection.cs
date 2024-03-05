@@ -19,9 +19,9 @@ public class PWaterDetection : AbstractPassive
     [Header("Results")]
     public DetectionResult detectionResult;
 
-    [DisableIf("True")] public bool Floating;
-    [DisableIf("True")] public SurfaceStates surfaceState;
-    [DisableIf("True")] public float NormalizedDistance;
+    [AllowNesting][ReadOnly] public bool Floating;
+    [AllowNesting][ReadOnly] public SurfaceStates surfaceState;
+    [AllowNesting][ReadOnly] public float NormalizedDistance;
     public bool debug = false;
     private CMotor motor;
 

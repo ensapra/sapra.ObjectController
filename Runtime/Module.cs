@@ -19,6 +19,15 @@ namespace sapra.ObjectController
         [SerializeReference] [HideInInspector] protected List<T> onlyEnabledRoutines = new List<T>();
         [SerializeReference] [HideInInspector] private List<T> cachedRoutines = new List<T>();
 
+        private Dictionary<Type, T> onlyRoutines = new Dictionary<Type, T>();
+        public void UpdateList(){
+            onlyEnabledRoutines.Clear();
+            foreach(KeyValuePair<Type, T> keyValue in onlyRoutines){
+                onlyEnabledRoutines.Add(keyValue.Value);
+            }
+        }
+
+
         public override Routine[] EnabledRoutinesObject => onlyEnabledRoutines.ToArray();
         internal override Routine[] ChachedRoutinesObject => cachedRoutines.ToArray();
 
@@ -69,19 +78,23 @@ namespace sapra.ObjectController
                 if(routine.isEnabled)      
                     routine.AwakeRoutine(controller);
                 if(!routine.isEnabled)  
-                    routine.SleepRoutine();    
- 
-                if(!routine.isEnabled)
                 {
+                    routine.SleepRoutine();    
                     //Store to cache if needed later
-                    if(!RemoveUnused)
-                        cachedRoutines.Add(routine);
-                    onlyEnabledRoutines.RemoveAt(i);       
+                    CacheRoutine(routine);    
                 }  
             }    
 
             onlyEnabledRoutines.Sort((a,b)=> a.GetType().ToString().CompareTo(b.GetType().ToString()));
             InitializeModule();
+        }
+        private void CacheRoutine(T routine){
+            T existsOne = cachedRoutines.Find(a => a.GetType().Equals(routine.GetType()));
+            if(existsOne != null && !RemoveUnused){
+                cachedRoutines.Add(routine);
+            }
+            onlyEnabledRoutines.RemoveAll(a => a.GetType().Equals(routine.GetType()));       
+
         }
        public Z GetComponent<Z>(bool required = false) where Z : Component
         {
@@ -92,7 +105,7 @@ namespace sapra.ObjectController
         private object GenerateRoutine(Type type)
         {
             T newRoutine = Activator.CreateInstance(type) as T;
-            newRoutine.Enable();
+            newRoutine.AwakeRoutine(controller);
             onlyEnabledRoutines.Add(newRoutine);
             onlyEnabledRoutines.Sort((a,b)=> a.GetType().ToString().CompareTo(b.GetType().ToString()));
             return newRoutine;
@@ -108,7 +121,7 @@ namespace sapra.ObjectController
             foundRoutine = cachedRoutines.Find(x => x != null && x.GetType().IsEquivalentTo(type));
             if(foundRoutine != null)
             {
-                foundRoutine.Enable();
+                foundRoutine.AwakeRoutine(controller);
                 cachedRoutines.Remove(foundRoutine);
                 onlyEnabledRoutines.Add(foundRoutine);
                 onlyEnabledRoutines.Sort((a,b)=> a.GetType().ToString().CompareTo(b.GetType().ToString()));

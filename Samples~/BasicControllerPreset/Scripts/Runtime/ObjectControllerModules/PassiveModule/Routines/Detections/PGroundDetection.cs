@@ -15,9 +15,9 @@ public class PGroundDetection : AbstractPassive
     [Header("Results")]
     [SerializeField] public DetectionResult detectionResult;
     [Tooltip("Ground Mask")]
-    [DisableIf("True")] public bool Walkable;
-    [DisableIf("True")] public float AngleFront;
-    [DisableIf("True")] public float NormalizedDistance;
+    [AllowNesting][ReadOnly] public bool Walkable;
+    [AllowNesting][ReadOnly] public float AngleFront;
+    [AllowNesting][ReadOnly] public float NormalizedDistance;
 
     private float AngleFrontLerped;
     private float refAngleFront;

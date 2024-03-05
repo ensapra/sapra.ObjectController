@@ -2,11 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using System.Text.RegularExpressions;
-using sapra.ObjectController;
-using System.IO;
-using System.Reflection;
 using System.Linq;
+using Unity.Properties;
+using System;
+using System.IO;
 
 namespace sapra.ObjectController.Editor
 {
@@ -67,22 +66,6 @@ namespace sapra.ObjectController.Editor
                 workingListStyle = new GUIStyle(GUI.skin.GetStyle("Label"));
                 workingListStyle.fontStyle = FontStyle.Bold;
             }
-        }
-        private Texture2D MakeBackgroundTexture(int width, int height, Color color)
-        {
-            Color[] pixels = new Color[width * height];
-
-            for (int i = 0; i < pixels.Length; i++)
-            {
-            pixels[i] = color;
-            }
-
-            Texture2D backgroundTexture = new Texture2D(width, height);
-
-            backgroundTexture.SetPixels(pixels);
-            backgroundTexture.Apply();
-
-            return backgroundTexture;
         }
         private void SerializeModule(SerializedProperty module, Rect position)
         {
@@ -275,6 +258,7 @@ namespace sapra.ObjectController.Editor
         {
             string correctPropertyName = ObjectName(AbstractRoutineProperty.managedReferenceFullTypename);
             SerializedProperty enabledBool = AbstractRoutineProperty.FindPropertyRelative("_isEnabled");
+            SerializedProperty awakenedBool = AbstractRoutineProperty.FindPropertyRelative("_isAwake");
 
             Rect boxPosition = position;
             boxPosition.height = 22;
@@ -288,6 +272,8 @@ namespace sapra.ObjectController.Editor
 
             if(!enabledBool.boolValue)
                 GUI.backgroundColor = Color.gray;
+            else if(!awakenedBool.boolValue)
+                GUI.backgroundColor = Color.blue;
             GUI.Box(boxPosition, "", boxButtonStyle);
             GUI.backgroundColor = Color.white;
 
@@ -345,16 +331,17 @@ namespace sapra.ObjectController.Editor
             return UpperSplit(noFirst);
         }
 
-        public void OpenFile(System.Type type)
+        private void OpenFile(System.Type type)
         {
-            string[] Guid = AssetDatabase.FindAssets( string.Format( "{0} t:script", type.Name));
-            if(Guid.Length > 0)
-            {
-                string dataPath = Application.dataPath;
-                dataPath = Directory.GetParent(dataPath).FullName + "/";
-                var path = dataPath + AssetDatabase.GUIDToAssetPath(Guid[0]);
-                System.Diagnostics.Process.Start(@path);
-            }   
+            string Guid = AssetDatabase.FindAssets(string.Format( "{0} t:script", type.Name)).Where(guid => IsScript(guid, type.Name)).FirstOrDefault();
+            var path = AssetDatabase.GUIDToAssetPath(Guid);
+            var scriptPath = AssetDatabase.LoadMainAssetAtPath(path);
+            AssetDatabase.OpenAsset(scriptPath);
+        }
+        bool IsScript(string guid, string name){
+            string path = AssetDatabase.GUIDToAssetPath(guid);
+            string fileName = Path.GetFileNameWithoutExtension(path);//path.Split("/").LastOrDefault().Replace(".cs","");
+            return fileName.Equals(name);
         }
     }
 }

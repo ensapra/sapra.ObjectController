@@ -18,7 +18,7 @@ public class AJump : ActiveRoutine
     private CMotor motor;
 
     public enum JumpingState{ReadyToJump, StartedJump, Jumping, Falling}
-    [DisableIf("True")] public JumpingState State = JumpingState.ReadyToJump;
+    [AllowNesting][ReadOnly] public JumpingState State = JumpingState.ReadyToJump;
     private Coroutine GhostJump;
     private Coroutine JumpCounter;
     private float jumpsMade = 0;

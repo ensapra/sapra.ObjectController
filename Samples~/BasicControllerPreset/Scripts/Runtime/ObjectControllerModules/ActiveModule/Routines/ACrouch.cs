@@ -18,7 +18,7 @@ public class ACrouch : ActiveRoutine
     private PWaterDetection _pWaterDetection;
     private StatsContainer _statContainer;
     private float heightLerped; 
-    [DisableIf("True")] [SerializeField] private float refHeightSpeed;
+    [AllowNesting][ReadOnly] [SerializeField] private float refHeightSpeed;
     public override int priorityID => 10;
     protected override void Awake()
     {

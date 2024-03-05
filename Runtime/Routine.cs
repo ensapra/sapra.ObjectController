@@ -10,7 +10,8 @@ namespace sapra.ObjectController
         public string name => this.GetType().ToString();
         protected Transform transform;
 
-        [SerializeField] [HideInInspector] private bool _isEnabled;
+        [SerializeField] [HideInInspector] internal bool _isEnabled;
+        [SerializeField] [HideInInspector] internal bool _isAwake;
 
         internal bool isEnabled{get{return _isEnabled;}}
 
@@ -19,21 +20,24 @@ namespace sapra.ObjectController
         {
             this.controller = controller;
             this.transform = controller.transform;
+            this._isAwake = true;
             Awake();
             Enable();
-        }
-        internal void Enable(){
-            _isEnabled = true;
-        }
-        internal void Disable(){
-            _isEnabled = false;
         }
 
         internal void SleepRoutine()
         {
-            Sleep();
+            this._isAwake = false;
             Disable();
         }
+
+        private void Enable(){
+            _isEnabled = true;
+        }
+        private void Disable(){
+            _isEnabled = false;
+        }
+
 
         public T GetComponent<T>(bool required = false) where T : Component
         {
@@ -63,10 +67,5 @@ namespace sapra.ObjectController
         /// Automatically called once the Routine is initialized. Equivalent of Awake on MonoBehaviour
         /// <summary/>
         protected virtual void Awake(){}
-
-        /// <summary>
-        /// Automatically called once the Routine is disabled.
-        /// <summary/>
-        protected virtual void Sleep(){}
     }
 }

@@ -13,9 +13,9 @@ public class PVerticalMovement : AbstractPassive
     public bool canVerticalMove{get{return _canVerticalMove;}}
     [SerializeField]private bool _canVerticalMove;
     [Header("Results")]
-    [DisableIf("True")] public Vector3 upVector;
-    [DisableIf("True")] public Vector3 normalVector;
-    [DisableIf("True")] public Vector3 pointOnTheLadder;
+    [AllowNesting][ReadOnly] public Vector3 upVector;
+    [AllowNesting][ReadOnly] public Vector3 normalVector;
+    [AllowNesting][ReadOnly] public Vector3 pointOnTheLadder;
     private Vector3 ladderPosition;
     
 

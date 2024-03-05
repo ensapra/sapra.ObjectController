@@ -8,8 +8,8 @@ using NaughtyAttributes;
 public class CMotor : MonoBehaviour
 {
     public Rigidbody rb;
-    [DisableIf("True")] public Vector3 gravityDirection;
-    [DisableIf("True")] public float gravityMultiplier;
+    [AllowNesting][ReadOnly] public Vector3 gravityDirection;
+    [AllowNesting][ReadOnly] public float gravityMultiplier;
 
     public Vector3 velocity{get; private set;}
     public Vector3 newVelocity{get{return _newVelocity;}}
@@ -18,9 +18,9 @@ public class CMotor : MonoBehaviour
     public Vector3 angularVelocity{get; private set;}
     public Vector3 newAngularVelocity{get{return _newAngularVelocity;}}
     private Vector3 _newAngularVelocity;
-    [DisableIf("True")] public List<Routine> DisableGravityCount = new List<Routine>();
+    [AllowNesting][ReadOnly] public List<Routine> DisableGravityCount = new List<Routine>();
     public bool Gravity => DisableGravityCount.Count <= 0;
-    [SerializeField] [DisableIf("True")] private bool gravity;
+    [SerializeField] [AllowNesting][ReadOnly] private bool gravity;
     void Start()
     {
         DisableGravityCount.Clear();

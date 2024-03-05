@@ -71,11 +71,11 @@ public class HSurfaceDetection : HelperRoutine
 [System.Serializable]
 public struct DetectionResult
 {
-    [DisableIf("True")]public float distance;
-    [DisableIf("True")]public float angle;
-    [DisableIf("True")]public Vector3 normal;
-    [DisableIf("True")]public Vector3 point;
-    [DisableIf("True")]public Rigidbody rb;
+    [AllowNesting][ReadOnly]public float distance;
+    [AllowNesting][ReadOnly]public float angle;
+    [AllowNesting][ReadOnly]public Vector3 normal;
+    [AllowNesting][ReadOnly]public Vector3 point;
+    [AllowNesting][ReadOnly]public Rigidbody rb;
     public static DetectionResult Default(float maxDistance) =>
         new DetectionResult(){
             distance = maxDistance,
