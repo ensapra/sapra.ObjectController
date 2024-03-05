@@ -90,15 +90,19 @@ namespace sapra.ObjectController
         public abstract Routine GenerateRoutine(Type type);
         public Routine GetRoutine(Type type, bool required){
             Routine foundRoutine = baseAllRoutines.FirstOrDefault(a => type.IsEquivalentTo(a.GetType()));
-            if(foundRoutine == default && required)
-                foundRoutine = GenerateRoutine(type);
-        
-            if(foundRoutine != null)
-            {
-                if(foundRoutine._isEnabled || required)
+            if(foundRoutine != default){
+                if(!foundRoutine._isEnabled)
                     foundRoutine.AwakeRoutine(controller);
+                return foundRoutine;
             }
-            return foundRoutine;
+            else if(required){
+                foundRoutine = GenerateRoutine(type);
+                foundRoutine.AwakeRoutine(controller);
+                return foundRoutine;
+            }
+            else
+                return null;
+        
         }
 
         internal void UpdateList(){
@@ -136,7 +140,6 @@ namespace sapra.ObjectController
 
         public void InternalSort(){
             baseAllRoutines.Sort((a,b)=> a.GetType().ToString().CompareTo(b.GetType().ToString()));
-
         }
         /// <summary>
         /// Method called after all routines have been enabled. Equivalent to Awake of Monobehaviours

@@ -185,8 +185,8 @@ namespace sapra.ObjectController.Editor
                         SerializedProperty newClass = list.GetArrayElementAtIndex(list.arraySize-1);
                         newClass.managedReferenceValue = System.Activator.CreateInstance(target);
                         newClass.FindPropertyRelative("_isEnabled").boolValue = true;
-                        module.InternalSort();
                         property.serializedObject.ApplyModifiedProperties();
+                        module.InternalSort();
                     });
                 }
             }
