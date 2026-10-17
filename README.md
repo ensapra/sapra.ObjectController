@@ -1,3 +1,26 @@
+<div align="center">
+
+  <!-- Website -->
+  <a href="https://ensapra.com">
+    <img src="https://img.shields.io/badge/Website-Visit-1999?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Ensapra Website" />
+  </a>
+
+  <!-- Discord -->
+  <a href="https://ensapra.com/links/discord">
+    <img src="https://img.shields.io/badge/Discord-Join_Server-5865F2?style=for-the-badge&logo=discord&logoColor=white" alt="Join Ensapra Discord" />
+  </a>
+
+  <!-- Patreon -->
+  <a href="https://ensapra.com/links/patreon">
+    <img src="https://img.shields.io/badge/Patreon-Support-FF424D?style=for-the-badge&logo=patreon&logoColor=white" alt="Support Ensapra on Patreon" />
+  </a>
+
+  <a href="https://ensapra.com/links/object-controller-asset-store">
+    <img src="https://img.shields.io/badge/Asset_Store-Get_for_free!-dba248?style=for-the-badge&logo=unity&logoColor=white" alt="Support Ensapra on Patreon" />
+  </a>
+  
+</div>
+
 # Object Controller
 This package contains the basic structure to build an object controller, following a certain workflow. 
 It allows the user to create different modules that can be structured so that components inside can be shown, hidden, and overall enabled and disabled 
